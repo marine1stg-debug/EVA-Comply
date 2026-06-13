@@ -1,0 +1,139 @@
+services:
+
+  db:
+    # Pinned to the current patched minor (in-place compatible within major 16).
+    # Bump when new 16.x security releases ship: postgresql.org/support/security
+    image: postgres:16.14-alpine
+    container_name: eva_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: eva_db
+      POSTGRES_USER: eva_user
+      POSTGRES_PASSWORD: eva_secret_change_in_prod
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eva_user -d eva_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: eva_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: eva_api
+    restart: unless-stopped
+    environment:
+      PYTHONPATH: /app
+      DATABASE_URL: postgresql+asyncpg://eva_user:eva_secret_change_in_prod@db:5432/eva_db
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: dev_secret_key_change_in_production_min_32_chars
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: "15"
+      REFRESH_TOKEN_EXPIRE_DAYS: "30"
+      ENVIRONMENT: development
+      STORAGE_BACKEND: local
+      STORAGE_LOCAL_PATH: /app/uploads
+      R2_ACCOUNT_ID: ""
+      R2_ACCESS_KEY_ID: ""
+      R2_SECRET_ACCESS_KEY: ""
+      R2_BUCKET_NAME: eva-uploads
+      STRIPE_SECRET_KEY: ""
+      STRIPE_WEBHOOK_SECRET: ""
+      EMAIL_BACKEND: console
+      FROM_EMAIL: noreply@eva-portal.com
+    volumes:
+      - ./backend:/app
+      - uploads_data:/app/uploads
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: [
+      "sh", "-c",
+      "until python -c \"import asyncio,asyncpg; asyncio.run(asyncpg.connect('postgresql://eva_user:eva_secret_change_in_prod@db:5432/eva_db'))\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && echo 'DB ready' && alembic upgrade head && python -m app.seed_catalogs --yes && python -m app.seed_scripts_all && python -m app.seed && python -m app.seed_maturity_questions --yes && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    ]
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: eva_worker
+    restart: unless-stopped
+    environment:
+      PYTHONPATH: /app
+      DATABASE_URL: postgresql+asyncpg://eva_user:eva_secret_change_in_prod@db:5432/eva_db
+      REDIS_URL: redis://redis:6379
+      SECRET_KEY: dev_secret_key_change_in_production_min_32_chars
+      STORAGE_BACKEND: local
+      STORAGE_LOCAL_PATH: /app/uploads
+    volumes:
+      - ./backend:/app
+      - uploads_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["celery", "-A", "app.worker", "worker", "--loglevel=info", "--uid=nobody"]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: eva_frontend
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - api
+
+  nginx:
+    # Reverse proxy with env-driven HTTP Basic Auth + no-index headers.
+    # Built from ./nginx/Dockerfile (pins nginx 1.30-alpine).
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: eva_nginx
+    restart: unless-stopped
+    environment:
+      # Site-wide basic auth. CHANGE THESE. The gate returns 401 to anyone
+      # (including crawlers) who doesn't supply these credentials.
+      BASIC_AUTH_USER: ${BASIC_AUTH_USER:-eva}
+      BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD:-changeme}
+      # Set to "true" ONLY for local development to bypass the auth gate.
+      BASIC_AUTH_DISABLED: ${BASIC_AUTH_DISABLED:-false}
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+      - frontend
+
+volumes:
+  postgres_data:
+  uploads_data:

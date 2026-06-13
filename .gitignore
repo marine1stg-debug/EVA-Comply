@@ -1,0 +1,38 @@
+# ── Secrets / local env ──────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.htpasswd
+.htpasswd
+
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Node / frontend ──────────────────────────────────────────────────
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+yarn-error.log*
+
+# ── App data / backups (never commit real tenant data or evidence) ───
+backups/
+uploads/
+*.dump
+*.sql.gz
+*.tar.gz
+
+# ── OS / editor ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

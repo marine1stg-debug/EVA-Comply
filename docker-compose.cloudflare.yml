@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# EVA Comply — Cloudflare Tunnel / Zero Trust override
+#
+# Usage (from the eva-portal/ directory, with this file + .env alongside the
+# base docker-compose.yml):
+#
+#   docker compose -f docker-compose.yml -f docker-compose.cloudflare.yml up -d --build
+#
+# What this override does on top of the base compose file:
+#   1. Adds a `cloudflared` service that runs the Cloudflare Tunnel and reaches
+#      nginx over the internal compose network (http://nginx:80). No inbound
+#      ports are opened on the host — all traffic arrives through Cloudflare.
+#   2. Stops publishing db / redis / api / frontend / nginx ports to the host,
+#      so nothing is reachable except through the tunnel.
+#   3. Flips the API + worker to production-safe settings, pulling every secret
+#      from the .env file (see .env.cloudflare.example).
+#
+# All ${VARS} below are read from a `.env` file in this same directory.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  db:
+    # Do not expose Postgres to the host/internet — internal network only.
+    ports: []
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    ports: []
+
+  api:
+    ports: []
+    environment:
+      ENVIRONMENT: production
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: postgresql+asyncpg://eva_user:${POSTGRES_PASSWORD}@db:5432/eva_db
+      # Public HTTPS URL — used to build invite / password-reset / unlock links.
+      FRONTEND_URL: https://${PUBLIC_HOSTNAME}
+      # Real email is REQUIRED in production (the app refuses to boot on
+      # EMAIL_BACKEND=console because it would leak verification codes).
+      EMAIL_BACKEND: ${EMAIL_BACKEND}
+      FROM_EMAIL: ${FROM_EMAIL}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_TLS: ${SMTP_TLS}
+    # Same boot sequence as the base file (wait for DB, migrate, seed) but with
+    # the production DB password and WITHOUT uvicorn --reload.
+    command: [
+      "sh", "-c",
+      "until python -c \"import asyncio,asyncpg; asyncio.run(asyncpg.connect('postgresql://eva_user:${POSTGRES_PASSWORD}@db:5432/eva_db'))\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && echo 'DB ready' && alembic upgrade head && python -m app.seed_catalogs --yes && python -m app.seed_scripts_all && python -m app.seed && python -m app.seed_maturity_questions --yes && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    ]
+
+  frontend:
+    # Reachable only via nginx on the internal network; nothing on the host.
+    ports: []
+
+  worker:
+    environment:
+      ENVIRONMENT: production
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: postgresql+asyncpg://eva_user:${POSTGRES_PASSWORD}@db:5432/eva_db
+
+  nginx:
+    # The tunnel reaches nginx over the compose network, so we don't need to
+    # publish port 80 on the host at all.
+    ports: []
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: eva_cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on:
+      - nginx

@@ -1,0 +1,6 @@
+# Never commit backups — they can contain tenant data
+backups/
+__pycache__/
+*.pyc
+.env
+uploads/

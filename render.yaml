@@ -1,0 +1,159 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# EVA Comply — Render Blueprint
+#
+# Topology (mirrors the docker-compose stack):
+#   eva-nginx     (web,  PUBLIC)   ← the only internet-facing service; basic-auth gate
+#   eva-api       (pserv, private) ← FastAPI, listens on :8000
+#   eva-worker    (worker)         ← Celery
+#   eva-frontend  (pserv, private) ← Vite, listens on :3000
+#   eva-db        (Postgres, managed)
+#   eva-redis     (Key Value / Redis, managed)
+#
+# Private services talk to each other over Render's private network using the
+# service NAME as hostname (e.g. eva-api:8000). Only eva-nginx is public, and it
+# requires HTTP Basic Auth — so crawlers and anonymous visitors get a 401.
+#
+# ⚠️ Review before first deploy:
+#   • DATABASE_URL must be set manually (asyncpg form) — see DEPLOY_RENDER.md.
+#   • Confirm Render's current Redis block keyword in your account: this file
+#     uses `type: keyvalue` (older accounts used `type: redis`).
+#   • Set the real BASIC_AUTH_PASSWORD, email, and FRONTEND_URL values.
+# ─────────────────────────────────────────────────────────────────────────────
+
+databases:
+  - name: eva-db
+    databaseName: eva_db
+    user: eva_user
+    plan: basic-256mb        # bump as needed
+
+services:
+  # ── Managed Redis / Key Value ──────────────────────────────────────────────
+  - type: keyvalue
+    name: eva-redis
+    plan: free               # bump for production
+    ipAllowList: []          # private only
+
+  # ── API (private) ───────────────────────────────────────────────────────────
+  - type: pserv
+    name: eva-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: standard
+    # Migrate + seed on boot, then run uvicorn on the fixed internal port 8000.
+    dockerCommand: >-
+      sh -c "alembic upgrade head &&
+      python -m app.seed_catalogs --yes &&
+      python -m app.seed_scripts_all &&
+      python -m app.seed &&
+      python -m app.seed_maturity_questions --yes &&
+      uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: PYTHONPATH
+        value: /app
+      - key: ENVIRONMENT
+        value: production
+      - key: SECRET_KEY
+        generateValue: true            # Render generates a strong value
+      # Set manually in the dashboard to the asyncpg URL of eva-db:
+      #   postgresql+asyncpg://eva_user:<password>@<internal-host>:5432/eva_db
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: eva-redis
+          property: connectionString
+      - key: FRONTEND_URL
+        sync: false                    # https://<your eva-nginx public URL>
+      - key: STORAGE_BACKEND
+        value: r2                      # recommended; or "local" with a disk
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET_NAME
+        value: eva-uploads
+      - key: EMAIL_BACKEND
+        value: smtp
+      - key: FROM_EMAIL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_TLS
+        value: "true"
+
+  # ── Celery worker ────────────────────────────────────────────────────────────
+  - type: worker
+    name: eva-worker
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: standard
+    dockerCommand: celery -A app.worker worker --loglevel=info
+    envVars:
+      - key: PYTHONPATH
+        value: /app
+      - key: ENVIRONMENT
+        value: production
+      - key: SECRET_KEY
+        fromService:
+          type: pserv
+          name: eva-api
+          envVarKey: SECRET_KEY
+      - key: DATABASE_URL
+        sync: false                    # same asyncpg URL as eva-api
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: eva-redis
+          property: connectionString
+      - key: STORAGE_BACKEND
+        value: r2
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET_NAME
+        value: eva-uploads
+
+  # ── Frontend (private Vite server) ───────────────────────────────────────────
+  - type: pserv
+    name: eva-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: standard
+    envVars:
+      - key: PORT
+        value: "3000"
+
+  # ── nginx reverse proxy (PUBLIC, basic-auth gate) ────────────────────────────
+  - type: web
+    name: eva-nginx
+    runtime: docker
+    dockerfilePath: ./nginx/Dockerfile
+    dockerContext: ./nginx
+    plan: starter
+    envVars:
+      # Render injects PORT; the entrypoint listens on it automatically.
+      - key: BASIC_AUTH_USER
+        sync: false
+      - key: BASIC_AUTH_PASSWORD
+        sync: false
+      - key: API_HOST
+        value: eva-api:8000
+      - key: FRONTEND_HOST
+        value: eva-frontend:3000
