@@ -128,6 +128,7 @@ services:
 
   nginx:
     # Reverse proxy with env-driven HTTP Basic Auth + no-index headers.
+    # Internal only — Caddy terminates TLS in front and forwards to nginx:80.
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -137,13 +138,29 @@ services:
       BASIC_AUTH_USER: ${BASIC_AUTH_USER:-eva}
       BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD:-changeme}
       BASIC_AUTH_DISABLED: ${BASIC_AUTH_DISABLED:-false}
-    ports:
-      - "80:80"
     depends_on:
       - api
       - frontend
+
+  caddy:
+    # Public entry point: automatic HTTPS (Let's Encrypt) + HTTP→HTTPS redirect.
+    image: caddy:2-alpine
+    container_name: eva_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data       # persists issued certificates (avoid LE rate limits)
+      - caddy_config:/config
+    depends_on:
+      - nginx
 
 volumes:
   postgres_data:
   uploads_data:
   backups_data:
+  caddy_data:
+  caddy_config:

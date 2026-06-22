@@ -1,0 +1,18 @@
+# Caddy automatically obtains and renews a free Let's Encrypt TLS certificate
+# for the domain below, terminates HTTPS, and redirects all HTTP → HTTPS.
+# It forwards requests to the internal nginx container (which still does the
+# basic-auth gate, no-index headers, and routing).
+#
+# Requirements: the domain's DNS A record must point at this server, and ports
+# 80 + 443 must be open to the internet (ufw allow 443/tcp).
+
+{
+    # Contact address Let's Encrypt uses for expiry/renewal notices. Change it.
+    email charles.courchesne@gmail.com
+}
+
+eva-comply.eva-technologies.com {
+    # Preserve the original Host header (Caddy does this by default) so nginx
+    # routing and the app behave correctly.
+    reverse_proxy nginx:80
+}
