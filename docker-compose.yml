@@ -1,20 +1,33 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# EVA Comply — single, deploy-ready compose file.
+#
+#   docker compose up -d --build
+#
+# Secure by default:
+#   • Only nginx publishes a host port (80). Postgres / Redis / API / frontend
+#     are reachable ONLY on the internal Docker network.
+#   • No host source bind mounts — containers run the code baked into the images,
+#     so the non-root users can write their work dirs (uploads, backups, vite).
+#   • All secrets come from the .env file in this directory (with dev fallbacks).
+#
+# Required in .env: BASIC_AUTH_USER, BASIC_AUTH_PASSWORD, SECRET_KEY,
+#                   POSTGRES_PASSWORD  (see .env.example).
+# ─────────────────────────────────────────────────────────────────────────────
+
 services:
 
   db:
-    # Pinned to the current patched minor (in-place compatible within major 16).
-    # Bump when new 16.x security releases ship: postgresql.org/support/security
     image: postgres:16.14-alpine
     container_name: eva_db
     restart: unless-stopped
     environment:
       POSTGRES_DB: eva_db
       POSTGRES_USER: eva_user
-      POSTGRES_PASSWORD: eva_secret_change_in_prod
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eva_secret_change_in_prod}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
+    # No host ports — internal network only.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U eva_user -d eva_db"]
       interval: 5s
@@ -26,8 +39,7 @@ services:
     image: redis:7-alpine
     container_name: eva_redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    # No host ports — internal network only.
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -42,28 +54,33 @@ services:
     restart: unless-stopped
     environment:
       PYTHONPATH: /app
-      DATABASE_URL: postgresql+asyncpg://eva_user:eva_secret_change_in_prod@db:5432/eva_db
+      DATABASE_URL: postgresql+asyncpg://eva_user:${POSTGRES_PASSWORD:-eva_secret_change_in_prod}@db:5432/eva_db
       REDIS_URL: redis://redis:6379
-      SECRET_KEY: dev_secret_key_change_in_production_min_32_chars
+      SECRET_KEY: ${SECRET_KEY:-dev_secret_key_change_in_production_min_32_chars}
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: "15"
       REFRESH_TOKEN_EXPIRE_DAYS: "30"
-      ENVIRONMENT: development
+      ENVIRONMENT: ${ENVIRONMENT:-development}
       STORAGE_BACKEND: local
       STORAGE_LOCAL_PATH: /app/uploads
-      R2_ACCOUNT_ID: ""
-      R2_ACCESS_KEY_ID: ""
-      R2_SECRET_ACCESS_KEY: ""
-      R2_BUCKET_NAME: eva-uploads
-      STRIPE_SECRET_KEY: ""
-      STRIPE_WEBHOOK_SECRET: ""
-      EMAIL_BACKEND: console
-      FROM_EMAIL: noreply@eva-portal.com
+      R2_ACCOUNT_ID: "${R2_ACCOUNT_ID:-}"
+      R2_ACCESS_KEY_ID: "${R2_ACCESS_KEY_ID:-}"
+      R2_SECRET_ACCESS_KEY: "${R2_SECRET_ACCESS_KEY:-}"
+      R2_BUCKET_NAME: "${R2_BUCKET_NAME:-eva-uploads}"
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY:-}"
+      STRIPE_WEBHOOK_SECRET: "${STRIPE_WEBHOOK_SECRET:-}"
+      EMAIL_BACKEND: ${EMAIL_BACKEND:-console}
+      FROM_EMAIL: ${FROM_EMAIL:-noreply@eva-portal.com}
+      SENDGRID_API_KEY: "${SENDGRID_API_KEY:-}"
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:-}"
+      SMTP_TLS: "${SMTP_TLS:-true}"
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
     volumes:
-      - ./backend:/app
       - uploads_data:/app/uploads
-    ports:
-      - "8000:8000"
+      - backups_data:/app/backups
     depends_on:
       db:
         condition: service_healthy
@@ -71,7 +88,7 @@ services:
         condition: service_healthy
     command: [
       "sh", "-c",
-      "until python -c \"import asyncio,asyncpg; asyncio.run(asyncpg.connect('postgresql://eva_user:eva_secret_change_in_prod@db:5432/eva_db'))\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && echo 'DB ready' && alembic upgrade head && python -m app.seed_catalogs --yes && python -m app.seed_scripts_all && python -m app.seed && python -m app.seed_maturity_questions --yes && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+      "until python -c \"import asyncio,asyncpg; asyncio.run(asyncpg.connect('postgresql://eva_user:${POSTGRES_PASSWORD:-eva_secret_change_in_prod}@db:5432/eva_db'))\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && echo 'DB ready' && alembic upgrade head && python -m app.seed_catalogs --yes && python -m app.seed_scripts_all && python -m app.seed && python -m app.seed_maturity_questions --yes && uvicorn app.main:app --host 0.0.0.0 --port 8000"
     ]
 
   worker:
@@ -82,21 +99,21 @@ services:
     restart: unless-stopped
     environment:
       PYTHONPATH: /app
-      DATABASE_URL: postgresql+asyncpg://eva_user:eva_secret_change_in_prod@db:5432/eva_db
+      DATABASE_URL: postgresql+asyncpg://eva_user:${POSTGRES_PASSWORD:-eva_secret_change_in_prod}@db:5432/eva_db
       REDIS_URL: redis://redis:6379
-      SECRET_KEY: dev_secret_key_change_in_production_min_32_chars
+      SECRET_KEY: ${SECRET_KEY:-dev_secret_key_change_in_production_min_32_chars}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
       STORAGE_BACKEND: local
       STORAGE_LOCAL_PATH: /app/uploads
     volumes:
-      - ./backend:/app
       - uploads_data:/app/uploads
+      - backups_data:/app/backups
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-    # The image already runs as the non-root 'appuser', so celery's --uid drop
-    # (which requires starting as root) is no longer needed and would error.
+    # Runs as non-root 'appuser' from the image, so no celery --uid drop needed.
     command: ["celery", "-A", "app.worker", "worker", "--loglevel=info"]
 
   frontend:
@@ -105,30 +122,20 @@ services:
       dockerfile: Dockerfile
     container_name: eva_frontend
     restart: unless-stopped
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-    environment:
-      VITE_API_URL: http://localhost:8000
+    # No bind mount, no host port — serves the build baked into the image.
     depends_on:
       - api
 
   nginx:
     # Reverse proxy with env-driven HTTP Basic Auth + no-index headers.
-    # Built from ./nginx/Dockerfile (pins nginx 1.30-alpine).
     build:
       context: ./nginx
       dockerfile: Dockerfile
     container_name: eva_nginx
     restart: unless-stopped
     environment:
-      # Site-wide basic auth. CHANGE THESE. The gate returns 401 to anyone
-      # (including crawlers) who doesn't supply these credentials.
       BASIC_AUTH_USER: ${BASIC_AUTH_USER:-eva}
       BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD:-changeme}
-      # Set to "true" ONLY for local development to bypass the auth gate.
       BASIC_AUTH_DISABLED: ${BASIC_AUTH_DISABLED:-false}
     ports:
       - "80:80"
@@ -139,3 +146,4 @@ services:
 volumes:
   postgres_data:
   uploads_data:
+  backups_data:
