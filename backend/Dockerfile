@@ -60,7 +60,7 @@ COPY --from=builder /opt/venv /opt/venv
 
 # Non-root runtime user; owns the app dir and the uploads mount point.
 RUN useradd --create-home --uid 10001 appuser \
-    && mkdir -p /app/uploads \
+    && mkdir -p /app/uploads /app/backups \
     && chown -R appuser:appuser /app
 
 # Application code (the .dockerignore keeps caches/secrets/VCS out).

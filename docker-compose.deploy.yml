@@ -28,6 +28,12 @@ services:
 
   api:
     ports: []
+    # Use the code baked into the image — NOT a host bind mount. On Linux the
+    # bind mount would be owned by the host user, blocking the non-root appuser
+    # from writing /app/backups. Persist uploads + backups in named volumes.
+    volumes:
+      - uploads_data:/app/uploads
+      - backups_data:/app/backups
     environment:
       ENVIRONMENT: ${ENVIRONMENT:-development}
       SECRET_KEY: ${SECRET_KEY}
@@ -49,6 +55,9 @@ services:
     ]
 
   worker:
+    volumes:
+      - uploads_data:/app/uploads
+      - backups_data:/app/backups
     environment:
       ENVIRONMENT: ${ENVIRONMENT:-development}
       SECRET_KEY: ${SECRET_KEY}
@@ -65,3 +74,7 @@ services:
       BASIC_AUTH_USER: ${BASIC_AUTH_USER}
       BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
       BASIC_AUTH_DISABLED: "false"
+
+# Adds the backups volume (postgres_data + uploads_data come from the base file).
+volumes:
+  backups_data:
