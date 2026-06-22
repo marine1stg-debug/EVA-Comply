@@ -36,6 +36,11 @@ http {
         include /etc/nginx/auth_basic.conf;
 
         location /api/ {
+            # No basic-auth here: the API authenticates with its own JWT Bearer
+            # token, which uses the same Authorization header as basic auth and
+            # would otherwise collide (every authenticated call -> 401). The app
+            # rejects any /api request without a valid token, so it stays locked.
+            auth_basic off;
             proxy_pass http://api;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
