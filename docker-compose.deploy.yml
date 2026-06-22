@@ -65,6 +65,10 @@ services:
 
   frontend:
     ports: []
+    # Use the image's own code (no host bind mount). On Linux the bind mount is
+    # owned by the host user, so the non-root 'node' user can't write Vite's
+    # temp config into /app. Empty list clears the base file's bind mounts.
+    volumes: []
 
   nginx:
     # The only externally reachable service. Password gate from .env.
