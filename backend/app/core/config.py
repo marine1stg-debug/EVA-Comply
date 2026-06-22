@@ -32,7 +32,7 @@ class Settings(BaseSettings):
 
     # Email
     EMAIL_BACKEND: Literal["console", "sendgrid", "ses", "smtp"] = "console"
-    FROM_EMAIL: str = "noreply@eva-portal.com"
+    FROM_EMAIL: str = "noreply@eva-technologies.com"
     SENDGRID_API_KEY: str = ""
     # SMTP (used when EMAIL_BACKEND=smtp)
     SMTP_HOST: str = ""

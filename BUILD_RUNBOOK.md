@@ -86,7 +86,7 @@ Dev defaults are shown; **bold** items must change for production.
 | `STRIPE_SECRET_KEY` | empty | Stripe API key. Empty = checkout is **simulated**. |
 | `STRIPE_WEBHOOK_SECRET` | empty | Stripe webhook signing secret. |
 | `EMAIL_BACKEND` | `console` | `console` = no real mail; dev surfaces verification/invite codes/links in the UI/logs. Switch to a real provider in prod. |
-| `FROM_EMAIL` | `noreply@eva-portal.com` | Sender address. |
+| `FROM_EMAIL` | `noreply@eva-technologies.com` | Sender address. |
 
 > Secrets are currently inlined in `docker-compose.yml` for dev convenience.
 > For production, move them to an `.env` file or a secrets manager and never

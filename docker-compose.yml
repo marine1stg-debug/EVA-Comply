@@ -70,7 +70,7 @@ services:
       STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY:-}"
       STRIPE_WEBHOOK_SECRET: "${STRIPE_WEBHOOK_SECRET:-}"
       EMAIL_BACKEND: ${EMAIL_BACKEND:-console}
-      FROM_EMAIL: ${FROM_EMAIL:-noreply@eva-portal.com}
+      FROM_EMAIL: ${FROM_EMAIL:-noreply@eva-technologies.com}
       SENDGRID_API_KEY: "${SENDGRID_API_KEY:-}"
       SMTP_HOST: "${SMTP_HOST:-}"
       SMTP_PORT: "${SMTP_PORT:-587}"
