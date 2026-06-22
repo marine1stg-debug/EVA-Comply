@@ -6,15 +6,6 @@ import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
 import toast from 'react-hot-toast'
 
-const DEMO_USERS = [
-  { email: 'superadmin@eva.com',  role: 'Super Admin',   color: '#7C3AED' },
-  { email: 'auditor@eva.com',     role: 'EVA Auditor',   color: '#2563EB' },
-  { email: 'msp@acmemsp.com',     role: 'MSP Admin',     color: '#0D9488' },
-  { email: 'analyst@acmemsp.com', role: 'MSP Analyst',   color: '#0891B2' },
-  { email: 'admin@novlogix.com',  role: 'Client Admin',  color: '#D97706' },
-  { email: 'it@novlogix.com',     role: 'Contributor',   color: '#16A34A' },
-]
-
 export default function LoginPage() {
   const navigate = useNavigate()
   const t = useT()
@@ -65,23 +56,6 @@ export default function LoginPage() {
     }
   }
 
-  const quickLogin = async (demoEmail: string) => {
-    setLoading(true)
-    try {
-      const result = await login(demoEmail, 'demo1234')
-      if (result.requires_mfa) {
-        setTempToken(result.temp_token || '')
-        setMfaStep(true)
-        setEmail(demoEmail)
-      } else {
-        navigate('/dashboard')
-      }
-    } catch {
-      toast.error(t('Demo login failed — is the API running?'))
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5"
@@ -126,20 +100,6 @@ export default function LoginPage() {
             </div>
             <div className="text-xs text-center mt-2" style={{ color: '#3A5570' }}>
               {t('A service provider?')} <span style={{ color: '#7DD3FC', cursor: 'pointer' }} onClick={() => navigate('/provider-signup')}>{t('Apply to the marketplace')}</span>
-            </div>
-
-            <div className="mt-5 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,.07)' }}>
-              <div className="text-xs text-center mb-3" style={{ color: '#3A5570' }}>{t('Demo — pick a role')}</div>
-              <div className="grid grid-cols-2 gap-2">
-                {DEMO_USERS.map(u => (
-                  <button key={u.email} onClick={() => quickLogin(u.email)}
-                    className="p-2 rounded-lg text-left text-xs transition-all"
-                    style={{ border: '1px solid rgba(255,255,255,.07)', background: 'rgba(255,255,255,.03)', color: '#7094B8' }}>
-                    <span className="font-bold block" style={{ color: u.color }}>{t(u.role)}</span>
-                    <span style={{ color: '#2E4A6B' }}>{u.email.split('@')[1].split('.')[0]}</span>
-                  </button>
-                ))}
-              </div>
             </div>
           </>
         ) : (
