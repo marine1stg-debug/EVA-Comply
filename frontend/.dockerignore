@@ -1,0 +1,13 @@
+# Keep build context small and free of secrets / caches / VCS.
+.git
+.gitignore
+.dockerignore
+Dockerfile
+node_modules/
+dist/
+build/
+.vite/
+.env
+.env.*
+npm-debug.log*
+*.md

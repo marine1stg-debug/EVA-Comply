@@ -95,7 +95,9 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: ["celery", "-A", "app.worker", "worker", "--loglevel=info", "--uid=nobody"]
+    # The image already runs as the non-root 'appuser', so celery's --uid drop
+    # (which requires starting as root) is no longer needed and would error.
+    command: ["celery", "-A", "app.worker", "worker", "--loglevel=info"]
 
   frontend:
     build:

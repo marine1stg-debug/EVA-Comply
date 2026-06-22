@@ -1,0 +1,20 @@
+# Keep build context small and free of secrets / caches / VCS.
+.git
+.gitignore
+.dockerignore
+Dockerfile
+**/__pycache__/
+**/*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.env
+.env.*
+*.sqlite
+*.sqlite3
+uploads/
+backups/
+*.md

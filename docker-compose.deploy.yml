@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# EVA Comply — single-host deploy override (plain Debian VM, no Cloudflare).
+#
+# Usage (from the repo dir, with a .env file alongside):
+#   docker compose -f docker-compose.yml -f docker-compose.deploy.yml up -d --build
+#
+# What it changes vs the base (dev) compose:
+#   1. Stops publishing db / redis / api / frontend ports to the host. ONLY
+#      nginx:80 is reachable from outside — everything else is internal-only.
+#      (Critical on a public server: the base compose exposes Postgres 5432 and
+#      unauthenticated Redis 6379 to the internet.)
+#   2. Injects real secrets from .env (SECRET_KEY, DB password, basic-auth creds)
+#      instead of the dev defaults baked into the base file.
+#   3. Runs the API without --reload (production-style).
+#
+# All ${VARS} come from the .env file in this directory.
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  db:
+    ports: []
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    ports: []
+
+  api:
+    ports: []
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: postgresql+asyncpg://eva_user:${POSTGRES_PASSWORD}@db:5432/eva_db
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      EMAIL_BACKEND: ${EMAIL_BACKEND:-console}
+      FROM_EMAIL: ${FROM_EMAIL:-noreply@example.com}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_TLS: ${SMTP_TLS:-true}
+    # Same boot sequence as base (wait for DB, migrate, seed) with the real DB
+    # password and WITHOUT uvicorn --reload.
+    command: [
+      "sh", "-c",
+      "until python -c \"import asyncio,asyncpg; asyncio.run(asyncpg.connect('postgresql://eva_user:${POSTGRES_PASSWORD}@db:5432/eva_db'))\" 2>/dev/null; do echo 'Waiting for DB...'; sleep 2; done && echo 'DB ready' && alembic upgrade head && python -m app.seed_catalogs --yes && python -m app.seed_scripts_all && python -m app.seed && python -m app.seed_maturity_questions --yes && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    ]
+
+  worker:
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: postgresql+asyncpg://eva_user:${POSTGRES_PASSWORD}@db:5432/eva_db
+
+  frontend:
+    ports: []
+
+  nginx:
+    # The only externally reachable service. Password gate from .env.
+    ports:
+      - "80:80"
+    environment:
+      BASIC_AUTH_USER: ${BASIC_AUTH_USER}
+      BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
+      BASIC_AUTH_DISABLED: "false"
