@@ -21,7 +21,9 @@ from fastapi import HTTPException
 
 # Per-kind allowed lowercase extensions (no leading dot).
 _DOCS = {"pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "csv", "txt", "md", "rtf", "odt", "ods"}
-_IMAGES = {"png", "jpg", "jpeg", "gif", "webp", "bmp", "tiff", "svg", "heic"}
+# NOTE: SVG is deliberately excluded — it can carry embedded <script>/onload and
+# would be a stored-XSS vector if served inline. Use PNG/JPG for image evidence.
+_IMAGES = {"png", "jpg", "jpeg", "gif", "webp", "bmp", "tiff", "heic"}
 _ARCHIVES = {"zip", "7z", "rar", "gz", "tgz"}
 _VIDEO = {"mp4", "mov", "webm", "m4v", "avi", "mkv"}
 
@@ -43,6 +45,7 @@ _DANGEROUS_MIME_PREFIXES = (
     "application/vnd.microsoft.portable-executable",
     "text/html",
     "application/xhtml",
+    "image/svg",                      # scriptable SVG, even if renamed .png
     "application/x-shellscript",
     "application/x-perl",
     "application/x-python",

@@ -128,10 +128,11 @@ def _user_dict(user: User) -> dict:
     }
 
 def _session_tokens(user: User) -> TokenResponse:
-    """Issue a short-lived access token + a long-lived refresh token."""
+    """Issue a short-lived access token + a long-lived refresh token. The refresh
+    token carries the user's token_version so it can be revoked on password change."""
     return TokenResponse(
         access_token=create_access_token({"sub": str(user.id)}),
-        refresh_token=create_refresh_token({"sub": str(user.id)}),
+        refresh_token=create_refresh_token({"sub": str(user.id), "tv": user.token_version or 0}),
         user=_user_dict(user),
     )
 
@@ -245,6 +246,9 @@ async def refresh_session(request: RefreshRequest, http_request: Request, db: As
     user = (await db.execute(select(User).where(User.id == uuid.UUID(user_id)))).scalar_one_or_none()
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="User not found or inactive")
+    # Revocation: a refresh token is only valid for the version it was issued at.
+    if int(payload.get("tv", 0)) != int(user.token_version or 0):
+        raise HTTPException(status_code=401, detail="Session expired — please sign in again")
     return _session_tokens(user)
 
 
@@ -508,6 +512,8 @@ async def change_password(
         raise HTTPException(status_code=401, detail="Current password is incorrect")
     _validate_password(body.new_password)
     current_user.password_hash = hash_password(body.new_password)
+    # Revoke all outstanding refresh tokens issued before this password change.
+    current_user.token_version = (current_user.token_version or 0) + 1
     await db.commit()
     return {"message": "Password updated"}
 

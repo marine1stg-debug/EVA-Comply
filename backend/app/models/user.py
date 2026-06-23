@@ -37,6 +37,9 @@ class User(Base, TimestampMixin):
     # False = reviewer-only (accept/reject without re-opening).
     can_coach: Mapped[bool] = mapped_column(Boolean, default=False)
     # Brute-force lockout: 3 failed logins → locked_until set 15 min out.
+    # Bumped on password change to invalidate all outstanding refresh tokens
+    # (refresh tokens carry the version they were issued at; a mismatch is rejected).
+    token_version: Mapped[int] = mapped_column(Integer, default=0, nullable=False, server_default="0")
     failed_attempts: Mapped[int] = mapped_column(Integer, default=0)
     locked_until: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True

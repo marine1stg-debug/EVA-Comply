@@ -172,7 +172,9 @@ async def chat(s: LlmSettings, messages: list[dict], max_tokens: int = 1024) -> 
     url, headers, body = _build_request(s, messages, max_tokens)
     timeout = max(5, int(s.timeout_seconds or 30))
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        # follow_redirects=False so a 30x to an internal host can't bypass the
+        # SSRF guard (which validated only the original URL).
+        async with httpx.AsyncClient(timeout=timeout, follow_redirects=False) as client:
             resp = await client.post(url, headers=headers, json=body)
     except httpx.HTTPError as e:
         raise LlmError(f"Connection failed: {e}")

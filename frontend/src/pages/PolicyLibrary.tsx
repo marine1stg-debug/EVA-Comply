@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { api } from '../lib/api'
 import { useT } from '../lib/i18n'
-import { Download, Search, Plus, Pencil, Upload, Trash2, X } from 'lucide-react'
+import { Download, Search, Plus, Pencil, Upload, Trash2, X, Eye } from 'lucide-react'
 
 interface Policy {
   id: string; name: string; category: string; description: string
@@ -12,6 +12,7 @@ interface Policy {
   keywords?: string; source?: string
 }
 interface Resp { policies: Policy[]; categories: string[]; can_manage: boolean }
+interface PreviewResp { html: string; lang: string; has_fr: boolean; name: string }
 
 const EMPTY_FORM = { name: '', name_fr: '', category: '', category_fr: '', keywords: '', description: '' }
 
@@ -26,6 +27,8 @@ export default function PolicyLibraryPage() {
   const addFile = useRef<HTMLInputElement | null>(null)
   const replaceFile = useRef<HTMLInputElement | null>(null)
   const replacingId = useRef<string | null>(null)
+  const [preview, setPreview] = useState<Policy | null>(null)
+  const [pvFr, setPvFr] = useState(false)
 
   const { data, isLoading, isError, error } = useQuery<Resp>({
     queryKey: ['policies'],
@@ -33,6 +36,13 @@ export default function PolicyLibraryPage() {
   })
 
   const refresh = () => { qc.invalidateQueries({ queryKey: ['policies'] }); qc.invalidateQueries({ queryKey: ['controls'] }) }
+
+  const pv = useQuery<PreviewResp>({
+    queryKey: ['policy-preview', preview?.id, pvFr],
+    queryFn: async () => (await api.get(`/policy-templates/${preview!.id}/preview`, { params: { fr: pvFr } })).data,
+    enabled: !!preview,
+  })
+  const openPreview = (p: Policy) => { setPvFr(false); setPreview(p) }
 
   const download = async (p: Policy) => {
     try {
@@ -133,6 +143,7 @@ export default function PolicyLibraryPage() {
               {p.description && <div style={{ fontSize: 12, color: 'var(--text2)', marginTop: 4 }}>{p.description}</div>}
             </div>
             <div style={{ display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              <button className="tb-btn" onClick={() => openPreview(p)} disabled={!p.has_file} title={t('Preview')}><Eye size={13} aria-hidden /> {t('Preview')}</button>
               <button className="tb-btn" onClick={() => download(p)} disabled={!p.has_file}><Download size={13} aria-hidden /> {t('Download')}</button>
               {canManage && <>
                 <button className="tb-btn" onClick={() => openEdit(p)} title={t('Edit')}><Pencil size={13} aria-hidden /></button>
@@ -148,6 +159,31 @@ export default function PolicyLibraryPage() {
 
       <input ref={replaceFile} type="file" accept=".docx" style={{ display: 'none' }}
         onChange={e => { const f = e.target.files?.[0]; const id = replacingId.current; if (f && id) doReplace.mutate({ id, file: f }); e.target.value = ''; replacingId.current = null }} />
+
+      {preview && (
+        <div className="modal-overlay" style={{ zIndex: 60 }} onClick={() => setPreview(null)}>
+          <div className="modal-card" style={{ maxWidth: 820, width: '92%', display: 'flex', flexDirection: 'column', maxHeight: '88vh' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '14px 18px', borderBottom: '1px solid var(--border, rgba(255,255,255,.12))' }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{preview.name}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                <div style={{ display: 'flex', border: '1px solid var(--border, rgba(255,255,255,.15))', borderRadius: 8, overflow: 'hidden' }}>
+                  <button className="tb-btn" style={{ border: 'none', borderRadius: 0, background: !pvFr ? 'var(--accent, #2E5FA3)' : 'transparent', color: !pvFr ? '#fff' : 'var(--text2)' }} onClick={() => setPvFr(false)}>EN</button>
+                  <button className="tb-btn" style={{ border: 'none', borderRadius: 0, background: pvFr ? 'var(--accent, #2E5FA3)' : 'transparent', color: pvFr ? '#fff' : 'var(--text2)' }}
+                    disabled={pv.data ? !pv.data.has_fr : false}
+                    title={pv.data && !pv.data.has_fr ? t('French version not available') : 'Français'} onClick={() => setPvFr(true)}>FR</button>
+                </div>
+                <button className="tb-btn" onClick={() => download(preview)} title={t('Download')}><Download size={13} aria-hidden /></button>
+                <button className="tb-btn" style={{ padding: 4 }} onClick={() => setPreview(null)}><X size={16} aria-hidden /></button>
+              </div>
+            </div>
+            <div style={{ padding: '18px 22px', overflowY: 'auto' }}>
+              {pv.isLoading && <div className="page-sub">{t('Loading preview…')}</div>}
+              {pv.isError && <div className="page-sub" style={{ color: 'var(--red)' }}>{t('Could not load this preview.')}</div>}
+              {pv.data && <div className="policy-preview" style={{ color: 'var(--text)', lineHeight: 1.55, fontSize: 14 }} dangerouslySetInnerHTML={{ __html: pv.data.html }} />}
+            </div>
+          </div>
+        </div>
+      )}
 
       {(addOpen || editing) && (
         <div className="modal-overlay" style={{ zIndex: 60 }} onClick={() => { setAddOpen(false); setEditing(null) }}>

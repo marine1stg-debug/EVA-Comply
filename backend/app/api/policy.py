@@ -150,6 +150,58 @@ async def download_by_id(
     return FileResponse(path, media_type=DOCX_MIME, filename=pol.slug + ("_FR.docx" if fr else ".docx"))
 
 
+import re as _re
+
+# Defense-in-depth sanitizer for rendered preview HTML. Mammoth already maps Word
+# content to a safe element set (it does not emit <script>), but since the SPA
+# injects this via dangerouslySetInnerHTML we strip any script/style blocks,
+# inline event handlers, and javascript:/data: URLs before returning it.
+_SCRIPT_RE = _re.compile(r"<\s*(script|style|iframe|object|embed)\b.*?<\s*/\s*\1\s*>", _re.I | _re.S)
+_ON_ATTR_RE = _re.compile(r"\son\w+\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s>]+)", _re.I)
+_JS_URI_RE = _re.compile(r"(href|src)\s*=\s*(\"|')\s*javascript:[^\"']*\2", _re.I)
+
+
+def _sanitize_html(html: str) -> str:
+    html = _SCRIPT_RE.sub("", html)
+    html = _ON_ATTR_RE.sub("", html)
+    html = _JS_URI_RE.sub("", html)
+    return html
+
+
+def _docx_to_html(path: str) -> str:
+    """Render a .docx to semantic HTML for in-app preview (headings, lists,
+    tables, bold/italics preserved). Uses mammoth (pure-Python), then sanitizes."""
+    import mammoth
+    with open(path, "rb") as fh:
+        result = mammoth.convert_to_html(fh)
+    return _sanitize_html(result.value or "")
+
+
+@router.get("/{policy_id}/preview")
+async def preview_by_id(
+    policy_id: str,
+    fr: bool = False,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_lang),
+):
+    """Full HTML preview of a policy, in English or (fr=true) French. Returns
+    has_fr so the UI can show a language toggle only when a FR version exists."""
+    pol = await db.get(Policy, uuid.UUID(policy_id))
+    if not pol or (not pol.is_active and not _is_admin(current_user)):
+        raise HTTPException(status_code=404, detail="Policy not available")
+    want = "fr" if (fr and pol.has_fr) else "en"
+    path = _file_path(pol, want)
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="No file for this policy")
+    try:
+        html = _docx_to_html(path)
+    except Exception:
+        raise HTTPException(status_code=500, detail="Could not render this document")
+    return {"html": html, "lang": want, "has_fr": bool(pol.has_fr),
+            "name": loc(pol, "name", want)}
+
+
 # ── Manage (super admin) ─────────────────────────────────────────────────────
 async def _require_admin(current_user: User = Depends(get_current_user)) -> User:
     if not _is_admin(current_user):

@@ -1,5 +1,13 @@
 # EVA Comply — OWASP Top 10 (2021) Security Review
 
+> **Follow-up status (2026-06-23, v1.3.0): 6 findings RESOLVED, 3 PARTIALLY resolved, 0 unresolved; no new High.**
+> Resolved: backup-restore lockdown (A08), secrets encrypted at rest (A02), viewer RBAC + MSP role-tiering (A01), `/docs`+CORS prod hardening (A05), password policy ≥12 (A04), secrets removed from logs (A09).
+> Partially resolved (residual Medium): SSRF DNS-rebinding TOCTOU (A10), rate-limit X-Forwarded-For spoofing (A04), inline-served SVG stored XSS on S3/R2 (A08).
+> Still-open Low: security headers (HSTS/CSP), refresh-token revocation, `/request-verification` user-enumeration, python-jose → PyJWT.
+> Full follow-up write-up: **EVA_Comply_Audit_Suivi_v2.docx**. The findings below are the original (pre-fix) report, retained for traceability.
+
+---
+
 **Date:** 2026-06-23
 **Scope:** Source code (`backend/app/**`) + deployment config (`docker-compose.yml`, `nginx/`, `caddy/`, Dockerfiles)
 **Method:** Static code + configuration audit, evidence-based (file:line + code quotes). This is a white-box code review, **not** a live exploit/network pentest. For CMMC certification you will still need an accredited third-party penetration test against the running environment.

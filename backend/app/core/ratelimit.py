@@ -23,13 +23,22 @@ _LAST_PRUNE = [0.0]
 
 
 def client_ip(request: Request) -> str:
-    """Best-effort client IP, honoring the proxy chain (nginx/Caddy)."""
-    xff = request.headers.get("x-forwarded-for")
-    if xff:
-        return xff.split(",")[0].strip()
+    """Real client IP for rate-limit bucketing.
+
+    Prefer X-Real-IP: nginx computes it from the proxy chain via its realip
+    module (trusting only the internal Caddy/nginx hops), so it is the genuine
+    client address and NOT spoofable by a client-supplied X-Forwarded-For. Fall
+    back to the LAST X-Forwarded-For entry (closest, hardest to spoof) and
+    finally the socket peer for non-proxied/local runs.
+    """
     xri = request.headers.get("x-real-ip")
     if xri:
         return xri.strip()
+    xff = request.headers.get("x-forwarded-for")
+    if xff:
+        parts = [p.strip() for p in xff.split(",") if p.strip()]
+        if parts:
+            return parts[-1]
     return request.client.host if request.client else "unknown"
 
 
