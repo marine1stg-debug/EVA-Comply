@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.core import storage
+from app.core.upload_guard import validate_upload
 from app.core.email import send_email
 from app.api.auth import get_current_user
 from app.api.evidence import _accessible_org_ids
@@ -145,6 +146,7 @@ async def create_case(
         data = await file.read()
         if len(data) > ATTACH_MAX_BYTES:
             raise HTTPException(status_code=413, detail="Attachment exceeds 25 MB limit")
+        validate_upload(file.filename, data, "support")
         a_name = os.path.basename(file.filename)
         a_key = storage.save_bytes(f"{target_org_id}/support/{uuid.uuid4().hex}_{a_name}", data)
         a_type = file.content_type

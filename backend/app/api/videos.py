@@ -19,6 +19,7 @@ from app.core.database import get_db
 from app.core.i18n import get_lang, loc, loc_domain
 from app.api.auth import get_current_user
 from app.core import storage
+from app.core.upload_guard import validate_upload
 from app.core.llm import get_llm_settings, chat, LlmError
 from app.models.user import User, UserRole
 from app.models.framework import Framework, Control
@@ -158,6 +159,7 @@ async def _save_upload(file: UploadFile, folder_key: str) -> str:
     data = await file.read()
     if len(data) > VIDEO_MAX_BYTES:
         raise HTTPException(status_code=413, detail="Video exceeds the 200 MB limit")
+    validate_upload(file.filename, data, "video")
     ext = os.path.splitext(file.filename or "")[1] or ".webm"
     key = f"{folder_key}/{uuid.uuid4().hex}{ext}"
     return storage.save_bytes(key, data)

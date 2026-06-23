@@ -18,13 +18,26 @@ from app.core.audit import record as audit_record
 from app.core.entitlements import get_entitlements, tenant_usage
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
-from app.models.tenant import Tenant
+from app.models.tenant import Tenant, TenantType
 
 FRONTEND_URL = settings.FRONTEND_URL
 INVITABLE_ROLES = {
     UserRole.super_admin: ["super_admin", "eva_auditor"],
     UserRole.msp_admin: ["msp_admin", "msp_analyst"],
     UserRole.client_admin: ["client_admin", "contributor", "viewer"],
+}
+
+# A role must also fit the target tenant's tier: EVA roles belong on the EVA
+# internal org, MSP roles on an MSP org, client roles on a client org. This
+# stops e.g. an MSP admin from granting an MSP role to a client-org user.
+ROLE_TENANT_FIT = {
+    UserRole.super_admin: {TenantType.eva_internal},
+    UserRole.eva_auditor: {TenantType.eva_internal},
+    UserRole.msp_admin: {TenantType.msp},
+    UserRole.msp_analyst: {TenantType.msp},
+    UserRole.client_admin: {TenantType.single_client},
+    UserRole.contributor: {TenantType.single_client},
+    UserRole.viewer: {TenantType.single_client},
 }
 
 router = APIRouter()
@@ -211,9 +224,14 @@ async def edit_user(user_id: str, body: EditBody, current_user: User = Depends(g
         allowed = INVITABLE_ROLES.get(current_user.role, [])
         if body.role not in allowed:
             raise HTTPException(status_code=400, detail="You can't assign that role")
+        new_role = UserRole(body.role)
+        # The new role must also be valid for the target user's organization tier.
+        target_tenant = (await db.execute(select(Tenant).where(Tenant.id == u.tenant_id))).scalar_one_or_none()
+        if target_tenant is not None and target_tenant.tenant_type not in ROLE_TENANT_FIT.get(new_role, set()):
+            raise HTTPException(status_code=400, detail="That role isn't valid for this user's organization")
         await audit_record(db, current_user, "user.role_changed", target=u.email,
                            detail=f"{u.role.value} → {body.role}", org_id=u.tenant_id)
-        u.role = UserRole(body.role)
+        u.role = new_role
     if body.can_coach is not None:
         u.can_coach = body.can_coach
     await db.commit()

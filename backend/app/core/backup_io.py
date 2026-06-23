@@ -16,6 +16,9 @@ Bundle shape:
     }
 """
 import uuid
+import hmac
+import json
+import hashlib
 import datetime as dt
 from typing import Optional
 
@@ -39,6 +42,8 @@ from app.models.recommendation import Recommendation
 from app.models.maturity import MaturityAssessment, MaturitySnapshot
 from app.models.self_assessment import SelfAssessment
 from app.models.audit import AuditLog
+from app.models.policy import Policy
+from app.core.config import settings
 
 BUNDLE_VERSION = 1
 
@@ -61,6 +66,7 @@ CATEGORIES: dict = {
                    [(SupportCase, "org_id"), (SupportComment, None), (SupportSettings, None)]),
     "billing":    ("Factures", True, [(Invoice, "tenant_id")]),
     "audit":      ("Journal d'audit", True, [(AuditLog, "org_id")]),
+    "policies":   ("Bibliothèque de politiques", False, [(Policy, None)]),
 }
 
 # Global restore order across every model (parents before children).
@@ -69,7 +75,7 @@ TABLE_ORDER = [
     MarketplaceSkill, ServiceProvider, Tenant, User,
     OrgControl, ExpectedEvidence, EvidenceItem, ControlEvent, Recommendation,
     MaturityAssessment, MaturitySnapshot, SelfAssessment,
-    SupportCase, SupportComment, SupportSettings, Invoice, AuditLog,
+    SupportCase, SupportComment, SupportSettings, Invoice, AuditLog, Policy,
 ]
 _BY_TABLE = {m.__tablename__: m for m in TABLE_ORDER}
 
@@ -125,6 +131,28 @@ def _pk_col(model):
     return pk[0] if pk else None
 
 
+# ── integrity signing ─────────────────────────────────────────────────────────
+# An HMAC over the bundle content lets restore distinguish a file produced by
+# THIS system (trusted — safe to restore in full) from a hand-crafted one (which
+# could otherwise flip a user to super_admin or rewrite another tenant's rows).
+def _bundle_digest(bundle: dict) -> str:
+    payload = {k: bundle.get(k) for k in ("version", "created_at", "categories", "client_ids", "tables")}
+    canonical = json.dumps(payload, sort_keys=True, ensure_ascii=False, default=str).encode("utf-8")
+    return hmac.new(settings.SECRET_KEY.encode("utf-8"), canonical, hashlib.sha256).hexdigest()
+
+
+def sign_bundle(bundle: dict) -> dict:
+    bundle["signature"] = _bundle_digest(bundle)
+    return bundle
+
+
+def verify_bundle(bundle: dict) -> bool:
+    sig = bundle.get("signature")
+    if not sig or not isinstance(sig, str):
+        return False
+    return hmac.compare_digest(sig, _bundle_digest(bundle))
+
+
 # ── export ───────────────────────────────────────────────────────────────────
 async def export_bundle(db: AsyncSession, categories: list, client_ids: list) -> dict:
     cid = [uuid.UUID(str(c)) for c in (client_ids or [])]
@@ -141,13 +169,13 @@ async def export_bundle(db: AsyncSession, categories: list, client_ids: list) ->
             rows = (await db.execute(q)).scalars().all()
             tables.setdefault(model.__tablename__, [])
             tables[model.__tablename__].extend(serialize_row(r) for r in rows)
-    return {
+    return sign_bundle({
         "version": BUNDLE_VERSION,
         "created_at": dt.datetime.utcnow().isoformat() + "Z",
         "categories": list(categories),
         "client_ids": [str(c) for c in cid],
         "tables": tables,
-    }
+    })
 
 
 # ── import (merge / upsert) ──────────────────────────────────────────────────

@@ -105,9 +105,13 @@ def generate_totp_secret() -> str:
     return pyotp.random_base32()
 
 
-def verify_totp(secret: str, code: str) -> bool:
-    totp = pyotp.TOTP(secret)
-    return totp.verify(code, valid_window=1)
+def verify_totp(secret: str | None, code: str) -> bool:
+    if not secret:
+        return False
+    try:
+        return pyotp.TOTP(secret).verify(code, valid_window=1)
+    except Exception:
+        return False
 
 
 def get_totp_uri(secret: str, email: str) -> str:

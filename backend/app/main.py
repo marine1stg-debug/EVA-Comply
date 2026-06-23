@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.core.database import engine, Base
 from app.core.client_context import client_id_ctx
+from app.core.config import settings
 from app.api import auth, frameworks, controls, evidence, users, tenants, billing, reports, dashboard, review, msp, audit, plans, platform, promos, policy, maturity, llm_settings, recommendations, support, notifications, partners, videos, marketplace, backup, agreement
 
 
@@ -16,24 +17,37 @@ async def lifespan(app: FastAPI):
     print("EVA Portal API shutting down...")
 
 
+_PROD = settings.ENVIRONMENT == "production"
+
 app = FastAPI(
     title="EVA Cybersecurity Audit Portal API",
     description="Multi-tenant SaaS platform for cybersecurity compliance management",
     version="1.0.0",
     lifespan=lifespan,
+    # Hide the interactive API schema in production (it would expose the full
+    # surface to anyone past the basic-auth gate). Available in development.
+    docs_url=None if _PROD else "/docs",
+    redoc_url=None if _PROD else "/redoc",
+    openapi_url=None if _PROD else "/openapi.json",
 )
 
-# CORS — allow frontend dev server
+# CORS — explicit origins, methods, and headers (no wildcards with credentials).
+# In production the SPA is served same-origin via the proxy, so CORS rarely
+# applies; the prod origin is included for completeness.
+_cors_origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:80",
+]
+if settings.FRONTEND_URL and settings.FRONTEND_URL not in _cors_origins:
+    _cors_origins.append(settings.FRONTEND_URL.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://localhost:80",
-    ],
+    allow_origins=_cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Client-Id", "X-Lang"],
 )
 
 

@@ -110,7 +110,7 @@ export default function SignupPage() {
     } finally { setLoading(false) }
   }
 
-  const step1Ok = org.trim() && name.trim() && email.trim() && password.length >= 6 && capAns.trim() && capToken
+  const step1Ok = org.trim() && name.trim() && email.trim() && password.length >= 12 && capAns.trim() && capToken
 
   if (showAgree) {
     return (
@@ -136,7 +136,7 @@ export default function SignupPage() {
             <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} placeholder="Jane Doe" />
             <label style={label}>{t('Email')}</label>
             <input style={inputStyle} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@company.com" />
-            <label style={label}>{t('Password (min 6 chars)')}</label>
+            <label style={label}>{t('Password (min 12 chars)')}</label>
             <input style={inputStyle} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
             <label style={label}>{t('Verification: what is {q}?', { q: capQ || '…' })}</label>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

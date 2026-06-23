@@ -136,6 +136,16 @@ export default function BackupRestorePage() {
     } catch { toast.error(t('Download failed')) }
     finally { setBusy(false) }
   }
+  const [fullBusy, setFullBusy] = useState(false)
+  const downloadFull = async () => {
+    setFullBusy(true)
+    try {
+      const r = await api.get('/backup/full', { responseType: 'blob' })
+      dl(new Blob([r.data], { type: 'application/zip' }), `eva-full-backup-${new Date().toISOString().slice(0, 10)}.zip`)
+      toast.success(t('Full backup downloaded'))
+    } catch { toast.error(t('Backup failed')) }
+    finally { setFullBusy(false) }
+  }
   const delSnap = useMutation({
     mutationFn: async (id: string) => (await api.delete(`/backup/snapshots/${id}`)).data,
     onSuccess: () => { toast.success(t('Deleted')); qc.invalidateQueries({ queryKey: ['backup-snaps'] }) },
@@ -160,6 +170,18 @@ export default function BackupRestorePage() {
         <div>
           <div className="page-title">{t('Backup & Restore')}</div>
           <div className="page-sub">{t('Export selected data to a file or a server snapshot, and restore by merging it back (never deletes).')}</div>
+        </div>
+      </div>
+
+      <div className="card fi" style={{ padding: 16, marginBottom: 14, borderLeft: '3px solid var(--eva-blue2, #1A8FD1)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontWeight: 700, color: 'var(--text)' }}>{t('Full backup (everything)')}</div>
+            <div className="page-sub" style={{ marginTop: 2 }}>{t('Download one .zip with the entire database (all data) plus every uploaded file — evidence and policy documents.')}</div>
+          </div>
+          <button className="submit-btn" disabled={fullBusy} onClick={downloadFull} style={{ flexShrink: 0 }}>
+            ⬇ {fullBusy ? t('Preparing…') : t('Download full backup')}
+          </button>
         </div>
       </div>
 

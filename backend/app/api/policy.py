@@ -23,6 +23,7 @@ from app.core.database import get_db
 from app.core.config import settings
 from app.core.i18n import get_lang, loc
 from app.core.policy_library import TEMPLATE_DIR, slug as slugify
+from app.core.upload_guard import validate_upload
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.policy import Policy
@@ -190,6 +191,7 @@ async def create_policy(
     data = await file.read()
     if len(data) > MAX_BYTES:
         raise HTTPException(status_code=413, detail="File exceeds 25 MB limit")
+    validate_upload(file.filename, data, "policy")
     base = slugify(name) or uuid.uuid4().hex
     pol = Policy(name=name, name_fr=(name_fr or None), category=category or "General",
                  category_fr=(category_fr or None), description=(description or None),
@@ -229,6 +231,7 @@ async def replace_file(
     data = await file.read()
     if len(data) > MAX_BYTES:
         raise HTTPException(status_code=413, detail="File exceeds 25 MB limit")
+    validate_upload(file.filename, data, "policy")
     # Uploaded replacements always live in the upload dir; flip source so they win.
     pol.source = "upload"
     _save_upload(pol.slug, ".fr" if fr else "", data)

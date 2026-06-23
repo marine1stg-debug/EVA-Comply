@@ -51,6 +51,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-reco
         libcairo2 \
         libgdk-pixbuf-2.0-0 \
         shared-mime-info \
+        libmagic1 \
         fonts-dejavu-core \
         fonts-liberation \
     && rm -rf /var/lib/apt/lists/*

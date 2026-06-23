@@ -20,6 +20,8 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.config import settings
+from app.core.audit import record as audit_record
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType
@@ -158,6 +160,45 @@ async def download_snapshot(snap_id: str, fmt: str = "json",
     return FileResponse(_path(b.id), media_type="application/json", filename=json_name)
 
 
+@router.get("/full")
+async def full_backup(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """Complete backup: ALL database data (every category, as JSON) PLUS every
+    uploaded file (evidence, uploaded/replaced policy documents) in one zip."""
+    _require_super(current_user)
+    stamp = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+    bundle = await bio.export_bundle(db, list(bio.CATEGORIES.keys()), [])
+    payload = json.dumps(bundle, ensure_ascii=False).encode("utf-8")
+    out_path = os.path.join(BACKUP_DIR, f"eva-full-backup-{stamp}.zip")
+    uploads_root = settings.STORAGE_LOCAL_PATH
+    file_count = 0
+    # Stream files straight into the zip on disk (avoids holding everything in memory).
+    with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr(f"data/eva-data-{stamp}.json", payload)
+        if os.path.isdir(uploads_root):
+            for root, _dirs, files in os.walk(uploads_root):
+                for fn in files:
+                    fp = os.path.join(root, fn)
+                    arc = os.path.join("uploads", os.path.relpath(fp, uploads_root))
+                    try:
+                        z.write(fp, arc)
+                        file_count += 1
+                    except OSError:
+                        pass
+        z.writestr("MANIFEST.txt", (
+            "EVA Comply — FULL BACKUP\n"
+            f"Created: {dt.datetime.now().isoformat()}\n"
+            f"Data categories: {', '.join(bio.CATEGORIES.keys())}\n"
+            f"Uploaded files included: {file_count}\n\n"
+            "Contents:\n"
+            "  data/eva-data-*.json   — all database records (restore via the Restore tab / API)\n"
+            "  uploads/...            — evidence files and uploaded/replaced policy documents\n\n"
+            "Note: the 18 built-in policy templates and framework catalogs ship with the\n"
+            "application image and are not duplicated here.\n"
+        ).encode("utf-8"))
+    return FileResponse(out_path, media_type="application/zip",
+                        filename=f"eva-full-backup-{stamp}.zip")
+
+
 @router.get("/frameworks.zip")
 async def download_frameworks_zip(current_user: User = Depends(get_current_user)):
     """Download all bundled framework catalogs (EN + FR .xlsx) as a single zip."""
@@ -198,11 +239,25 @@ async def delete_snapshot(snap_id: str, current_user: User = Depends(get_current
 
 
 # ── restore (merge / upsert) ─────────────────────────────────────────────────
-async def _do_restore(db: AsyncSession, bundle: dict, categories: Optional[list]) -> dict:
+async def _do_restore(db: AsyncSession, bundle: dict, categories: Optional[list],
+                      *, trusted: bool, user: User) -> dict:
     if not isinstance(bundle, dict) or "tables" not in bundle:
         raise HTTPException(status_code=400, detail="Fichier de sauvegarde invalide")
+    # SECURITY: only restore bundles produced by this system. Server-side
+    # snapshots are inherently trusted; uploaded files must carry a valid
+    # signature, which blocks a hand-crafted bundle from escalating roles or
+    # overwriting another tenant's data.
+    if not trusted and not bio.verify_bundle(bundle):
+        raise HTTPException(
+            status_code=400,
+            detail=("Ce fichier de sauvegarde n'est pas signé par ce système et ne peut "
+                    "pas être restauré. Seules les sauvegardes exportées depuis EVA Comply "
+                    "sont acceptées."),
+        )
     try:
         counts = await bio.import_bundle(db, bundle, categories or None)
+        await audit_record(db, user, "backup.restore",
+                           target=",".join(categories) if categories else "all")
         await db.commit()
     except HTTPException:
         raise
@@ -227,7 +282,9 @@ async def restore_snapshot(body: RestoreSnapshotBody, current_user: User = Depen
         raise HTTPException(status_code=404, detail="Sauvegarde introuvable")
     with open(_path(b.id), "rb") as f:
         bundle = json.loads(f.read().decode("utf-8"))
-    return await _do_restore(db, bundle, body.categories)
+    # Server-side snapshots are written only by this app and are super-admin
+    # gated, so they are trusted regardless of signature (covers pre-signing snapshots).
+    return await _do_restore(db, bundle, body.categories, trusted=True, user=current_user)
 
 
 @router.post("/restore/upload")
@@ -239,7 +296,8 @@ async def restore_upload(file: UploadFile = File(...), categories: str = Form(""
     except (ValueError, UnicodeDecodeError):
         raise HTTPException(status_code=400, detail="JSON invalide")
     cats = [c for c in (categories.split(",") if categories else []) if c]
-    return await _do_restore(db, bundle, cats)
+    # Uploaded files are untrusted — _do_restore requires a valid signature.
+    return await _do_restore(db, bundle, cats, trusted=False, user=current_user)
 
 
 def _as_uuid(v: str) -> uuid.UUID:

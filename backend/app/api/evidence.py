@@ -17,6 +17,7 @@ from app.core.database import get_db
 from app.core.config import settings
 from app.core import storage
 from app.core.entitlements import ensure_active
+from app.core.upload_guard import validate_upload
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType
@@ -30,6 +31,13 @@ router = APIRouter()
 
 CLIENT_ROLES = {UserRole.client_admin, UserRole.contributor, UserRole.viewer}
 MAX_BYTES = 50 * 1024 * 1024  # 50 MB
+
+
+def _require_can_write(user: User) -> None:
+    """The viewer role is read-only. All other roles (contributor, client_admin,
+    and the reviewer/admin roles acting on a client's behalf) may write."""
+    if user.role == UserRole.viewer:
+        raise HTTPException(status_code=403, detail="Your role has read-only access")
 
 EV_BADGE = {
     "accepted": "b-green", "needs_more": "b-amber", "draft": "b-gray",
@@ -167,6 +175,7 @@ async def upload_evidence(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    _require_can_write(current_user)
     await ensure_active(db, current_user)
     org_id = await _target_org(db, current_user)
     if not org_id:
@@ -188,6 +197,7 @@ async def upload_evidence(
     data = await file.read()
     if len(data) > MAX_BYTES:
         raise HTTPException(status_code=413, detail="File exceeds 50 MB limit")
+    validate_upload(file.filename, data, "evidence")
 
     # Resolve or create the org-control link for this org + control
     oc = (await db.execute(
@@ -241,6 +251,7 @@ async def submit_evidence(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    _require_can_write(current_user)
     await ensure_active(db, current_user)
     ev = await _get_owned(db, evidence_id, current_user)
     if ev.status != EvidenceStatus.draft:
@@ -259,6 +270,7 @@ async def delete_evidence(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    _require_can_write(current_user)
     ev = await _get_owned(db, evidence_id, current_user)
     org_id = ev.org_id
     ee_id = ev.expected_evidence_id

@@ -9,7 +9,9 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.llm import get_llm_settings, masked_settings, test_connection, PROVIDERS
+from app.core.llm import get_llm_settings, masked_settings, test_connection, PROVIDERS, _resolve_base
+from app.core.net_guard import validate_outbound_url, UrlNotAllowed
+from app.core.secrets_crypto import encrypt
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 
@@ -56,11 +58,21 @@ async def update_settings(body: LlmSettingsBody, current_user: User = Depends(ge
     s.enabled = bool(body.enabled)
     s.timeout_seconds = max(5, min(300, int(body.timeout_seconds or 30)))
     s.extra_header_name = body.extra_header_name.strip() or None
-    s.extra_header_value = body.extra_header_value.strip() or None
 
-    # Key handling: None/sentinel keeps; "" clears; otherwise replace.
+    # SSRF guard: reject a base URL that targets a private/internal address
+    # (unless the operator opted in via LLM_ALLOW_PRIVATE_NETWORKS).
+    try:
+        validate_outbound_url(_resolve_base(s))
+    except UrlNotAllowed as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    # Secrets are encrypted at rest. extra_header_value: None/sentinel keeps.
+    if body.extra_header_value != KEEP_SENTINEL:
+        s.extra_header_value = encrypt(body.extra_header_value.strip() or None)
+
+    # Key handling: None/sentinel keeps; "" clears; otherwise replace (encrypted).
     if body.api_key is not None and body.api_key != KEEP_SENTINEL:
-        s.api_key = body.api_key.strip() or None
+        s.api_key = encrypt(body.api_key.strip() or None)
 
     await db.commit()
     await db.refresh(s)

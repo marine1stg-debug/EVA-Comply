@@ -17,6 +17,8 @@ from app.core.security import (
 )
 from app.core.email import send_email
 from app.core.audit import record as audit_record
+from app.core.secrets_crypto import encrypt, decrypt
+from app.core import ratelimit
 from app.core.provisioning import assign_frameworks
 from app.core.entitlements import get_entitlements, tenant_usage, filter_frameworks, trial_state
 from app.core.platform import get_settings
@@ -29,6 +31,16 @@ router = APIRouter()
 security = HTTPBearer()
 
 MFA_REQUIRED_ROLES = {UserRole.super_admin, UserRole.eva_auditor, UserRole.msp_admin}
+
+MIN_PASSWORD_LENGTH = 12
+
+
+def _validate_password(pw: str) -> None:
+    if len(pw or "") < MIN_PASSWORD_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Password must be at least {MIN_PASSWORD_LENGTH} characters",
+        )
 
 
 # ── Schemas ───────────────────────────────────────────
@@ -135,11 +147,13 @@ async def _send_unlock_email(user: User):
     send_email(user.email, "Your EVA account is locked",
                f"Your account was locked after too many sign-in attempts.\n"
                f"It will unlock automatically in {LOCKOUT_MINUTES} minutes, or unlock it now:\n{link}")
-    print(f"[unlock] {user.email} -> /unlock?token={token}")
+    if settings.ENVIRONMENT == "development":
+        print(f"[unlock] {user.email} -> /unlock?token={token}")
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
+async def login(request: LoginRequest, http_request: Request, db: AsyncSession = Depends(get_db)):
+    ratelimit.enforce(http_request, "login", limit=10, window_seconds=300)
     result = await db.execute(select(User).where(User.email == request.email))
     user = result.scalar_one_or_none()
 
@@ -193,7 +207,8 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/mfa/verify", response_model=TokenResponse)
-async def verify_mfa(request: MFAVerifyRequest, db: AsyncSession = Depends(get_db)):
+async def verify_mfa(request: MFAVerifyRequest, http_request: Request, db: AsyncSession = Depends(get_db)):
+    ratelimit.enforce(http_request, "mfa_verify", limit=10, window_seconds=300)
     try:
         payload = decode_token(request.temp_token)
         if not payload.get("mfa_pending"):
@@ -207,16 +222,17 @@ async def verify_mfa(request: MFAVerifyRequest, db: AsyncSession = Depends(get_d
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    if not verify_totp(user.mfa_secret, request.code):
+    if not verify_totp(decrypt(user.mfa_secret), request.code):
         raise HTTPException(status_code=401, detail="Invalid MFA code")
 
     return _session_tokens(user)
 
 
 @router.post("/refresh", response_model=TokenResponse)
-async def refresh_session(request: RefreshRequest, db: AsyncSession = Depends(get_db)):
+async def refresh_session(request: RefreshRequest, http_request: Request, db: AsyncSession = Depends(get_db)):
     """Exchange a valid refresh token for a fresh access + refresh token pair
     (rotation). Lets the SPA renew silently without re-login."""
+    ratelimit.enforce(http_request, "refresh", limit=60, window_seconds=300)
     try:
         payload = decode_token(request.refresh_token)
     except Exception:
@@ -241,9 +257,10 @@ class TokenBody(BaseModel):
 
 
 @router.post("/request-unlock")
-async def request_unlock(body: EmailBody, db: AsyncSession = Depends(get_db)):
+async def request_unlock(body: EmailBody, http_request: Request, db: AsyncSession = Depends(get_db)):
     """Email a one-time unlock link. Always returns success to avoid leaking
     which addresses have accounts."""
+    ratelimit.enforce(http_request, "request_unlock", limit=5, window_seconds=900)
     user = (await db.execute(select(User).where(User.email == body.email))).scalar_one_or_none()
     if user:
         await _send_unlock_email(user)
@@ -306,25 +323,30 @@ async def get_captcha():
 
 
 @router.post("/request-verification")
-async def request_verification(body: VerifyRequestBody, db: AsyncSession = Depends(get_db)):
+async def request_verification(body: VerifyRequestBody, http_request: Request, db: AsyncSession = Depends(get_db)):
     """Public — issue an email verification code. In dev (console email) the
     code is returned so the flow is testable without an email service."""
+    ratelimit.enforce(http_request, "request_verification", limit=5, window_seconds=900)
     exists = (await db.execute(select(User).where(User.email == body.email))).scalar_one_or_none()
     if exists:
         raise HTTPException(status_code=400, detail="That email already has an account — please sign in")
     code = gen_verification_code()
     token = create_verification_token(body.email, code)
     dev = settings.EMAIL_BACKEND == "console" or settings.ENVIRONMENT == "development"
-    # In production this code would be emailed, not returned.
-    print(f"[verification] {body.email} -> {code}")
+    # Only echo the code to logs in development; in production it is emailed.
+    if dev:
+        print(f"[verification] {body.email} -> {code}")
     return {"verification_token": token, "dev_code": code if dev else None}
 
 
 @router.post("/register")
-async def register(request: RegisterRequest, db: AsyncSession = Depends(get_db)):
+async def register(request: RegisterRequest, http_request: Request, db: AsyncSession = Depends(get_db)):
+    ratelimit.enforce(http_request, "register", limit=5, window_seconds=3600)
     result = await db.execute(select(User).where(User.email == request.email))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email already registered")
+
+    _validate_password(request.password)
 
     # Require a valid CAPTCHA answer (challenge issued by /captcha).
     if not request.captcha_token or not verify_captcha(request.captcha_token, request.captcha_answer or ""):
@@ -439,7 +461,7 @@ async def check_promo(code: str, db: AsyncSession = Depends(get_db)):
 @router.post("/mfa/setup", response_model=MFASetupResponse)
 async def setup_mfa(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     secret = generate_totp_secret()
-    current_user.mfa_secret = secret
+    current_user.mfa_secret = encrypt(secret)  # stored encrypted at rest
     await db.commit()
     return MFASetupResponse(secret=secret, qr_uri=get_totp_uri(secret, current_user.email))
 
@@ -456,7 +478,7 @@ async def enable_mfa(
 ):
     if not current_user.mfa_secret:
         raise HTTPException(status_code=400, detail="Run /mfa/setup first")
-    if not verify_totp(current_user.mfa_secret, body.code):
+    if not verify_totp(decrypt(current_user.mfa_secret), body.code):
         raise HTTPException(status_code=401, detail="Invalid code")
     current_user.mfa_enabled = True
     await db.commit()
@@ -484,8 +506,7 @@ async def change_password(
 ):
     if not verify_password(body.current_password, current_user.password_hash):
         raise HTTPException(status_code=401, detail="Current password is incorrect")
-    if len(body.new_password) < 6:
-        raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+    _validate_password(body.new_password)
     current_user.password_hash = hash_password(body.new_password)
     await db.commit()
     return {"message": "Password updated"}
@@ -534,8 +555,7 @@ async def accept_invite(body: AcceptInviteBody, db: AsyncSession = Depends(get_d
         raise HTTPException(status_code=400, detail="This invite link is invalid or has expired")
     if p.get("type") != "invite":
         raise HTTPException(status_code=400, detail="Invalid invite")
-    if len(body.password) < 6:
-        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+    _validate_password(body.password)
     u = (await db.execute(select(User).where(User.id == uuid.UUID(p["sub"])))).scalar_one_or_none()
     if not u:
         raise HTTPException(status_code=404, detail="Invite no longer valid")

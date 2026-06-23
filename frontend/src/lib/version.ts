@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.2.0'
+export const APP_VERSION = '1.3.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,17 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.3.0',
+    date: '2026-06-23',
+    changes: [
+      'Security hardening from the OWASP review — no changes to how you sign in or use the app.',
+      'Stored secrets (AI connector key, MFA secrets) are now encrypted at rest.',
+      'The AI connector is protected against requests to internal/private addresses (SSRF).',
+      'Backup restore now only accepts backups created by this system, and every restore is logged.',
+      'Sign-in, registration, and verification endpoints are now rate-limited against abuse.',
+    ],
+  },
   {
     version: '1.2.0',
     date: '2026-06-23',

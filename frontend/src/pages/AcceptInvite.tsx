@@ -31,7 +31,7 @@ export default function AcceptInvitePage() {
   }, [token])
 
   const submit = async () => {
-    if (pw.length < 6) return toast.error(t('Password must be at least 6 characters'))
+    if (pw.length < 12) return toast.error(t('Password must be at least 12 characters'))
     if (pw !== pw2) return toast.error(t('Passwords don’t match'))
     setLoading(true)
     try {
@@ -60,7 +60,7 @@ export default function AcceptInvitePage() {
               <div className="text-xs mt-1" style={{ color: '#4A6A8A' }}>{info.email}</div>
             </div>
             <label style={{ fontSize: 11, fontWeight: 600, color: '#7094B8', marginBottom: 4, display: 'block' }}>{t('Set a password')}</label>
-            <input style={inputStyle} type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder={t('min 6 chars')} />
+            <input style={inputStyle} type="password" value={pw} onChange={e => setPw(e.target.value)} placeholder={t('min 12 chars')} />
             <input style={inputStyle} type="password" value={pw2} onChange={e => setPw2(e.target.value)} placeholder={t('confirm password')} />
             <button className="w-full py-2.5 rounded-lg font-semibold text-white text-sm mt-1" disabled={loading}
               style={{ background: 'linear-gradient(135deg, #1A8FD1, #3A2F8F)', opacity: loading ? .6 : 1 }} onClick={submit}>

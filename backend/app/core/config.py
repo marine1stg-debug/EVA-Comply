@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     # Redis
     REDIS_URL: str = "redis://redis:6379"
 
+    # LLM connector SSRF guard. Default False blocks the connector from calling
+    # private/loopback/link-local addresses. Set True only if you run a trusted
+    # internal LLM (e.g. Ollama on localhost or an internal vLLM endpoint).
+    LLM_ALLOW_PRIVATE_NETWORKS: bool = False
+
     # Storage
     STORAGE_BACKEND: Literal["local", "s3", "r2", "azure", "gcs"] = "local"
     STORAGE_LOCAL_PATH: str = "/app/uploads"

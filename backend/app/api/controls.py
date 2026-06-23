@@ -16,6 +16,7 @@ import hashlib
 from app.core.database import get_db
 from app.core.config import settings
 from app.core import storage
+from app.core.upload_guard import validate_upload
 from app.core.i18n import get_lang, loc, loc_domain, has_fr, lines as _lines
 from app.api.auth import get_current_user
 from app.api.policy import active_policies, match_policy_name
@@ -31,6 +32,14 @@ from app.models.self_assessment import SelfAssessment
 from app.core.maturity_questions import generate_questions, perceived_level
 
 MAX_BYTES = 50 * 1024 * 1024  # 50 MB
+
+
+def _require_can_write(user: User) -> None:
+    """The viewer role is read-only. Contributors, client admins, and the
+    reviewer/admin roles (acting on a client's behalf) may write."""
+    if user.role == UserRole.viewer:
+        raise HTTPException(status_code=403, detail="Your role has read-only access")
+
 
 FREQS = [f.value for f in EvidenceFrequency]
 EVIDENCE_TYPES = ["Document", "Policy", "Screenshot", "Log", "Configuration", "Report", "Record", "Other"]
@@ -723,6 +732,7 @@ async def add_expected_evidence(
     db: AsyncSession = Depends(get_db),
     lang: str = Depends(get_lang),
 ):
+    _require_can_write(current_user)
     text = (body.text or "").strip()
     if not text:
         raise HTTPException(status_code=400, detail="Text is required")
@@ -765,6 +775,7 @@ async def update_expected_evidence(
     db: AsyncSession = Depends(get_db),
     lang: str = Depends(get_lang),
 ):
+    _require_can_write(current_user)
     control = await _load_control(db, control_id)
     org_id = await _target_org(db, current_user)
     if org_id is None:
@@ -790,6 +801,7 @@ async def delete_expected_evidence(
     db: AsyncSession = Depends(get_db),
     lang: str = Depends(get_lang),
 ):
+    _require_can_write(current_user)
     control = await _load_control(db, control_id)
     org_id = await _target_org(db, current_user)
     if org_id is None:
@@ -816,6 +828,7 @@ async def add_standalone_evidence(
     """Add an additional, standalone evidence item to a control (not tied to a
     specific expected-evidence requirement), with a title and an optional note
     documenting what it is. Goes through the same review pipeline."""
+    _require_can_write(current_user)
     title = (title or "").strip()
     if not title:
         raise HTTPException(status_code=400, detail="A title is required")
@@ -828,6 +841,7 @@ async def add_standalone_evidence(
     data = await file.read()
     if len(data) > MAX_BYTES:
         raise HTTPException(status_code=413, detail="File exceeds 50 MB limit")
+    validate_upload(file.filename, data, "evidence")
     safe_name = os.path.basename(file.filename or "evidence")
     file_key = storage.save_bytes(f"{org_id}/{uuid.uuid4().hex}_{safe_name}", data)
 
@@ -856,6 +870,7 @@ async def collect_expected_evidence(
 ):
     """Upload a file against a specific expected-evidence requirement, which
     marks it satisfied (→ valid) and lifts the control's coverage."""
+    _require_can_write(current_user)
     control = await _load_control(db, control_id)
     org_id = await _target_org(db, current_user)
     if org_id is None:
@@ -866,6 +881,7 @@ async def collect_expected_evidence(
     data = await file.read()
     if len(data) > MAX_BYTES:
         raise HTTPException(status_code=413, detail="File exceeds 50 MB limit")
+    validate_upload(file.filename, data, "evidence")
 
     safe_name = os.path.basename(file.filename or "evidence")
     file_key = storage.save_bytes(f"{org_id}/{uuid.uuid4().hex}_{safe_name}", data)
@@ -1184,6 +1200,7 @@ async def save_self_assessment(
 ):
     """Client (or a reviewer on their behalf) records the perceived maturity
     rating + an optional Comments / Additional info note for this control."""
+    _require_can_write(current_user)
     control = await _load_control(db, control_id)
     org_id = await _target_org(db, current_user)
     if org_id is None:

@@ -74,9 +74,9 @@ export default function SettingsPage() {
         <div className="detail-section">
           <div className="card-hdr" style={{ marginBottom: 10 }}><span className="card-title">{t('Change Password')}</span></div>
           <div className="form-row"><label className="form-label">{t('Current password')}</label><input className="form-input" type="password" value={cur} onChange={e => setCur(e.target.value)} /></div>
-          <div className="form-row" style={{ marginTop: 8 }}><label className="form-label">{t('New password')}</label><input className="form-input" type="password" value={next} onChange={e => setNext(e.target.value)} placeholder={t('min 6 chars')} /></div>
+          <div className="form-row" style={{ marginTop: 8 }}><label className="form-label">{t('New password')}</label><input className="form-input" type="password" value={next} onChange={e => setNext(e.target.value)} placeholder={t('min 12 chars')} /></div>
           <button className="submit-btn" style={{ marginTop: 12, justifyContent: 'center', width: '100%' }}
-            disabled={!cur || next.length < 6 || changePw.isPending} onClick={() => changePw.mutate()}>
+            disabled={!cur || next.length < 12 || changePw.isPending} onClick={() => changePw.mutate()}>
             {changePw.isPending ? t('Saving…') : t('Update password')}
           </button>
         </div>

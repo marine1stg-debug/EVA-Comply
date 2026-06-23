@@ -498,7 +498,7 @@ export const FR: Record<string, string> = {
   // ── Auth: Accept invite ──
   'Missing invite token.': 'Jeton d’invitation manquant.',
   'This invite link is invalid or has expired.': 'Ce lien d’invitation est invalide ou a expiré.',
-  'Password must be at least 6 characters': 'Le mot de passe doit contenir au moins 6 caractères',
+  'Password must be at least 12 characters': 'Le mot de passe doit contenir au moins 12 caractères',
   'Passwords don’t match': 'Les mots de passe ne correspondent pas',
   'Welcome to EVA': 'Bienvenue chez EVA',
   'Could not accept invite': 'Impossible d’accepter l’invitation',
@@ -506,7 +506,7 @@ export const FR: Record<string, string> = {
   'You’ve been invited to join': 'Vous avez été invité à rejoindre',
   'as': 'en tant que',
   'Set a password': 'Définir un mot de passe',
-  'min 6 chars': 'min. 6 caractères',
+  'min 12 chars': 'min. 12 caractères',
   'confirm password': 'confirmer le mot de passe',
   'Setting up…': 'Configuration…',
   'Accept & enter EVA': 'Accepter et entrer dans EVA',
@@ -519,7 +519,7 @@ export const FR: Record<string, string> = {
   'Create your account · Step {step} of 4': 'Créez votre compte · Étape {step} sur 4',
   'Organization name': 'Nom de l’organisation',
   'Your name': 'Votre nom',
-  'Password (min 6 chars)': 'Mot de passe (min. 6 caractères)',
+  'Password (min 12 chars)': 'Mot de passe (min. 12 caractères)',
   'Sending code…': 'Envoi du code…',
   'Continue': 'Continuer',
   'Verify your email': 'Vérifiez votre courriel',
@@ -1504,4 +1504,11 @@ export const FR: Record<string, string> = {
   'Policy deleted': 'Politique supprimée',
   'Please choose a .docx file': 'Veuillez choisir un fichier .docx',
   'No file available for this policy yet': 'Aucun fichier disponible pour cette politique pour le moment',
+  // ── Full backup ──
+  'Full backup (everything)': 'Sauvegarde complète (tout)',
+  'Download one .zip with the entire database (all data) plus every uploaded file — evidence and policy documents.':
+    'Téléchargez un seul fichier .zip contenant toute la base de données (toutes les données) ainsi que tous les fichiers téléversés — preuves et documents de politiques.',
+  'Download full backup': 'Télécharger la sauvegarde complète',
+  'Preparing…': 'Préparation…',
+  'Full backup downloaded': 'Sauvegarde complète téléchargée',
 }

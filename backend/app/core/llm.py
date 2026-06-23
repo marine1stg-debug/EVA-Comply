@@ -23,6 +23,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.llm_settings import LlmSettings
+from app.core.secrets_crypto import decrypt
+from app.core.net_guard import validate_outbound_url, UrlNotAllowed
 
 PROVIDERS = [
     {"key": "openai", "name": "OpenAI-compatible",
@@ -64,8 +66,18 @@ def _mask(key: str | None) -> str | None:
     return f"••••{tail}"
 
 
+def api_key_plain(s: LlmSettings) -> str | None:
+    """Decrypt the stored API key for server-side use (never sent to clients)."""
+    return decrypt(s.api_key)
+
+
+def extra_header_value_plain(s: LlmSettings) -> str | None:
+    return decrypt(s.extra_header_value)
+
+
 def masked_settings(s: LlmSettings) -> dict:
     """Client-safe view — never includes the raw API key."""
+    key = api_key_plain(s)
     return {
         "provider": s.provider,
         "base_url": s.base_url or "",
@@ -73,8 +85,8 @@ def masked_settings(s: LlmSettings) -> dict:
         "enabled": bool(s.enabled),
         "timeout_seconds": s.timeout_seconds,
         "extra_header_name": s.extra_header_name or "",
-        "has_key": bool(s.api_key),
-        "key_hint": _mask(s.api_key),
+        "has_key": bool(key),
+        "key_hint": _mask(key),
         "last_tested_at": s.last_tested_at.isoformat() if s.last_tested_at else None,
         "last_test_ok": s.last_test_ok,
         "last_test_msg": s.last_test_msg,
@@ -95,15 +107,23 @@ def _resolve_base(s: LlmSettings) -> str:
 def _build_request(s: LlmSettings, messages: list[dict], max_tokens: int):
     """Return (url, headers, json_body) for the configured provider."""
     base = _resolve_base(s)
+    # SSRF guard: never let the server call a private/internal address unless the
+    # operator explicitly opted in. Validated again here (defense in depth) even
+    # though it is also checked when the URL is saved.
+    try:
+        validate_outbound_url(base)
+    except UrlNotAllowed as e:
+        raise LlmError(str(e))
     model = (s.model or "").strip()
     if not model:
         raise LlmError("No model configured.")
+    api_key = api_key_plain(s)
     headers: dict[str, str] = {"Content-Type": "application/json"}
 
     if s.provider == "anthropic":
         url = f"{base}/v1/messages"
-        if s.api_key:
-            headers["x-api-key"] = s.api_key
+        if api_key:
+            headers["x-api-key"] = api_key
         headers["anthropic-version"] = ANTHROPIC_VERSION
         system = "\n".join(m["content"] for m in messages if m["role"] == "system")
         convo = [m for m in messages if m["role"] != "system"]
@@ -112,18 +132,19 @@ def _build_request(s: LlmSettings, messages: list[dict], max_tokens: int):
             body["system"] = system
     elif s.provider == "ollama":
         url = f"{base}/api/chat"
-        if s.api_key:
-            headers["Authorization"] = f"Bearer {s.api_key}"
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
         body = {"model": model, "messages": messages, "stream": False,
                 "options": {"num_predict": max_tokens}}
     else:  # openai-compatible
         url = f"{base}/chat/completions"
-        if s.api_key:
-            headers["Authorization"] = f"Bearer {s.api_key}"
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
         body = {"model": model, "messages": messages, "max_tokens": max_tokens}
 
-    if s.extra_header_name and s.extra_header_value:
-        headers[s.extra_header_name] = s.extra_header_value
+    header_value = extra_header_value_plain(s)
+    if s.extra_header_name and header_value:
+        headers[s.extra_header_name] = header_value
     return url, headers, body
 
 
