@@ -56,10 +56,14 @@ class RegisterRequest(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
+    refresh_token: Optional[str] = None
     token_type: str = "bearer"
     requires_mfa: bool = False
     temp_token: Optional[str] = None
     user: Optional[dict] = None
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
 
 class MFASetupResponse(BaseModel):
     secret: str
@@ -99,6 +103,25 @@ async def get_current_user(
         raise HTTPException(status_code=402, detail="Account suspended — please update payment")
 
     return user
+
+
+# ── Session helpers ───────────────────────────────────
+def _user_dict(user: User) -> dict:
+    return {
+        "id": str(user.id),
+        "email": user.email,
+        "display_name": user.display_name,
+        "role": user.role.value,
+        "tenant_id": str(user.tenant_id),
+    }
+
+def _session_tokens(user: User) -> TokenResponse:
+    """Issue a short-lived access token + a long-lived refresh token."""
+    return TokenResponse(
+        access_token=create_access_token({"sub": str(user.id)}),
+        refresh_token=create_refresh_token({"sub": str(user.id)}),
+        user=_user_dict(user),
+    )
 
 
 # ── Routes ────────────────────────────────────────────
@@ -166,17 +189,7 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
         )
         return TokenResponse(requires_mfa=True, temp_token=temp_token)
 
-    access_token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(
-        access_token=access_token,
-        user={
-            "id": str(user.id),
-            "email": user.email,
-            "display_name": user.display_name,
-            "role": user.role.value,
-            "tenant_id": str(user.tenant_id),
-        }
-    )
+    return _session_tokens(user)
 
 
 @router.post("/mfa/verify", response_model=TokenResponse)
@@ -197,17 +210,26 @@ async def verify_mfa(request: MFAVerifyRequest, db: AsyncSession = Depends(get_d
     if not verify_totp(user.mfa_secret, request.code):
         raise HTTPException(status_code=401, detail="Invalid MFA code")
 
-    access_token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(
-        access_token=access_token,
-        user={
-            "id": str(user.id),
-            "email": user.email,
-            "display_name": user.display_name,
-            "role": user.role.value,
-            "tenant_id": str(user.tenant_id),
-        }
-    )
+    return _session_tokens(user)
+
+
+@router.post("/refresh", response_model=TokenResponse)
+async def refresh_session(request: RefreshRequest, db: AsyncSession = Depends(get_db)):
+    """Exchange a valid refresh token for a fresh access + refresh token pair
+    (rotation). Lets the SPA renew silently without re-login."""
+    try:
+        payload = decode_token(request.refresh_token)
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid or expired refresh token")
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Invalid token type")
+    user_id = payload.get("sub")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    user = (await db.execute(select(User).where(User.id == uuid.UUID(user_id)))).scalar_one_or_none()
+    if not user or not user.is_active:
+        raise HTTPException(status_code=401, detail="User not found or inactive")
+    return _session_tokens(user)
 
 
 class EmailBody(BaseModel):
