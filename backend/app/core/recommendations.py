@@ -84,9 +84,15 @@ def _derive_from_ladder(control: Control, target: int) -> dict | None:
     label = tgt.get("label", "").strip()
     if not label:
         return None
+    short = tgt.get("short", "target")
+    # Use the ladder's French label/short when present, else fall back to EN.
+    short_fr = tgt.get("short_fr", short)
+    label_fr = (tgt.get("label_fr") or label).strip()
     return {
-        "title": f"Advance to '{tgt.get('short', 'target')}' maturity",
+        "title": f"Advance to '{short}' maturity",
         "text": f"To close the gap on {control.ref}, work toward: {label}",
+        "title_fr": f"Atteindre le niveau de maturité « {short_fr} »",
+        "text_fr": f"Pour combler l'écart sur {control.ref}, visez : {label_fr}",
         "effort": None, "impact": None,
     }
 

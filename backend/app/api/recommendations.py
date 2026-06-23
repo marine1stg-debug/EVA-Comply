@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.api.auth import get_current_user
 from app.core.client_context import resolve_org, CLIENT_ROLES
+from app.core.i18n import get_lang, loc, loc_domain
 from app.models.user import User, UserRole
 from app.models.framework import Control
 from app.models.recommendation import Recommendation
@@ -34,18 +35,18 @@ def _risk(c: Control) -> str:
     return engine._risk_value(c.risk_rating)
 
 
-def _serialize(r: Recommendation, c: Control) -> dict:
+def _serialize(r: Recommendation, c: Control, lang: str = "en") -> dict:
     risk = engine._risk_value(c.risk_rating)
     return {
         "id": str(r.id),
         "control_id": str(c.id),
         "control_ref": c.ref,
-        "control_title": c.title,
-        "domain": c.domain or "General",
+        "control_title": loc(c, "title", lang),
+        "domain": loc_domain(c.domain, lang) or "General",
         "risk": risk,
         "source": r.source,
-        "title": r.title,
-        "text": r.text,
+        "title": loc(r, "title", lang),
+        "text": loc(r, "text", lang),
         "rationale": r.rationale,
         "effort": r.effort,
         "impact": r.impact,
@@ -70,24 +71,24 @@ async def _scoped_org(db, user) -> uuid.UUID:
     return org_id
 
 
-async def _all_for_org(db: AsyncSession, org_id) -> list[dict]:
+async def _all_for_org(db: AsyncSession, org_id, lang: str = "en") -> list[dict]:
     rows = (await db.execute(
         select(Recommendation, Control)
         .join(Control, Control.id == Recommendation.control_id)
         .where(Recommendation.org_id == org_id)
     )).all()
-    items = [_serialize(r, c) for r, c in rows]
+    items = [_serialize(r, c, lang) for r, c in rows]
     items.sort(key=lambda x: x["priority"], reverse=True)
     return items
 
 
 @router.get("/")
-async def list_recommendations(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+async def list_recommendations(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db), lang: str = Depends(get_lang)):
     org_id = await resolve_org(db, current_user)
     if org_id is None:
         return {"recommendations": [], "top10": [], "quick_wins": [], "counts": {},
                 "needs_client": current_user.role not in CLIENT_ROLES, "can_generate": False, "has_llm": False}
-    items = await _all_for_org(db, org_id)
+    items = await _all_for_org(db, org_id, lang)
     active = [i for i in items if i["status"] not in ("done", "dismissed")]
     quick = [i for i in active if i["quick_win"]]
     pinned = [i for i in active if i["is_top10"]]
@@ -182,6 +183,7 @@ async def _generate(db: AsyncSession, org_id, source: str, overwrite: bool,
             db.add(Recommendation(
                 org_id=org_id, control_id=c.id, source=source,
                 title=rec["title"], text=rec["text"],
+                title_fr=rec.get("title_fr"), text_fr=rec.get("text_fr"),
                 effort=rec["effort"], impact=rec["impact"],
                 current_level=g["current"], target_level=g["target"],
                 status="open",
@@ -206,7 +208,7 @@ async def generate(body: GenerateBody, current_user: User = Depends(get_current_
 
 
 @router.get("/control/{control_id}")
-async def control_recommendations(control_id: str, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+async def control_recommendations(control_id: str, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db), lang: str = Depends(get_lang)):
     org_id = await _scoped_org(db, current_user)
     try:
         cid = uuid.UUID(control_id)
@@ -217,7 +219,7 @@ async def control_recommendations(control_id: str, current_user: User = Depends(
         .join(Control, Control.id == Recommendation.control_id)
         .where(Recommendation.org_id == org_id, Recommendation.control_id == cid)
     )).all()
-    items = [_serialize(r, c) for r, c in rows]
+    items = [_serialize(r, c, lang) for r, c in rows]
     items.sort(key=lambda x: x["priority"], reverse=True)
     llm = await get_llm_settings(db)
     return {"recommendations": items, "can_generate": current_user.role in REVIEWER_ROLES, "has_llm": bool(llm.enabled)}

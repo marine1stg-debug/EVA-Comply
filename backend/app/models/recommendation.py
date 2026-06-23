@@ -30,6 +30,9 @@ class Recommendation(Base, TimestampMixin):
     source: Mapped[str] = mapped_column(String(10), default="premade")  # premade | ai | manual
     title: Mapped[str] = mapped_column(String(300), nullable=False)
     text: Mapped[str] = mapped_column(Text, nullable=False)
+    # Canadian-French translation (served when X-Lang=fr; falls back to EN).
+    title_fr: Mapped[Optional[str]] = mapped_column(String(300), nullable=True)
+    text_fr: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     rationale: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     effort: Mapped[str] = mapped_column(String(10), default="medium")   # low | medium | high
