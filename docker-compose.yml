@@ -58,8 +58,10 @@ services:
       REDIS_URL: redis://redis:6379
       SECRET_KEY: ${SECRET_KEY:-dev_secret_key_change_in_production_min_32_chars}
       ALGORITHM: HS256
-      ACCESS_TOKEN_EXPIRE_MINUTES: "15"
-      REFRESH_TOKEN_EXPIRE_DAYS: "30"
+      # Access-token lifetime in minutes. Default 480 (8h) so a normal work
+      # session doesn't get logged out. Override in .env if you want shorter.
+      ACCESS_TOKEN_EXPIRE_MINUTES: "${ACCESS_TOKEN_EXPIRE_MINUTES:-480}"
+      REFRESH_TOKEN_EXPIRE_DAYS: "${REFRESH_TOKEN_EXPIRE_DAYS:-30}"
       ENVIRONMENT: ${ENVIRONMENT:-development}
       STORAGE_BACKEND: local
       STORAGE_LOCAL_PATH: /app/uploads
