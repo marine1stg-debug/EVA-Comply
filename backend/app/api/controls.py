@@ -18,6 +18,7 @@ from app.core.config import settings
 from app.core import storage
 from app.core.i18n import get_lang, loc, loc_domain, has_fr, lines as _lines
 from app.api.auth import get_current_user
+from app.api.policy import active_policies, match_policy_name
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType
 from app.models.framework import Framework, Control, ControlRisk, ControlPriority
@@ -248,6 +249,7 @@ async def list_controls(
 
     items = []
     total_ev = coll_ev = complete = missing = 0
+    _pols = await active_policies(db)
     for c in controls:
         oc = ocs.get(c.id)
         status = oc.status.value if oc else "not_started"
@@ -288,7 +290,7 @@ async def list_controls(
             "evidence_expected": ev_expected,
             "owner": owner,
             "due": due,
-            "policy_template": _policy_template_for(c),
+            "policy_template": match_policy_name(c.domain, _pols, lang),
         })
 
     domains = sorted({c["domain"] for c in items if c["domain"] != "—"})
@@ -447,7 +449,7 @@ async def control_detail(
         "evidence_expected": max(len(expected), 1),
         "evidence": evidence,
         "mappings": control.mappings or {},
-        "policy_template": _policy_template_for(control),
+        "policy_template": match_policy_name(control.domain, await active_policies(db), lang),
     }
 
 

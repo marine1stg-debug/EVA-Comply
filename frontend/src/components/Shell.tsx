@@ -6,6 +6,8 @@ import { useClientContext } from '../store/clientContext'
 import { useUnsavedGuard } from '../store/unsavedGuard'
 import { api } from '../lib/api'
 import { useT, useI18n } from '../lib/i18n'
+import { Info, X } from 'lucide-react'
+import { APP_VERSION, CHANGELOG } from '../lib/version'
 import { LOGO_LG } from '../assets/logo'
 import { LOGO_LIGHT } from '../assets/logoLight'
 import NotificationBell from './NotificationBell'
@@ -127,6 +129,7 @@ export default function Shell() {
   const clientName = useClientContext(s => s.clientName)
 
   const role = user?.role || ''
+  const [showChangelog, setShowChangelog] = useState(false)
   const canReview = ['msp_admin', 'msp_analyst', 'eva_auditor', 'super_admin'].includes(role)
   const canUsers = ['super_admin', 'msp_admin', 'client_admin'].includes(role)
   const canTenants = role === 'super_admin'
@@ -151,6 +154,7 @@ export default function Shell() {
       { path: '/evidence', icon: '📄', label: 'Evidence', show: true },
       { path: '/maturity', icon: '◎', label: 'Maturity', show: true },
       { path: '/recommendations', icon: '✦', label: 'Recommendations', show: true },
+      { path: '/policies', icon: '📘', label: 'Policies', show: true },
       { path: '/renewals', icon: '↺', label: 'Renewals', show: true },
       { path: '/reports', icon: '⬇', label: 'Reports', show: feat('reports') },
     ]},
@@ -249,7 +253,16 @@ export default function Shell() {
       <div className="body-row">
         <aside className="sidebar-l">
           <div className="side-ctx">
-            <div className="side-ctx-title"><span className="bn-eva">EVA</span> Comply</div>
+            <div className="side-ctx-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span><span className="bn-eva">EVA</span> Comply</span>
+              <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text3)', background: 'var(--card2, rgba(255,255,255,.06))', padding: '1px 6px', borderRadius: 999 }}>v{APP_VERSION}</span>
+              {role === 'super_admin' && (
+                <button onClick={() => setShowChangelog(true)} title={t("What's new")} aria-label={t("What's new")}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 18, height: 18, padding: 0, borderRadius: '50%', border: '1px solid var(--border, rgba(255,255,255,.15))', background: 'transparent', color: 'var(--eva-blue2, #1A8FD1)', cursor: 'pointer' }}>
+                  <Info size={11} aria-hidden />
+                </button>
+              )}
+            </div>
             <div className="side-ctx-sub">{t('Risk & Compliance')}</div>
           </div>
 
@@ -313,6 +326,31 @@ export default function Shell() {
               <div className="page-sub" style={{ marginTop: 6 }}>{t('Subscribe to restore full access to your compliance workspace.')}</div>
               <button className="submit-btn" style={{ marginTop: 18, width: '100%', justifyContent: 'center' }} onClick={() => navigate('/billing')}>{t('View plans & subscribe')}</button>
               <button className="tb-btn" style={{ marginTop: 8, width: '100%', justifyContent: 'center' }} onClick={logout}>{t('Sign out')}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showChangelog && (
+        <div className="modal-overlay" style={{ zIndex: 70 }} onClick={() => setShowChangelog(false)}>
+          <div className="modal-card" style={{ maxWidth: 560 }} onClick={e => e.stopPropagation()}>
+            <div className="modal-body" style={{ padding: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)' }}>{t("What's new")} <span style={{ color: 'var(--text3)', fontWeight: 600 }}>· v{APP_VERSION}</span></div>
+                <button className="tb-btn" style={{ padding: 4 }} onClick={() => setShowChangelog(false)} aria-label={t('Close')}><X size={16} aria-hidden /></button>
+              </div>
+              <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                {CHANGELOG.map(rel => (
+                  <div key={rel.version} style={{ marginBottom: 16 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--eva-blue2, #1A8FD1)' }}>v{rel.version} <span style={{ color: 'var(--text3)', fontWeight: 500 }}>· {rel.date}</span></div>
+                    <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
+                      {rel.changes.map((c, i) => (
+                        <li key={i} style={{ fontSize: 12.5, color: 'var(--text2)', marginBottom: 4, lineHeight: 1.45 }}>{c}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

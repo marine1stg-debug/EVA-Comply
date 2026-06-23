@@ -33,6 +33,7 @@ import AiSettingsPage from './pages/AiSettings'
 import SupportPage from './pages/Support'
 import SupportCasesPage from './pages/SupportCases'
 import BackupRestorePage from './pages/BackupRestore'
+import PolicyLibraryPage from './pages/PolicyLibrary'
 import Shell from './components/Shell'
 import MobileQuick from './pages/MobileQuick'
 
@@ -80,6 +81,7 @@ export default function App() {
           <Route path="maturity" element={<MaturityPage />} />
           <Route path="recommendations" element={<RecommendationsPage />} />
           <Route path="evidence" element={<EvidencePage />} />
+          <Route path="policies" element={<PolicyLibraryPage />} />
           <Route path="review" element={<RoleRoute allow={REVIEWERS}><ReviewPage /></RoleRoute>} />
           <Route path="tenants" element={<RoleRoute allow={SUPER}><TenantsPage /></RoleRoute>} />
           <Route path="users" element={<RoleRoute allow={USER_ADMINS}><UsersPage /></RoleRoute>} />
