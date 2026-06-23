@@ -407,7 +407,12 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
   const templateReady = (name?: string | null) => !!name && (tpl?.available || []).includes(name)
 
   const afterExp = (data: ExpResp) => {
-    qc.setQueryData(['expected', id], data)
+    // Write to the real (language-scoped) key so the expected-evidence panel
+    // updates instantly, then invalidate to refetch and stay in sync. The old
+    // 2-part key never matched ['expected', id, lang], so the panel went stale
+    // until a full browser refresh.
+    qc.setQueryData(['expected', id, lang], data)
+    qc.invalidateQueries({ queryKey: ['expected', id] })
     qc.invalidateQueries({ queryKey: ['control', id] })
     qc.invalidateQueries({ queryKey: ['controls'] })
   }
