@@ -421,7 +421,7 @@ async def control_detail(
         "status_note": oc.status_note if oc else None,
         "previous_audit_notes": oc.previous_audit_notes if oc else None,
         "audit_status_options": [
-            {"value": v, "label": AUDIT_LABEL[v]} for v in ControlStatus.ALL
+            {"value": v, "label": audit_label(v, lang)} for v in ControlStatus.ALL
         ],
         "can_review": current_user.role in REVIEWER_ROLES,
         "can_coach": _is_coach(current_user),

@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.api.auth import get_current_user
 from app.api.controls import _FAMILY_POLICY
+from app.core.i18n import get_lang
 from app.core.policy_library import path_for, has_template, available, slug
 from app.models.user import User
 
@@ -28,7 +29,11 @@ async def download_template(
     name: str,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_lang),
 ):
     if not has_template(name):
         raise HTTPException(status_code=404, detail="No template uploaded for this policy yet")
-    return FileResponse(path_for(name), media_type=DOCX_MIME, filename=slug(name) + ".docx")
+    path = path_for(name, lang)
+    is_fr = path.endswith(".fr.docx")
+    filename = slug(name) + ("_FR.docx" if is_fr else ".docx")
+    return FileResponse(path, media_type=DOCX_MIME, filename=filename)

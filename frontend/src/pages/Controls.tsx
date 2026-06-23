@@ -359,6 +359,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
   const [newExp, setNewExp] = useState('')
   const [reviewing, setReviewing] = useState<{ id: string; note: string } | null>(null)
   const [statusEdit, setStatusEdit] = useState(false)
+  const [auditNote, setAuditNote] = useState('')
   const [showHelp, setShowHelp] = useState(false)
   const [saDraft, setSaDraft] = useState<{ answers: Record<string, number>; comment: string }>({ answers: {}, comment: '' })
   const collectingId = useRef<string | null>(null)
@@ -1124,12 +1125,17 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
             <div className="card fi" style={{ border: '1px solid #C4B5FD' }}>
               <div className="card-hdr"><span className="card-title" style={{ color: 'var(--purple)' }}>{t('Auditor decision')}</span></div>
               <div className="decision-grid">
-                <button className="dec-btn d-accept">{t('✓ Accept')}</button>
-                <button className="dec-btn d-reject">{t('✗ Reject')}</button>
-                <button className="dec-btn d-more">{t('⏳ Needs more')}</button>
-                <button className="dec-btn d-na">{t('— Not applicable')}</button>
+                <button className="dec-btn d-accept" disabled={setStatus.isPending}
+                  onClick={() => setStatus.mutate({ mode: 'manual', status: 'compliant', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('✓ Accept')}</button>
+                <button className="dec-btn d-reject" disabled={setStatus.isPending}
+                  onClick={() => setStatus.mutate({ mode: 'manual', status: 'non_compliant', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('✗ Reject')}</button>
+                <button className="dec-btn d-more" disabled={setStatus.isPending}
+                  onClick={() => setStatus.mutate({ mode: 'manual', status: 'in_progress', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('⏳ Needs more')}</button>
+                <button className="dec-btn d-na" disabled={setStatus.isPending}
+                  onClick={() => setStatus.mutate({ mode: 'manual', status: 'not_applicable', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('— Not applicable')}</button>
               </div>
-              <textarea className="auditor-note" rows={3} placeholder={t('Auditor notes…')} />
+              <textarea className="auditor-note" rows={3} placeholder={t('Auditor notes…')}
+                value={auditNote} onChange={e => setAuditNote(e.target.value)} />
             </div>
           )}
 

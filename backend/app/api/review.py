@@ -16,13 +16,32 @@ import uuid
 
 from app.core.database import get_db
 from app.core.entitlements import ensure_active
+from app.core.i18n import get_lang
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType
 from app.models.framework import Control, Framework
 from app.models.evidence import (
     OrgControl, OrgControlStatus, AuditDecision, EvidenceItem, EvidenceStatus,
+    ExpectedEvidence,
 )
+
+
+# Localized labels for the reviewer decision buttons.
+ACTION_LABELS_FR = {
+    "✓ Approve & Forward to EVA": "✓ Approuver et transmettre à EVA",
+    "⚑ Flag Issue": "⚑ Signaler un problème",
+    "↩ Return to Client": "↩ Retourner au client",
+    "✓ Accept": "✓ Accepter",
+    "✗ Reject": "✗ Rejeter",
+    "⏳ Needs more": "⏳ Complément requis",
+    "— Not applicable": "— Non applicable",
+}
+
+def _loc_actions(actions, lang):
+    if lang != "fr":
+        return actions
+    return [{**a, "label": ACTION_LABELS_FR.get(a["label"], a["label"])} for a in actions]
 
 router = APIRouter()
 
@@ -110,6 +129,7 @@ def _icon(name) -> str:
 async def review_queue(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_lang),
 ):
     stage = _stage(current_user)
     if stage == "none":
@@ -121,23 +141,26 @@ async def review_queue(
     items = []
     if org_ids:
         rows = await db.execute(
-            select(EvidenceItem, Control.ref, Control.title, Framework.name,
-                   Tenant.name, User.display_name)
+            select(EvidenceItem, Control.ref, Control.title, Control.title_fr,
+                   Framework.name, Tenant.name, User.display_name, ExpectedEvidence.text_fr)
             .join(OrgControl, OrgControl.id == EvidenceItem.org_control_id)
             .join(Control, Control.id == OrgControl.control_id)
             .join(Framework, Framework.id == Control.framework_id)
             .join(Tenant, Tenant.id == EvidenceItem.org_id)
             .join(User, User.id == EvidenceItem.collected_by)
+            .outerjoin(ExpectedEvidence, ExpectedEvidence.id == EvidenceItem.expected_evidence_id)
             .where(EvidenceItem.org_id.in_(org_ids), EvidenceItem.status == target_status)
             .order_by(EvidenceItem.created_at.desc())
         )
-        for ev, ref, ctitle, fw, client, who in rows.all():
+        for ev, ref, ctitle, ctitle_fr, fw, client, who, ee_text_fr in rows.all():
+            ctrl_name = (ctitle_fr or ctitle) if lang == "fr" else ctitle
+            ev_title = (ee_text_fr or ev.title) if lang == "fr" else ev.title
             items.append({
                 "id": str(ev.id),
                 "client": client,
                 "ctrl_ref": ref,
-                "ctrl_name": ctitle,
-                "ev_title": ev.title,
+                "ctrl_name": ctrl_name,
+                "ev_title": ev_title,
                 "ev_icon": _icon(ev.file_name),
                 "by": who,
                 "submitted": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "—",
@@ -148,7 +171,7 @@ async def review_queue(
 
     return {
         "stage": stage,
-        "actions": MSP_ACTIONS if stage == "msp" else EVA_ACTIONS,
+        "actions": _loc_actions(MSP_ACTIONS if stage == "msp" else EVA_ACTIONS, lang),
         "items": items,
         "clients": sorted({i["client"] for i in items}),
     }

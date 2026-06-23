@@ -16,12 +16,24 @@ def slug(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9]+", "_", name or "").strip("_")
 
 
-def path_for(name: str) -> str:
-    return os.path.join(TEMPLATE_DIR, slug(name) + ".docx")
+def path_for(name: str, lang: str = "en") -> str:
+    """Path to the template. Serves the French file (slug.fr.docx) when lang=fr
+    and it exists, otherwise the English base file."""
+    base = slug(name)
+    if lang == "fr":
+        fr = os.path.join(TEMPLATE_DIR, base + ".fr.docx")
+        if os.path.isfile(fr):
+            return fr
+    return os.path.join(TEMPLATE_DIR, base + ".docx")
 
 
 def has_template(name: str) -> bool:
-    return os.path.isfile(path_for(name))
+    # A template "exists" if the English base file exists (French is optional).
+    return os.path.isfile(os.path.join(TEMPLATE_DIR, slug(name) + ".docx"))
+
+
+def has_fr(name: str) -> bool:
+    return os.path.isfile(os.path.join(TEMPLATE_DIR, slug(name) + ".fr.docx"))
 
 
 def available(names) -> list:
