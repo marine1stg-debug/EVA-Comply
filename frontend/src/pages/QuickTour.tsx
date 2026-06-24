@@ -36,6 +36,7 @@ export default function QuickTourPage() {
   const lang = useI18n(s => s.lang)
   const role = useAuthStore(s => s.user?.role || '')
   const L = (en: string, fr: string) => (lang === 'fr' ? fr : en)
+  const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
   const isSuper = role === 'super_admin'
   const isMsp = role === 'msp_admin' || role === 'msp_analyst'
@@ -419,8 +420,12 @@ export default function QuickTourPage() {
         .qt-body p{margin:0 0 8px;color:var(--text2);font-size:13px}
         .qt-body ul{margin:0;padding-left:16px}
         .qt-body li{color:var(--text2);font-size:13px;margin:5px 0;line-height:1.5}
-        .qt-sec-hd{display:flex;align-items:center;gap:8px;margin:22px 0 2px}
+        .qt-sec-hd{display:flex;align-items:center;gap:8px;margin:22px 0 2px;scroll-margin-top:54px}
         .qt-bar{width:4px;height:18px;border-radius:3px}
+        .qt-toc{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;padding:10px 0;margin-bottom:4px;background:var(--bg,#fff);border-bottom:1px solid var(--border,rgba(120,140,170,.2))}
+        .qt-chip{border:1px solid var(--border,rgba(120,140,170,.3));background:var(--card2,rgba(46,95,163,.06));color:var(--eva-blue,#2E5FA3);
+                 border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+        .qt-chip:hover{background:var(--eva-blue,#2E5FA3);color:#fff;border-color:var(--eva-blue,#2E5FA3)}
       `}</style>
 
       <div className="page-title">{L('Quick Tour', 'Visite guidée')}</div>
@@ -435,9 +440,15 @@ export default function QuickTourPage() {
         </span>
       </div>
 
+      <div className="qt-toc">
+        {sections.map(sec => (
+          <button key={sec.key} className="qt-chip" onClick={() => jump(sec.key)}>{sec.heading}</button>
+        ))}
+      </div>
+
       {sections.map(sec => (
         <div key={sec.key}>
-          <div className="qt-sec-hd">
+          <div className="qt-sec-hd" id={sec.key}>
             <span className="qt-bar" style={{ background: sec.accent }} />
             <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{sec.heading}</span>
           </div>

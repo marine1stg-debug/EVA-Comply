@@ -12,6 +12,7 @@ interface Section { id: string; heading: string; boxes: Box[] }
 export default function ConfigGuidePage() {
   const lang = useI18n(s => s.lang)
   const L = (en: string, fr: string) => (lang === 'fr' ? fr : en)
+  const jump = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
   const sections: Section[] = [
     {
@@ -272,6 +273,11 @@ export default function ConfigGuidePage() {
         .cg-table th{color:var(--text);font-weight:700}
         .cg-warn{border:1px solid #f0d9a8;border-left:4px solid #D97706;border-radius:10px;padding:10px 14px;margin:12px 0;background:rgba(217,151,9,.06)}
         .cg-warn li{font-size:12.5px;color:var(--text2);margin:5px 0}
+        .cg-toc{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;padding:10px 0;margin-bottom:6px;background:var(--bg,#fff);border-bottom:1px solid var(--border,rgba(120,140,170,.2))}
+        .cg-chip{border:1px solid var(--border,rgba(120,140,170,.3));background:var(--card2,rgba(46,95,163,.06));color:var(--eva-blue,#2E5FA3);
+                 border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+        .cg-chip:hover{background:var(--eva-blue,#2E5FA3);color:#fff;border-color:var(--eva-blue,#2E5FA3)}
+        .cg-sechd{scroll-margin-top:54px}
       `}</style>
 
       <div className="page-title">{L('Configuration & How it works', 'Configuration et fonctionnement')}</div>
@@ -284,9 +290,17 @@ export default function ConfigGuidePage() {
               'Deux types de réglages : variables d’environnement définies au déploiement (redéploiement requis) vs réglages dans l’app modifiables en direct. Chaque boîte le précise.')}
       </div>
 
+      <div className="cg-toc">
+        {sections.map(sec => (
+          <button key={sec.id} className="cg-chip" onClick={() => jump(sec.id)}>{sec.heading}</button>
+        ))}
+        <button className="cg-chip" onClick={() => jump('cg-env')}>{L('Env variables', 'Variables env')}</button>
+        <button className="cg-chip" onClick={() => jump('cg-caveats')}>{L('Caveats', 'Mises en garde')}</button>
+      </div>
+
       {sections.map(sec => (
         <div key={sec.id}>
-          <div className="cg-sechd"><span className="cg-bar" /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{sec.heading}</span></div>
+          <div className="cg-sechd" id={sec.id}><span className="cg-bar" /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{sec.heading}</span></div>
           {sec.boxes.map((b, i) => (
             <details className="cg-box" key={i}>
               <summary>
@@ -303,7 +317,7 @@ export default function ConfigGuidePage() {
         </div>
       ))}
 
-      <div className="cg-sechd"><span className="cg-bar" /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{L('15 · Environment variables — cheat sheet', '15 · Variables d’environnement — aide-mémoire')}</span></div>
+      <div className="cg-sechd" id="cg-env"><span className="cg-bar" /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{L('15 · Environment variables — cheat sheet', '15 · Variables d’environnement — aide-mémoire')}</span></div>
       <div className="page-sub" style={{ marginTop: 0 }}>{L('Set in the server .env (or container env). Changing any requires a redeploy.', 'À définir dans le .env serveur (ou l’env du conteneur). Tout changement nécessite un redéploiement.')}</div>
       <table className="cg-table">
         <thead><tr><th>{L('Variable', 'Variable')}</th><th>{L('Purpose', 'Rôle')}</th><th>{L('Default / note', 'Défaut / note')}</th></tr></thead>
@@ -314,7 +328,7 @@ export default function ConfigGuidePage() {
         </tbody>
       </table>
 
-      <div className="cg-sechd"><span className="cg-bar" style={{ background: '#D97706' }} /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{L('Important caveats', 'Mises en garde importantes')}</span></div>
+      <div className="cg-sechd" id="cg-caveats"><span className="cg-bar" style={{ background: '#D97706' }} /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{L('Important caveats', 'Mises en garde importantes')}</span></div>
       <div className="cg-warn"><ul>{caveats.map((c, i) => <li key={i}>{c}</li>)}</ul></div>
 
       <div className="page-sub" style={{ marginTop: 16, fontStyle: 'italic' }}>
