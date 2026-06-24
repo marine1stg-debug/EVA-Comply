@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { renderAsync } from 'docx-preview'
 import toast from 'react-hot-toast'
 import { api } from '../lib/api'
-import { useT } from '../lib/i18n'
+import { useT, useI18n } from '../lib/i18n'
 import { Download, Search, Plus, Pencil, Upload, Trash2, X, Eye } from 'lucide-react'
 
 interface Policy {
@@ -19,6 +19,7 @@ const EMPTY_FORM = { name: '', name_fr: '', category: '', category_fr: '', keywo
 
 export default function PolicyLibraryPage() {
   const t = useT()
+  const lang = useI18n(s => s.lang)
   const qc = useQueryClient()
   const [search, setSearch] = useState('')
   const [cat, setCat] = useState('')
@@ -47,7 +48,9 @@ export default function PolicyLibraryPage() {
     queryFn: async () => (await api.get(`/policy-templates/${preview!.id}/preview`, { params: { fr: pvFr } })).data,
     enabled: !!preview,
   })
-  const openPreview = (p: Policy) => { setPvFr(false); setPreview(p) }
+  // Open the preview in the language the user has already selected (FR if the
+  // app is in French and a FR version exists; the backend falls back to EN if not).
+  const openPreview = (p: Policy) => { setPvFr(lang === 'fr'); setPreview(p) }
 
   // Render the actual .docx with a Word-like viewer (pages, margins, tables).
   useEffect(() => {

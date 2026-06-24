@@ -7,15 +7,18 @@
 // scale cleanly. Data files keep their emoji strings; this component maps
 // them to SVGs at render time and falls back to the raw emoji if unmapped.
 import {
-  Archive, BarChart3, Bell, BookOpen, Building2, CircleDollarSign,
-  Clapperboard, ClipboardList, CreditCard, Download, Eye, FileText,
+  Archive, BarChart3, Bell, BookOpen, BookOpenCheck, Building2, CircleDollarSign,
+  Clapperboard, ClipboardList, Compass, CreditCard, Download, Eye, FileText,
   FolderOpen, Hand, Headphones, KeyRound, LayoutGrid, Landmark, List,
-  Paperclip, RotateCcw, Settings, Shield, Sparkles, SunMoon, Tag, Target,
+  Paperclip, RotateCcw, ScrollText, Settings, Shield, Sparkles, SunMoon, Tag, Target,
   Upload, User, Wrench, type LucideIcon,
 } from 'lucide-react'
 
 const MAP: Record<string, LucideIcon> = {
   '⊞': LayoutGrid,
+  '🧭': Compass,
+  '📘': ScrollText,
+  '📖': BookOpenCheck,
   '☰': List,
   '📄': FileText,
   '◎': Target,
