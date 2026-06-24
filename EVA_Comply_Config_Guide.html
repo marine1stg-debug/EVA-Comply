@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVA Comply — Configuration &amp; How it works</title>
+<style>
+  :root{--navy:#1B3A6B;--blue:#2E5FA3;--sky:#1A8FD1;--ink:#1f2430;--mut:#5b6473;
+        --line:#c9d4e3;--bg:#f4f7fb;--card:#fff;--green:#16A34A;--violet:#7C3AED;--amber:#D97706;--red:#C0392B;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px 70px}
+  header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;border-bottom:3px solid var(--blue);padding-bottom:14px;flex-wrap:wrap}
+  header.top h1{margin:0;font-size:23px;color:var(--navy)}
+  header.top .sub{color:var(--mut);font-size:13px;margin-top:4px;max-width:720px}
+  .langtoggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:0 0 auto}
+  .langtoggle button{border:none;background:#fff;padding:6px 16px;font-weight:700;cursor:pointer;color:var(--mut);font-size:13px}
+  .langtoggle button.on{background:var(--blue);color:#fff}
+  .toc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:16px 0}
+  .toc a{display:inline-block;font-size:12.5px;color:var(--blue);text-decoration:none;background:#eef4fb;border:1px solid #dceafa;border-radius:7px;padding:3px 9px;margin:5px 5px 0 0}
+  .toc a:hover{background:#dce9fb}
+  .keynote{background:#eef4fb;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--mut);margin:10px 0}
+  h2.sec{font-size:17px;color:var(--navy);margin:28px 0 6px;border-left:4px solid var(--sky);padding-left:10px;scroll-margin-top:12px}
+  details.box{border:1px solid var(--line);border-radius:11px;background:#fff;margin:8px 0;overflow:hidden;box-shadow:0 1px 3px rgba(20,40,80,.05)}
+  details.box>summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:9px;padding:11px 13px}
+  details.box>summary::-webkit-details-marker{display:none}
+  .ic{font-size:16px;width:22px;text-align:center;flex:0 0 auto;margin-top:1px}
+  .sm{flex:1;min-width:0}
+  .ttl{font-weight:700;color:var(--navy);font-size:13.5px}
+  .how{display:block;font-size:12.5px;color:var(--mut);margin-top:2px}
+  .chev{margin-left:auto;color:#8a93a3;transition:transform .15s;font-size:12px;flex:0 0 auto;margin-top:2px}
+  details.box[open] .chev{transform:rotate(90deg)}
+  .cfg{padding:0 14px 13px 44px}
+  .cfg .lbl{font-size:11px;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:.04em;margin:2px 0 4px}
+  .cfg ul{margin:0;padding-left:16px} .cfg li{font-size:12.5px;color:var(--mut);margin:5px 0;line-height:1.55}
+  .cfg code{background:#f1f5fb;border:1px solid #e1e9f4;border-radius:5px;padding:0 5px;font-size:11.5px;color:#33415a}
+  .who{display:inline-block;font-size:10.5px;color:#fff;border-radius:6px;padding:1px 6px;margin-left:4px}
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th,td{padding:7px 9px;border-bottom:1px solid #eef2f7;text-align:left;vertical-align:top}
+  th{background:var(--navy);color:#fff;font-size:11.5px}
+  tr:nth-child(even) td{background:#f8fafd}
+  td code{background:#f1f5fb;border:1px solid #e1e9f4;border-radius:5px;padding:0 5px;font-size:11px}
+  .warn{background:#fff7e6;border:1px solid #f0d9a8;border-left:4px solid var(--amber);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:12.5px;color:#7a5b16}
+  .warn b{color:#92400e}
+  .foot{margin-top:24px;color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+  [data-fr]{display:none}
+  body.fr [data-en]{display:none} body.fr [data-fr]{display:revert}
+  @media print{body{background:#fff}details.box{box-shadow:none}.langtoggle,.toc{display:none}}
+</style>
+</head>
+<body class="en">
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1><span data-en>EVA Comply — Configuration &amp; How it works</span><span data-fr>EVA Comply — Configuration et fonctionnement</span></h1>
+      <div class="sub"><span data-en>For each element: how it actually works, and the configuration it needs (setting · where · who can change it · default · values). Click to expand; switch EN / FR.</span><span data-fr>Pour chaque élément : comment ça fonctionne réellement, et la configuration nécessaire (réglage · où · qui peut le changer · défaut · valeurs). Cliquez pour déplier ; basculez EN / FR.</span></div>
+    </div>
+    <div class="langtoggle"><button id="b-en" class="on" onclick="setLang('en')">EN</button><button id="b-fr" onclick="setLang('fr')">FR</button></div>
+  </header>
+
+  <div class="toc">
+    <a href="#deploy"><span data-en>Deployment &amp; env</span><span data-fr>Déploiement et env</span></a>
+    <a href="#auth"><span data-en>Auth &amp; sessions</span><span data-fr>Auth et sessions</span></a>
+    <a href="#roles"><span data-en>Roles &amp; access</span><span data-fr>Rôles et accès</span></a>
+    <a href="#tenant"><span data-en>Org / engagement</span><span data-fr>Org / engagement</span></a>
+    <a href="#evidence"><span data-en>Evidence</span><span data-fr>Preuves</span></a>
+    <a href="#maturity"><span data-en>Maturity &amp; recommendations</span><span data-fr>Maturité et recommandations</span></a>
+    <a href="#policies"><span data-en>Policies</span><span data-fr>Politiques</span></a>
+    <a href="#llm"><span data-en>AI connector</span><span data-fr>Connecteur IA</span></a>
+    <a href="#email"><span data-en>Email</span><span data-fr>Courriel</span></a>
+    <a href="#storage"><span data-en>Storage</span><span data-fr>Stockage</span></a>
+    <a href="#billing"><span data-en>Billing &amp; plans</span><span data-fr>Facturation et forfaits</span></a>
+    <a href="#backup"><span data-en>Backup &amp; restore</span><span data-fr>Sauvegarde</span></a>
+    <a href="#security"><span data-en>Security posture</span><span data-fr>Posture de sécurité</span></a>
+    <a href="#modules"><span data-en>Other modules</span><span data-fr>Autres modules</span></a>
+    <a href="#env"><span data-en>Env cheat-sheet</span><span data-fr>Aide-mémoire env</span></a>
+    <a href="#caveats"><span data-en>Important caveats</span><span data-fr>Mises en garde</span></a>
+  </div>
+
+  <div class="keynote">⚙️ <span data-en><b>Two kinds of settings.</b> Some are <b>environment variables</b> set once at deploy (server <code>.env</code> / container) — these need a redeploy to change. Others are <b>in-app settings</b> a role can change live (tenant engagement level, plans, AI connector, policies…). Each box says which.</span><span data-fr><b>Deux types de réglages.</b> Certains sont des <b>variables d’environnement</b> définies au déploiement (<code>.env</code> serveur / conteneur) — il faut redéployer pour les changer. D’autres sont des <b>réglages dans l’app</b> qu’un rôle modifie en direct (niveau d’engagement, forfaits, connecteur IA, politiques…). Chaque boîte le précise.</span></div>
+
+  <!-- DEPLOY -->
+  <h2 class="sec" id="deploy"><span data-en>1 · Deployment &amp; environment</span><span data-fr>1 · Déploiement et environnement</span></h2>
+  <details class="box"><summary><span class="ic">🔐</span><span class="sm"><span class="ttl"><span data-en>App secret &amp; environment mode</span><span data-fr>Secret de l’app et mode d’environnement</span></span><span class="how"><span data-en>Signs all sessions/tokens and encrypts stored secrets; production mode hardens the app.</span><span data-fr>Signe toutes les sessions/jetons et chiffre les secrets stockés ; le mode production durcit l’app.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (environment)</span><span data-fr>Configuration (environnement)</span></div><ul>
+      <li><code>SECRET_KEY</code> — <span data-en>required, ≥32 chars in production. Generate with <code>openssl rand -hex 32</code>. Changing it logs everyone out and makes stored AI keys / MFA secrets unreadable.</span><span data-fr>obligatoire, ≥32 caractères en production. Générez avec <code>openssl rand -hex 32</code>. Le changer déconnecte tout le monde et rend illisibles les clés IA / secrets MFA stockés.</span></li>
+      <li><code>ENVIRONMENT</code> — <code>development</code> | <code>production</code> (<span data-en>default</span><span data-fr>défaut</span> <code>development</code>). <span data-en>Production hides API docs and enables the startup safety guard.</span><span data-fr>La production masque la doc API et active la garde de démarrage.</span></li>
+      <li><code>FRONTEND_URL</code> — <span data-en>public app URL; used in invite/reset/unlock links and CORS.</span><span data-fr>URL publique de l’app ; utilisée dans les liens d’invitation/réinitialisation et le CORS.</span></li>
+      <li><b><span data-en>Startup guard</span><span data-fr>Garde de démarrage</span>:</b> <span data-en>in production the app refuses to start if SECRET_KEY is default/short, the DB password is the dev default, or EMAIL_BACKEND=console.</span><span data-fr>en production l’app refuse de démarrer si SECRET_KEY est par défaut/court, si le mot de passe BD est celui par défaut, ou si EMAIL_BACKEND=console.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">🚪</span><span class="sm"><span class="ttl"><span data-en>Site access gate (Basic Auth)</span><span data-fr>Portail d’accès au site (Basic Auth)</span></span><span class="how"><span data-en>An nginx username/password wall in front of the whole site so crawlers/strangers get 401.</span><span data-fr>Un mur identifiant/mot de passe nginx devant tout le site ; les robots/inconnus reçoivent 401.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (environment)</span><span data-fr>Configuration (environnement)</span></div><ul>
+      <li><code>BASIC_AUTH_USER</code> + <code>BASIC_AUTH_PASSWORD</code> — <span data-en>required; nginx builds a bcrypt password file at startup. If missing (and not disabled) the container exits.</span><span data-fr>obligatoires ; nginx construit un fichier de mots de passe bcrypt au démarrage. Si absents (et non désactivés), le conteneur s’arrête.</span></li>
+      <li><code>BASIC_AUTH_DISABLED</code> — <code>true</code>/<code>false</code> (<span data-en>default false; set true only for local dev</span><span data-fr>défaut false ; mettez true seulement en dev local</span>).</li>
+      <li><span data-en>The API (<code>/api/</code>) is exempt from this gate — it uses its own JWT login instead.</span><span data-fr>L’API (<code>/api/</code>) est exemptée de ce portail — elle utilise sa propre connexion JWT.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">🗄️</span><span class="sm"><span class="ttl"><span data-en>Database &amp; cache</span><span data-fr>Base de données et cache</span></span><span class="how"><span data-en>Postgres holds all data; Redis backs the queue.</span><span data-fr>Postgres contient toutes les données ; Redis sert la file de tâches.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (environment)</span><span data-fr>Configuration (environnement)</span></div><ul>
+      <li><code>DATABASE_URL</code> — <span data-en>async Postgres URL. Must NOT keep the dev default password in production.</span><span data-fr>URL Postgres async. Ne doit PAS garder le mot de passe par défaut en production.</span></li>
+      <li><code>REDIS_URL</code> — <span data-en>default</span><span data-fr>défaut</span> <code>redis://redis:6379</code>.</li>
+    </ul></div></details>
+
+  <!-- AUTH -->
+  <h2 class="sec" id="auth"><span data-en>2 · Authentication &amp; sessions</span><span data-fr>2 · Authentification et sessions</span></h2>
+  <details class="box"><summary><span class="ic">⏱️</span><span class="sm"><span class="ttl"><span data-en>Session length &amp; silent refresh</span><span data-fr>Durée de session et rafraîchissement silencieux</span></span><span class="how"><span data-en>A short access token is refreshed silently from a long-lived refresh token.</span><span data-fr>Un jeton d’accès court est renouvelé en silence depuis un jeton de rafraîchissement de longue durée.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (environment)</span><span data-fr>Configuration (environnement)</span></div><ul>
+      <li><code>ACCESS_TOKEN_EXPIRE_MINUTES</code> — <span data-en>default 15 (often raised, e.g. 480 = 8 h).</span><span data-fr>défaut 15 (souvent augmenté, p. ex. 480 = 8 h).</span></li>
+      <li><code>REFRESH_TOKEN_EXPIRE_DAYS</code> — <span data-en>default 30.</span><span data-fr>défaut 30.</span></li>
+      <li><span data-en>Changing a password revokes all existing sessions (token version bump).</span><span data-fr>Changer un mot de passe révoque toutes les sessions existantes (incrément de version de jeton).</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">🔑</span><span class="sm"><span class="ttl"><span data-en>MFA, lockout &amp; password rules</span><span data-fr>MFA, verrouillage et règles de mot de passe</span></span><span class="how"><span data-en>Two-factor for admin roles, automatic lockout on repeated failures, 12-char minimum.</span><span data-fr>Double authentification pour les rôles admin, verrouillage auto après échecs répétés, minimum 12 caractères.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>How it’s set (mostly fixed in code)</span><span data-fr>Comment c’est réglé (surtout fixé dans le code)</span></div><ul>
+      <li><b>MFA</b> — <span data-en>required for</span><span data-fr>requis pour</span> <code>super_admin, eva_auditor, msp_admin</code>. <span data-en><b>Opt-in:</b> each user enables it (Settings → enable MFA, scan QR). It is only enforced at login once a user has actually turned it on — there is no forced enrollment.</span><span data-fr><b>Sur activation :</b> chaque utilisateur l’active (Réglages → activer la MFA, scanner le QR). Elle n’est imposée à la connexion qu’une fois activée — il n’y a pas d’inscription forcée.</span></li>
+      <li><b><span data-en>Lockout</span><span data-fr>Verrouillage</span></b> — <span data-en>3 failed logins → 15-minute lock + emailed unlock link. Admins can also unlock a user.</span><span data-fr>3 échecs → verrouillage 15 min + lien de déverrouillage par courriel. Les admins peuvent aussi déverrouiller un utilisateur.</span></li>
+      <li><b><span data-en>Password</span><span data-fr>Mot de passe</span></b> — <span data-en>minimum 12 characters (no complexity rule).</span><span data-fr>minimum 12 caractères (pas de règle de complexité).</span></li>
+      <li><b><span data-en>Rate limits (per IP)</span><span data-fr>Limites de débit (par IP)</span></b> — <span data-en>login 10/5min, MFA 10/5min, refresh 60/5min, register 5/h, verification &amp; unlock 5/15min.</span><span data-fr>connexion 10/5min, MFA 10/5min, refresh 60/5min, inscription 5/h, vérification et déverrouillage 5/15min.</span></li>
+      <li><span data-en>These four (MFA roles, lockout, password length, rate limits) are <b>code constants</b> — changing them needs a code change + redeploy.</span><span data-fr>Ces quatre éléments (rôles MFA, verrouillage, longueur du mot de passe, limites) sont des <b>constantes de code</b> — les changer demande une modification de code + redéploiement.</span></li>
+    </ul></div></details>
+
+  <!-- ROLES -->
+  <h2 class="sec" id="roles"><span data-en>3 · Roles &amp; access control</span><span data-fr>3 · Rôles et contrôle d’accès</span></h2>
+  <details class="box"><summary><span class="ic">👥</span><span class="sm"><span class="ttl"><span data-en>The 7 roles &amp; who can invite whom</span><span data-fr>Les 7 rôles &amp; qui peut inviter qui</span></span><span class="how"><span data-en>Each admin can only grant roles within its tier; roles must match the org type.</span><span data-fr>Chaque admin n’attribue que des rôles de son niveau ; les rôles doivent correspondre au type d’org.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>How it works (in-app, Users &amp; Roles)</span><span data-fr>Fonctionnement (dans l’app, Utilisateurs et rôles)</span></div><ul>
+      <li><span data-en>Roles: super_admin, eva_auditor, msp_admin, msp_analyst, client_admin, contributor, viewer.</span><span data-fr>Rôles : super_admin, eva_auditor, msp_admin, msp_analyst, client_admin, contributor, viewer.</span></li>
+      <li><span data-en>Invite rights: Super Admin → super_admin/eva_auditor; MSP Admin → msp_admin/msp_analyst; Client Admin → client_admin/contributor/viewer.</span><span data-fr>Droits d’invitation : Super Admin → super_admin/eva_auditor ; Admin MSP → msp_admin/msp_analyst ; Admin client → client_admin/contributeur/lecteur.</span></li>
+      <li><span data-en>A role must fit the org tier (EVA roles on EVA org, MSP roles on MSP org, client roles on client org).</span><span data-fr>Un rôle doit correspondre au type d’org (rôles EVA sur org EVA, MSP sur org MSP, client sur org client).</span></li>
+      <li><span data-en><b>Viewer</b> is read-only — it cannot upload, submit, edit, or manage users.</span><span data-fr><b>Lecteur</b> est en lecture seule — il ne peut ni téléverser, ni soumettre, ni modifier, ni gérer les utilisateurs.</span></li>
+      <li><span data-en><code>can_coach</code> (per auditor): on = can send a control back “under review”; off = accept/reject only. Set by an admin.</span><span data-fr><code>can_coach</code> (par auditeur) : activé = peut renvoyer un contrôle « en revue » ; désactivé = accepter/rejeter seulement. Réglé par un admin.</span></li>
+    </ul></div></details>
+
+  <!-- TENANT -->
+  <h2 class="sec" id="tenant"><span data-en>4 · Organization &amp; engagement model</span><span data-fr>4 · Organisation et modèle d’engagement</span></h2>
+  <details class="box"><summary><span class="ic">🎚️</span><span class="sm"><span class="ttl"><span data-en>Audit level — self / assisted / audited</span><span data-fr>Niveau d’audit — self / assisted / audited</span></span><span class="how"><span data-en>Decides whether submitted evidence is auto-accepted or sent for review.</span><span data-fr>Décide si une preuve soumise est auto-acceptée ou envoyée en revue.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app, per organization)</span><span data-fr>Configuration (dans l’app, par organisation)</span></div><ul>
+      <li><span data-en>Values <code>self</code> | <code>assisted</code> | <code>audited</code>; <b>default <code>self</code></b>.</span><span data-fr>Valeurs <code>self</code> | <code>assisted</code> | <code>audited</code> ; <b>défaut <code>self</code></b>.</span></li>
+      <li><b><code>self</code> (<span data-en>self-audit</span><span data-fr>auto-audit</span>):</b> <span data-en>evidence is <b>accepted immediately</b> on submit — no reviewer.</span><span data-fr>la preuve est <b>acceptée immédiatement</b> à la soumission — aucun réviseur.</span></li>
+      <li><b><code>assisted</code> / <code>audited</code>:</b> <span data-en>evidence is routed to a reviewer (MSP if MSP review is enabled, otherwise EVA). Both behave the same for routing today.</span><span data-fr>la preuve est acheminée vers un réviseur (MSP si la revue MSP est activée, sinon EVA). Les deux se comportent pareil pour le routage aujourd’hui.</span></li>
+      <li><span data-en>Set by</span><span data-fr>Réglé par</span> <span class="who" style="background:#7C3AED">Super</span> <span class="who" style="background:#2563EB">EVA</span> <span class="who" style="background:#0D9488">MSP Admin</span> <span data-en>(MSP only for its own clients). Every change is audit-logged.</span><span data-fr>(MSP seulement pour ses propres clients). Chaque changement est journalisé.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">🏢</span><span class="sm"><span class="ttl"><span data-en>MSP review, activation &amp; lifecycle</span><span data-fr>Revue MSP, activation et cycle de vie</span></span><span class="how"><span data-en>Optional MSP pre-review step; MSP signups need approval; status gates access.</span><span data-fr>Étape de pré-revue MSP optionnelle ; les inscriptions MSP nécessitent une approbation ; le statut conditionne l’accès.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app, Tenants — Super Admin / MSP)</span><span data-fr>Configuration (dans l’app, Organisations — Super Admin / MSP)</span></div><ul>
+      <li><b>msp_review_enabled</b> — <span data-en>when on (non-self), submitted evidence goes to the MSP queue first.</span><span data-fr>quand activé (non-self), la preuve soumise passe d’abord par la file MSP.</span></li>
+      <li><b>activation_pending</b> — <span data-en>MSP/reseller self-signups can’t log in until a Super Admin authorizes them.</span><span data-fr>les inscriptions MSP/revendeurs ne peuvent pas se connecter tant qu’un Super Admin ne les a pas autorisées.</span></li>
+      <li><b>subscription_status</b> — <code>active · trialing · past_due · suspended · cancelled</code> (<span data-en>default trialing</span><span data-fr>défaut trialing</span>); changed by Super Admin. Suspended → access blocked.</li>
+      <li><b>plan / monthly_price / billing_mode / parent_msp_id / archived</b> — <span data-en>Super-Admin managed; archived orgs drop off listings.</span><span data-fr>gérés par le Super Admin ; les orgs archivées disparaissent des listes.</span></li>
+    </ul></div></details>
+
+  <!-- EVIDENCE -->
+  <h2 class="sec" id="evidence"><span data-en>5 · Evidence</span><span data-fr>5 · Preuves</span></h2>
+  <details class="box"><summary><span class="ic">📄</span><span class="sm"><span class="ttl"><span data-en>Statuses, routing, file rules &amp; renewals</span><span data-fr>Statuts, routage, règles de fichiers et renouvellements</span></span><span class="how"><span data-en>Upload → submit → (auto-accept or review) → accepted; periodic items renew.</span><span data-fr>Téléverser → soumettre → (auto-accept ou revue) → accepté ; les éléments périodiques se renouvellent.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>How it works &amp; limits</span><span data-fr>Fonctionnement et limites</span></div><ul>
+      <li><span data-en>Statuses: draft → submitted → msp_pending / eva_pending → accepted / needs_more / rejected (or not_applicable).</span><span data-fr>Statuts : brouillon → soumis → msp_pending / eva_pending → accepté / complément / rejeté (ou non applicable).</span></li>
+      <li><span data-en>Routing on submit depends on the org’s audit level (see §4).</span><span data-fr>Le routage à la soumission dépend du niveau d’audit de l’org (voir §4).</span></li>
+      <li><b><span data-en>Max size</span><span data-fr>Taille max</span></b> 50 MB; <b><span data-en>allowed types</span><span data-fr>types permis</span>:</b> <span data-en>documents (pdf, doc/x, xls/x, ppt/x, csv, txt, md, rtf, odt, ods), images (png, jpg, gif, webp, bmp, tiff, heic — <b>not SVG</b>), archives (zip, 7z, rar, gz). Executables/HTML/SVG are blocked even if renamed.</span><span data-fr>documents (pdf, doc/x, xls/x, ppt/x, csv, txt, md, rtf, odt, ods), images (png, jpg, gif, webp, bmp, tiff, heic — <b>pas SVG</b>), archives (zip, 7z, rar, gz). Exécutables/HTML/SVG bloqués même renommés.</span></li>
+      <li><b><span data-en>Frequencies</span><span data-fr>Fréquences</span></b> once/monthly/quarterly/semi-annual/annual/continuous → <span data-en>drive Renewals (expired / due ≤30 days / ok).</span><span data-fr>pilotent les Renouvellements (expiré / dû ≤30 jours / ok).</span></li>
+      <li><span data-en>(Size/type limits are code constants.)</span><span data-fr>(Les limites de taille/type sont des constantes de code.)</span></li>
+    </ul></div></details>
+
+  <!-- MATURITY -->
+  <h2 class="sec" id="maturity"><span data-en>6 · Maturity &amp; recommendations</span><span data-fr>6 · Maturité et recommandations</span></h2>
+  <details class="box"><summary><span class="ic">◎</span><span class="sm"><span class="ttl"><span data-en>Maturity scoring</span><span data-fr>Score de maturité</span></span><span class="how"><span data-en>0–5 ratings per domain; current can auto-derive from compliant controls or be overridden.</span><span data-fr>Notes 0–5 par domaine ; le niveau actuel se déduit des contrôles conformes ou est surchargé.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app)</span><span data-fr>Configuration (dans l’app)</span></div><ul>
+      <li><span data-en>Current (auto from compliant controls, or manual override), Target (default 4), and a frozen Previous via snapshots.</span><span data-fr>Actuel (auto selon les contrôles conformes, ou surcharge manuelle), Cible (défaut 4), et un Précédent figé via instantanés.</span></li>
+      <li><span data-en>Editable by</span><span data-fr>Modifiable par</span> <span class="who" style="background:#7C3AED">Super</span> <span class="who" style="background:#2563EB">EVA</span> <span class="who" style="background:#0D9488">MSP</span> <span data-en>(scale fixed 0–5).</span><span data-fr>(échelle fixe 0–5).</span></li>
+    </ul></div></details>
+  <details class="box"><summary><span class="ic">✦</span><span class="sm"><span class="ttl"><span data-en>Recommendations (curated + optional AI)</span><span data-fr>Recommandations (sélectionnées + IA optionnelle)</span></span><span class="how"><span data-en>Suggested fixes per gap, bilingual; AI generation needs the connector enabled.</span><span data-fr>Correctifs suggérés par écart, bilingues ; la génération IA nécessite le connecteur activé.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app, reviewers)</span><span data-fr>Configuration (dans l’app, réviseurs)</span></div><ul>
+      <li><span data-en>Source <code>premade</code> (curated, EN+FR) or <code>ai</code> (one LLM call per control — requires the AI connector enabled; AI output is single-language).</span><span data-fr>Source <code>premade</code> (sélectionnée, EN+FR) ou <code>ai</code> (un appel LLM par contrôle — nécessite le connecteur IA activé ; la sortie IA est unilingue).</span></li>
+      <li><span data-en>Generated by reviewers (Super / EVA / MSP). Status open → in_progress → done / dismissed.</span><span data-fr>Générées par les réviseurs (Super / EVA / MSP). Statut open → in_progress → done / dismissed.</span></li>
+    </ul></div></details>
+
+  <!-- POLICIES -->
+  <h2 class="sec" id="policies"><span data-en>7 · Policy library</span><span data-fr>7 · Bibliothèque de politiques</span></h2>
+  <details class="box"><summary><span class="ic">📘</span><span class="sm"><span class="ttl"><span data-en>Built-in vs uploaded, mapping &amp; availability</span><span data-fr>Intégrées vs téléversées, association et disponibilité</span></span><span class="how"><span data-en>Bilingual .docx templates; keywords map a policy to a control family; availability controls visibility.</span><span data-fr>Modèles .docx bilingues ; des mots-clés associent une politique à une famille de contrôles ; la disponibilité contrôle la visibilité.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app, Super Admin manages)</span><span data-fr>Configuration (dans l’app, géré par le Super Admin)</span></div><ul>
+      <li><span data-en>Source <code>builtin</code> (ships with the app) or <code>upload</code> (added by you). FR version via a <code>.fr.docx</code> (has_fr).</span><span data-fr>Source <code>builtin</code> (livrée) ou <code>upload</code> (ajoutée par vous). Version FR via un <code>.fr.docx</code> (has_fr).</span></li>
+      <li><b>keywords</b> — <span data-en>comma-separated tokens; a policy shows as “available” on a control when all its keywords appear in the control’s domain.</span><span data-fr>jetons séparés par virgules ; une politique apparaît « disponible » sur un contrôle si tous ses mots-clés figurent dans le domaine du contrôle.</span></li>
+      <li><b>is_active</b> — <span data-en>off = hidden from non-admins (preview/download return not-found).</span><span data-fr>désactivé = masquée aux non-admins (aperçu/téléchargement renvoient introuvable).</span></li>
+      <li><span data-en>Upload limit 25 MB, <b>.docx only</b>. Everyone can search, preview (eye, EN/FR) and download; only Super Admin can add/edit/replace/hide/delete.</span><span data-fr>Limite 25 Mo, <b>.docx seulement</b>. Tout le monde peut rechercher, prévisualiser (œil, EN/FR) et télécharger ; seul le Super Admin peut ajouter/modifier/remplacer/masquer/supprimer.</span></li>
+    </ul></div></details>
+
+  <!-- LLM -->
+  <h2 class="sec" id="llm"><span data-en>8 · AI connector (optional)</span><span data-fr>8 · Connecteur IA (optionnel)</span></h2>
+  <details class="box"><summary><span class="ic">✦</span><span class="sm"><span class="ttl"><span data-en>Connect an LLM provider</span><span data-fr>Connecter un fournisseur LLM</span></span><span class="how"><span data-en>Powers AI recommendations &amp; video scripts; off by default; key encrypted; outbound restricted.</span><span data-fr>Alimente les recommandations IA et scripts vidéo ; désactivé par défaut ; clé chiffrée ; sortie restreinte.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app, Super Admin · AI Connector)</span><span data-fr>Configuration (dans l’app, Super Admin · Connecteur IA)</span></div><ul>
+      <li><b>provider</b> <code>openai | anthropic | ollama</code>, <b>base_url</b> (<span data-en>provider default if blank</span><span data-fr>défaut du fournisseur si vide</span>), <b>model</b>, <b>api_key</b> (<span data-en>stored encrypted; never shown back</span><span data-fr>stockée chiffrée ; jamais réaffichée</span>), <b>timeout</b> (5–300 s), <b>enabled</b> (<span data-en>default off</span><span data-fr>défaut désactivé</span>).</li>
+      <li><span data-en>Use <b>Test connection</b> to verify before enabling.</span><span data-fr>Utilisez <b>Tester la connexion</b> avant d’activer.</span></li>
+      <li><b>SSRF guard</b> — <span data-en>the connector cannot call private/internal addresses. To use an internal LLM (e.g. Ollama on localhost), set the env var</span><span data-fr>le connecteur ne peut pas appeler d’adresses privées/internes. Pour un LLM interne (p. ex. Ollama en local), définissez la variable d’env</span> <code>LLM_ALLOW_PRIVATE_NETWORKS=true</code>.</li>
+    </ul></div></details>
+
+  <!-- EMAIL -->
+  <h2 class="sec" id="email"><span data-en>9 · Email delivery</span><span data-fr>9 · Envoi de courriels</span></h2>
+  <details class="box"><summary><span class="ic">✉️</span><span class="sm"><span class="ttl"><span data-en>Email backend &amp; sender addresses</span><span data-fr>Backend courriel et adresses d’expéditeur</span></span><span class="how"><span data-en>Sends invites, verification, unlock and notifications; production must use a real backend.</span><span data-fr>Envoie invitations, vérifications, déverrouillages et notifications ; la production doit utiliser un vrai backend.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (environment)</span><span data-fr>Configuration (environnement)</span></div><ul>
+      <li><code>EMAIL_BACKEND</code> — <code>smtp</code> | <code>sendgrid</code> | <code>console</code> (<span data-en><code>ses</code> is accepted but not implemented — it falls back to console</span><span data-fr><code>ses</code> est accepté mais non implémenté — il retombe sur console</span>).</li>
+      <li><code>smtp</code> <span data-en>needs</span><span data-fr>nécessite</span> <code>SMTP_HOST/PORT/USER/PASSWORD/TLS</code>; <code>sendgrid</code> <span data-en>needs</span><span data-fr>nécessite</span> <code>SENDGRID_API_KEY</code>.</li>
+      <li><span data-en>Senders</span><span data-fr>Expéditeurs</span> <code>FROM_EMAIL</code> (<span data-en>default</span><span data-fr>défaut</span>), <code>EMAIL_FROM_INVOICING</code>, <code>EMAIL_FROM_CASES</code>, <code>EMAIL_FROM_NOREPLY</code> (<span data-en>each falls back to FROM_EMAIL</span><span data-fr>chacun retombe sur FROM_EMAIL</span>).</li>
+      <li><span data-en><b>Production refuses to start with</b> <code>console</code> (it would leak verification codes). Super Admin can view/test the config in-app.</span><span data-fr><b>La production refuse de démarrer avec</b> <code>console</code> (cela divulguerait les codes). Le Super Admin peut voir/tester la config dans l’app.</span></li>
+    </ul></div></details>
+
+  <!-- STORAGE -->
+  <h2 class="sec" id="storage"><span data-en>10 · File storage</span><span data-fr>10 · Stockage des fichiers</span></h2>
+  <details class="box"><summary><span class="ic">📦</span><span class="sm"><span class="ttl"><span data-en>Where uploaded files live</span><span data-fr>Où vivent les fichiers téléversés</span></span><span class="how"><span data-en>Local disk by default; S3/Cloudflare R2 supported for durable storage.</span><span data-fr>Disque local par défaut ; S3/Cloudflare R2 pris en charge pour un stockage durable.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (environment / infra)</span><span data-fr>Configuration (environnement / infra)</span></div><ul>
+      <li><code>STORAGE_BACKEND</code> — <code>local</code> | <code>s3</code> | <code>r2</code> (<span data-en><code>azure</code>/<code>gcs</code> accepted but not implemented → behave as local</span><span data-fr><code>azure</code>/<code>gcs</code> acceptés mais non implémentés → se comportent comme local</span>).</li>
+      <li><code>STORAGE_LOCAL_PATH</code> (<span data-en>default</span><span data-fr>défaut</span> <code>/app/uploads</code>); R2/S3 use <code>R2_ACCOUNT_ID</code>, <code>R2_ACCESS_KEY_ID</code>, <code>R2_SECRET_ACCESS_KEY</code>, <code>R2_BUCKET_NAME</code>.</li>
+      <li><span data-en>Persistent volumes hold uploads (evidence + uploaded policies) and backups.</span><span data-fr>Des volumes persistants contiennent les téléversements (preuves + politiques téléversées) et les sauvegardes.</span></li>
+    </ul></div></details>
+
+  <!-- BILLING -->
+  <h2 class="sec" id="billing"><span data-en>11 · Billing, plans &amp; trials</span><span data-fr>11 · Facturation, forfaits et essais</span></h2>
+  <details class="box"><summary><span class="ic">💳</span><span class="sm"><span class="ttl"><span data-en>Plans, entitlements &amp; trial mode</span><span data-fr>Forfaits, droits et mode d’essai</span></span><span class="how"><span data-en>Plans gate features and seats; a platform billing mode controls trials &amp; locking.</span><span data-fr>Les forfaits conditionnent fonctions et sièges ; un mode de facturation plateforme gère essais et verrouillage.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (in-app Super Admin + environment for Stripe)</span><span data-fr>Configuration (Super Admin dans l’app + environnement pour Stripe)</span></div><ul>
+      <li><b><span data-en>Billing mode</span><span data-fr>Mode de facturation</span></b> (<span data-en>platform default</span><span data-fr>défaut plateforme</span> <code>no_card_trial</code>): <code>no_card_trial</code> (<span data-en>free trial then lock</span><span data-fr>essai puis verrouillage</span>), <code>card_trial</code> (<span data-en>Stripe trial, auto-charge</span><span data-fr>essai Stripe, prélèvement auto</span>), <code>charge_immediately</code>. <b><span data-en>Trial days</span><span data-fr>Jours d’essai</span></b> default 14.</li>
+      <li><b><span data-en>Plans</span><span data-fr>Forfaits</span></b> — <span data-en>tier (single_client/msp), monthly price, included frameworks, feature flags (reports, import, …), seat/client caps. Managed under Plans &amp; Pricing.</span><span data-fr>niveau (single_client/msp), prix mensuel, référentiels inclus, indicateurs de fonctions (reports, import, …), plafonds de sièges/clients. Gérés sous Forfaits et tarifs.</span></li>
+      <li><span data-en><b>Enforced feature gates today:</b> <code>reports</code> and <code>import</code>. (Other flags exist but aren’t enforced yet.)</span><span data-fr><b>Restrictions de fonctions appliquées aujourd’hui :</b> <code>reports</code> et <code>import</code>. (D’autres indicateurs existent mais ne sont pas encore appliqués.)</span></li>
+      <li><b>Stripe</b> — <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code> (env). <span data-en>Without a secret key, checkout is <b>simulated</b> (marks active, local invoice) — handy for testing.</span><span data-fr>Sans clé secrète, le paiement est <b>simulé</b> (marque actif, facture locale) — pratique pour tester.</span></li>
+    </ul></div></details>
+
+  <!-- BACKUP -->
+  <h2 class="sec" id="backup"><span data-en>12 · Backup &amp; restore</span><span data-fr>12 · Sauvegarde et restauration</span></h2>
+  <details class="box"><summary><span class="ic">🗄</span><span class="sm"><span class="ttl"><span data-en>Signed backups &amp; safe restore</span><span data-fr>Sauvegardes signées et restauration sûre</span></span><span class="how"><span data-en>Export chosen data (and files); restore merges by key and only accepts trusted/signed bundles.</span><span data-fr>Exporte les données choisies (et fichiers) ; la restauration fusionne par clé et n’accepte que des sauvegardes de confiance/signées.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>How it works (in-app, Super Admin only)</span><span data-fr>Fonctionnement (dans l’app, Super Admin seulement)</span></div><ul>
+      <li><span data-en>Categories: frameworks, plans, providers, tenants, compliance, support, billing, audit, policies (some scoped to chosen clients).</span><span data-fr>Catégories : référentiels, forfaits, fournisseurs, organisations, conformité, support, facturation, audit, politiques (certaines limitées aux clients choisis).</span></li>
+      <li><span data-en>Bundles are HMAC-signed with the app secret. Restore from a stored snapshot is trusted; an <b>uploaded</b> file must be signed by this system or it’s rejected.</span><span data-fr>Les sauvegardes sont signées (HMAC) avec le secret de l’app. La restauration depuis un instantané stocké est de confiance ; un fichier <b>téléversé</b> doit être signé par ce système, sinon il est refusé.</span></li>
+      <li><span data-en>Restore <b>merges (never deletes)</b>; passwords/MFA secrets are stripped; restored users must reset their password. Every restore is audit-logged.</span><span data-fr>La restauration <b>fusionne (ne supprime jamais)</b> ; mots de passe/secrets MFA retirés ; les utilisateurs restaurés doivent réinitialiser leur mot de passe. Chaque restauration est journalisée.</span></li>
+      <li><span data-en>“Full backup” zips all data + every uploaded file with a manifest.</span><span data-fr>La « sauvegarde complète » archive toutes les données + chaque fichier téléversé avec un manifeste.</span></li>
+    </ul></div></details>
+
+  <!-- SECURITY -->
+  <h2 class="sec" id="security"><span data-en>13 · Security posture</span><span data-fr>13 · Posture de sécurité</span></h2>
+  <details class="box"><summary><span class="ic">🛡️</span><span class="sm"><span class="ttl"><span data-en>HTTPS, headers, docs &amp; CORS</span><span data-fr>HTTPS, en-têtes, doc et CORS</span></span><span class="how"><span data-en>Caddy terminates HTTPS and sets security headers; API docs are off in production.</span><span data-fr>Caddy termine le HTTPS et pose les en-têtes de sécurité ; la doc API est désactivée en production.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><div class="lbl"><span data-en>Configuration (infra — Caddy / nginx / app)</span><span data-fr>Configuration (infra — Caddy / nginx / app)</span></div><ul>
+      <li><span data-en>Caddy: automatic Let’s Encrypt HTTPS, HSTS, CSP, X-Frame-Options DENY, nosniff, Referrer-Policy, Server header removed. The domain + contact email are set in the Caddyfile.</span><span data-fr>Caddy : HTTPS Let’s Encrypt automatique, HSTS, CSP, X-Frame-Options DENY, nosniff, Referrer-Policy, en-tête Server retiré. Le domaine + courriel de contact sont dans le Caddyfile.</span></li>
+      <li><span data-en>nginx: computes the real client IP (used by rate limiting), site-wide noindex, robots.txt = Disallow all.</span><span data-fr>nginx : calcule la vraie IP client (utilisée par la limite de débit), noindex sur tout le site, robots.txt = tout interdire.</span></li>
+      <li><span data-en>API docs/openapi disabled when ENVIRONMENT=production; CORS limited to known origins, methods and headers.</span><span data-fr>Doc API/openapi désactivées quand ENVIRONMENT=production ; CORS limité aux origines, méthodes et en-têtes connus.</span></li>
+    </ul></div></details>
+
+  <!-- MODULES -->
+  <h2 class="sec" id="modules"><span data-en>14 · Other modules</span><span data-fr>14 · Autres modules</span></h2>
+  <details class="box"><summary><span class="ic">🧩</span><span class="sm"><span class="ttl"><span data-en>Support · Notifications · Training · Marketplace · Partners · Agreement</span><span data-fr>Support · Notifications · Formation · Place de marché · Partenaires · Entente</span></span><span class="how"><span data-en>Supporting features, each role-gated.</span><span data-fr>Fonctions complémentaires, chacune restreinte par rôle.</span></span></span><span class="chev">▸</span></summary>
+    <div class="cfg"><ul>
+      <li><b>Support</b> — <span data-en>users raise cases (≤25 MB attachment); EVA reviews. Module enable + categories set by Super Admin.</span><span data-fr>les utilisateurs ouvrent des cas (pièce jointe ≤25 Mo) ; EVA traite. Activation du module + catégories réglées par le Super Admin.</span></li>
+      <li><b>Notifications</b> — <span data-en>role-aware “action required” bell; no config.</span><span data-fr>cloche « action requise » selon le rôle ; aucune config.</span></li>
+      <li><b><span data-en>Training videos</span><span data-fr>Vidéos de formation</span></b> — <span data-en>per framework/control (link or upload ≤200 MB); AI scripts need the connector. Super-Admin managed.</span><span data-fr>par référentiel/contrôle (lien ou upload ≤200 Mo) ; les scripts IA nécessitent le connecteur. Géré par le Super Admin.</span></li>
+      <li><b><span data-en>Marketplace</span><span data-fr>Place de marché</span></b> — <span data-en>service-provider directory; providers self-register (pending) then EVA authorizes.</span><span data-fr>annuaire de fournisseurs ; les fournisseurs s’inscrivent (en attente) puis EVA autorise.</span></li>
+      <li><b><span data-en>Partners</span><span data-fr>Partenaires</span></b> — <span data-en>MSP margin engine (wholesale/commission, volume tiers, monthly statements); terms set by Super Admin.</span><span data-fr>moteur de marge MSP (gros/commission, paliers de volume, relevés mensuels) ; conditions réglées par le Super Admin.</span></li>
+      <li><b><span data-en>Agreement gate</span><span data-fr>Entente</span></b> — <span data-en>bilingual subscription agreement accepted at registration; acceptance recorded with version + IP.</span><span data-fr>entente d’abonnement bilingue acceptée à l’inscription ; acceptation enregistrée avec version + IP.</span></li>
+    </ul></div></details>
+
+  <!-- ENV CHEAT SHEET -->
+  <h2 class="sec" id="env"><span data-en>15 · Environment variables — cheat sheet</span><span data-fr>15 · Variables d’environnement — aide-mémoire</span></h2>
+  <p style="font-size:12.5px;color:var(--mut);padding-left:14px"><span data-en>Set these in the server <code>.env</code> (or container env). Changing any requires a redeploy.</span><span data-fr>À définir dans le <code>.env</code> serveur (ou l’env du conteneur). Tout changement nécessite un redéploiement.</span></p>
+  <table>
+    <thead><tr><th><span data-en>Variable</span><span data-fr>Variable</span></th><th><span data-en>Purpose</span><span data-fr>Rôle</span></th><th><span data-en>Default / note</span><span data-fr>Défaut / note</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>SECRET_KEY</code></td><td><span data-en>Signs tokens, encrypts secrets</span><span data-fr>Signe les jetons, chiffre les secrets</span></td><td><span data-en>required, ≥32 chars</span><span data-fr>requis, ≥32 car.</span></td></tr>
+      <tr><td><code>ENVIRONMENT</code></td><td><span data-en>Dev vs prod hardening</span><span data-fr>Durcissement dev/prod</span></td><td><code>production</code></td></tr>
+      <tr><td><code>FRONTEND_URL</code></td><td><span data-en>Public URL for links + CORS</span><span data-fr>URL publique liens + CORS</span></td><td>https://…</td></tr>
+      <tr><td><code>DATABASE_URL</code></td><td>Postgres</td><td><span data-en>change the password</span><span data-fr>changez le mot de passe</span></td></tr>
+      <tr><td><code>BASIC_AUTH_USER/PASSWORD</code></td><td><span data-en>Site access gate</span><span data-fr>Portail d’accès</span></td><td><span data-en>required</span><span data-fr>requis</span></td></tr>
+      <tr><td><code>ACCESS_TOKEN_EXPIRE_MINUTES</code></td><td><span data-en>Access token life</span><span data-fr>Durée jeton d’accès</span></td><td>15 (→480 = 8h)</td></tr>
+      <tr><td><code>REFRESH_TOKEN_EXPIRE_DAYS</code></td><td><span data-en>Refresh token life</span><span data-fr>Durée refresh</span></td><td>30</td></tr>
+      <tr><td><code>EMAIL_BACKEND</code> + SMTP/SendGrid</td><td><span data-en>Email delivery</span><span data-fr>Envoi courriel</span></td><td><code>smtp</code>/<code>sendgrid</code> <span data-en>in prod</span><span data-fr>en prod</span></td></tr>
+      <tr><td><code>STORAGE_BACKEND</code> + R2_*</td><td><span data-en>File storage</span><span data-fr>Stockage fichiers</span></td><td><code>local</code> | <code>r2</code>/<code>s3</code></td></tr>
+      <tr><td><code>STRIPE_SECRET_KEY</code> / <code>STRIPE_WEBHOOK_SECRET</code></td><td><span data-en>Real payments</span><span data-fr>Paiements réels</span></td><td><span data-en>blank = simulated</span><span data-fr>vide = simulé</span></td></tr>
+      <tr><td><code>LLM_ALLOW_PRIVATE_NETWORKS</code></td><td><span data-en>Allow internal LLM</span><span data-fr>Autoriser LLM interne</span></td><td><code>false</code></td></tr>
+    </tbody>
+  </table>
+
+  <!-- CAVEATS -->
+  <h2 class="sec" id="caveats"><span data-en>Important caveats</span><span data-fr>Mises en garde importantes</span></h2>
+  <div class="warn"><span data-en><b>Worth knowing before you rely on a setting:</b></span><span data-fr><b>Bon à savoir avant de compter sur un réglage :</b></span>
+    <ul style="margin:6px 0 0;padding-left:18px">
+      <li><span data-en>MFA is <b>opt-in</b> even for admin roles — it’s only enforced once a user enables it. There is no forced enrollment.</span><span data-fr>La MFA est <b>sur activation</b> même pour les rôles admin — imposée seulement une fois activée par l’utilisateur. Aucune inscription forcée.</span></li>
+      <li><span data-en>Lockout, password length, rate limits and MFA-required roles are <b>code constants</b>, not env/in-app settings.</span><span data-fr>Verrouillage, longueur de mot de passe, limites de débit et rôles MFA requis sont des <b>constantes de code</b>, pas des réglages env/dans l’app.</span></li>
+      <li><span data-en><code>EMAIL_BACKEND=ses</code> and <code>STORAGE_BACKEND=azure/gcs</code> are accepted but not implemented (they fall back to console / local).</span><span data-fr><code>EMAIL_BACKEND=ses</code> et <code>STORAGE_BACKEND=azure/gcs</code> sont acceptés mais non implémentés (retombent sur console / local).</span></li>
+      <li><span data-en>Self-audit auto-accept happens on the <b>upload</b> path; submitting an existing draft routes to review even on self-audit orgs.</span><span data-fr>L’auto-acceptation en auto-audit se fait sur le chemin <b>téléversement</b> ; soumettre un brouillon existant part en revue même sur les orgs en auto-audit.</span></li>
+      <li><span data-en>Plan feature flags <code>msp_review</code>/<code>audit_logs</code>/<code>api</code> exist but aren’t enforced yet; only <code>reports</code> and <code>import</code> are gated.</span><span data-fr>Les indicateurs de forfait <code>msp_review</code>/<code>audit_logs</code>/<code>api</code> existent mais ne sont pas encore appliqués ; seuls <code>reports</code> et <code>import</code> sont restreints.</span></li>
+    </ul>
+  </div>
+
+  <div class="foot"><span data-en>Grounded in the live code (config, models, API endpoints). Defaults and behaviors can change with new releases — re-check after major updates.</span><span data-fr>Basé sur le code réel (config, modèles, points d’API). Les défauts et comportements peuvent changer avec les nouvelles versions — revérifiez après une mise à jour majeure.</span></div>
+</div>
+<script>
+  function setLang(l){
+    document.body.classList.toggle('fr', l==='fr');
+    document.getElementById('b-en').classList.toggle('on', l==='en');
+    document.getElementById('b-fr').classList.toggle('on', l==='fr');
+    document.documentElement.lang=l;
+  }
+</script>
+</body>
+</html>

@@ -35,6 +35,7 @@ import SupportCasesPage from './pages/SupportCases'
 import BackupRestorePage from './pages/BackupRestore'
 import PolicyLibraryPage from './pages/PolicyLibrary'
 import QuickTourPage from './pages/QuickTour'
+import ConfigGuidePage from './pages/ConfigGuide'
 import Shell from './components/Shell'
 import MobileQuick from './pages/MobileQuick'
 
@@ -105,6 +106,7 @@ export default function App() {
           <Route path="support" element={<SupportPage />} />
           <Route path="support-cases" element={<RoleRoute allow={EVA}><SupportCasesPage /></RoleRoute>} />
           <Route path="backup" element={<RoleRoute allow={SUPER}><BackupRestorePage /></RoleRoute>} />
+          <Route path="config-guide" element={<RoleRoute allow={SUPER}><ConfigGuidePage /></RoleRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>

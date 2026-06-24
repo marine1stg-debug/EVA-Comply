@@ -130,6 +130,18 @@ export default function Shell() {
 
   const role = user?.role || ''
   const [showChangelog, setShowChangelog] = useState(false)
+
+  // First-time users: show the Quick Tour once, then never auto-redirect again
+  // (they can always reopen it from the sidebar). Gated by a localStorage flag.
+  useEffect(() => {
+    try {
+      if (user && localStorage.getItem('eva-tour-seen') !== '1') {
+        localStorage.setItem('eva-tour-seen', '1')
+        if (loc.pathname === '/' || loc.pathname === '/dashboard') navigate('/quick-tour')
+      }
+    } catch { /* ignore */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
   const canReview = ['msp_admin', 'msp_analyst', 'eva_auditor', 'super_admin'].includes(role)
   const canUsers = ['super_admin', 'msp_admin', 'client_admin'].includes(role)
   const canTenants = role === 'super_admin'
@@ -182,6 +194,7 @@ export default function Shell() {
       { path: '/billing', icon: '💳', label: 'Billing', show: canBilling },
       { path: '/audit-logs', icon: '📋', label: 'Audit Logs', show: !!role },
       { path: '/backup', icon: '🗄', label: 'Backup & Restore', show: canTenants },
+      { path: '/config-guide', icon: '📖', label: 'Configuration Guide', show: canTenants },
       { path: '/settings', icon: '⚙', label: 'Settings', show: true },
     ]},
   ]
