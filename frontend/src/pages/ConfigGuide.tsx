@@ -274,9 +274,9 @@ export default function ConfigGuidePage() {
         .cg-warn{border:1px solid #f0d9a8;border-left:4px solid #D97706;border-radius:10px;padding:10px 14px;margin:12px 0;background:rgba(217,151,9,.06)}
         .cg-warn li{font-size:12.5px;color:var(--text2);margin:5px 0}
         .cg-toc{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:6px;padding:10px 0;margin-bottom:6px;background:var(--bg,#fff);border-bottom:1px solid var(--border,rgba(120,140,170,.2))}
-        .cg-chip{border:1px solid var(--border,rgba(120,140,170,.3));background:var(--card2,rgba(46,95,163,.06));color:var(--eva-blue,#2E5FA3);
-                 border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap}
-        .cg-chip:hover{background:var(--eva-blue,#2E5FA3);color:#fff;border-color:var(--eva-blue,#2E5FA3)}
+        .cg-chip{border:1px solid #9db6d8;background:#e8f0fb;color:#1B3A6B;
+                 border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+        .cg-chip:hover{background:#1B3A6B;color:#fff;border-color:#1B3A6B}
         .cg-sechd{scroll-margin-top:54px}
       `}</style>
 
