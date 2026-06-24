@@ -34,6 +34,7 @@ import SupportPage from './pages/Support'
 import SupportCasesPage from './pages/SupportCases'
 import BackupRestorePage from './pages/BackupRestore'
 import PolicyLibraryPage from './pages/PolicyLibrary'
+import QuickTourPage from './pages/QuickTour'
 import Shell from './components/Shell'
 import MobileQuick from './pages/MobileQuick'
 
@@ -77,6 +78,7 @@ export default function App() {
         }>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="quick-tour" element={<QuickTourPage />} />
           <Route path="controls" element={<ControlsPage />} />
           <Route path="maturity" element={<MaturityPage />} />
           <Route path="recommendations" element={<RecommendationsPage />} />

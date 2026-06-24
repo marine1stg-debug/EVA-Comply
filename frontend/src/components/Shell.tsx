@@ -148,6 +148,7 @@ export default function Shell() {
   const sections: NavSection[] = [
     { label: 'Overview', items: [
       { path: '/dashboard', icon: '⊞', label: 'Dashboard', show: true },
+      { path: '/quick-tour', icon: '🧭', label: 'Quick Tour', show: true },
     ]},
     { label: canReview ? 'Client compliance' : 'Compliance', items: [
       { path: '/controls', icon: '☰', label: 'Controls', show: true },

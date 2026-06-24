@@ -10,6 +10,7 @@
 export const FR: Record<string, string> = {
   // ── Sidebar navigation ──
   'Dashboard': 'Tableau de bord',
+  'Quick Tour': 'Visite guidée',
   'Controls': 'Contrôles',
   'Evidence': 'Preuves',
   'Maturity': 'Maturité',

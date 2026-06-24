@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVA Comply — Quick Tour / Visite guidée</title>
+<style>
+  :root{--navy:#1B3A6B;--blue:#2E5FA3;--sky:#1A8FD1;--ink:#1f2430;--mut:#5b6473;
+        --line:#c9d4e3;--bg:#f4f7fb;--card:#fff;--green:#16A34A;--violet:#7C3AED;
+        --teal:#0D9488;--amber:#D97706;--grey:#64748B;--eva:#2563EB;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 20px 60px}
+  header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;border-bottom:3px solid var(--blue);padding-bottom:14px;margin-bottom:18px;flex-wrap:wrap}
+  header.top h1{margin:0;font-size:24px;color:var(--navy)}
+  header.top .sub{color:var(--mut);font-size:13.5px;margin-top:4px}
+  .langtoggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:0 0 auto}
+  .langtoggle button{border:none;background:#fff;padding:6px 16px;font-weight:700;cursor:pointer;color:var(--mut);font-size:13px}
+  .langtoggle button.on{background:var(--blue);color:#fff}
+  .legend{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+  .pill{font-size:11.5px;font-weight:700;color:#fff;border-radius:999px;padding:3px 10px}
+  h2.sec{font-size:17px;color:var(--navy);margin:26px 0 4px;border-left:4px solid var(--sky);padding-left:10px}
+  .secblurb{color:var(--mut);font-size:13px;margin:0 0 8px;padding-left:14px}
+  details.box{border:1px solid var(--line);border-radius:12px;background:#fff;margin:8px 0;overflow:hidden}
+  details.box>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px}
+  details.box>summary::-webkit-details-marker{display:none}
+  .ic{font-size:18px;width:26px;text-align:center;flex:0 0 auto}
+  .ttl{font-weight:700;color:var(--navy);font-size:14px}
+  .menu{font-size:11px;color:var(--blue);background:#eaf1fb;border-radius:6px;padding:2px 7px}
+  .chev{margin-left:auto;color:#8a93a3;transition:transform .15s;font-size:12px}
+  details.box[open] .chev{transform:rotate(90deg)}
+  .body{padding:0 16px 14px 50px}
+  .body p{margin:0 0 8px;font-size:13px;color:var(--mut)}
+  .body ul{margin:0;padding-left:16px} .body li{font-size:13px;color:var(--mut);margin:5px 0}
+  .roleblock h3{font-size:14px;margin:14px 0 2px}
+  .foot{margin-top:24px;color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+  [data-fr]{display:none}
+  body.fr [data-en]{display:none} body.fr [data-fr]{display:revert}
+  @media print{body{background:#fff}details.box{box-shadow:none}.langtoggle{display:none}}
+</style>
+</head>
+<body class="en">
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1><span data-en>EVA Comply — Quick Tour</span><span data-fr>EVA Comply — Visite guidée</span></h1>
+      <div class="sub">
+        <span data-en>A guided walkthrough of every role and menu. Click any step to expand the details.</span>
+        <span data-fr>Un parcours guidé de chaque rôle et menu. Cliquez sur une étape pour déplier les détails.</span>
+      </div>
+    </div>
+    <div class="langtoggle">
+      <button id="b-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="b-fr" onclick="setLang('fr')">FR</button>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span class="pill" style="background:#7C3AED">Super Admin</span>
+    <span class="pill" style="background:#0D9488"><span data-en>MSP Admin / Analyst</span><span data-fr>Admin / Analyste MSP</span></span>
+    <span class="pill" style="background:#D97706"><span data-en>Client Admin</span><span data-fr>Admin client</span></span>
+    <span class="pill" style="background:#16A34A"><span data-en>Contributor</span><span data-fr>Contributeur</span></span>
+    <span class="pill" style="background:#64748B"><span data-en>Viewer (read-only)</span><span data-fr>Lecteur (lecture seule)</span></span>
+    <span class="pill" style="background:#2563EB"><span data-en>EVA Auditor</span><span data-fr>Auditeur EVA</span></span>
+  </div>
+
+  <!-- 1 GETTING STARTED -->
+  <h2 class="sec"><span data-en>1 · Getting started — everyone</span><span data-fr>1 · Pour commencer — tout le monde</span></h2>
+  <p class="secblurb"><span data-en>Sign in and set up your account.</span><span data-fr>Connectez-vous et configurez votre compte.</span></p>
+
+  <details class="box" open><summary><span class="ic">🔑</span>
+    <span class="ttl"><span data-en>Sign in</span><span data-fr>Se connecter</span></span>
+    <span class="menu"><span data-en>Login</span><span data-fr>Connexion</span></span><span class="chev">▸</span></summary>
+    <div class="body">
+      <p><span data-en>Three ways in, depending on your situation.</span><span data-fr>Trois façons d’entrer, selon votre situation.</span></p>
+      <ul>
+        <li><span data-en>Invited: click the invite link and set a password (min. 12 characters).</span><span data-fr>Invité : cliquez sur le lien d’invitation et définissez un mot de passe (12 caractères min.).</span></li>
+        <li><span data-en>New organization: Sign up — you become its Client Admin (free trial).</span><span data-fr>Nouvelle organisation : Inscription — vous en devenez l’Administrateur client (essai gratuit).</span></li>
+        <li><span data-en>Returning: log in with email + password; admins enter an MFA code if enabled.</span><span data-fr>Retour : connectez-vous avec courriel + mot de passe ; les admins saisissent un code MFA si activé.</span></li>
+      </ul>
+    </div></details>
+
+  <details class="box"><summary><span class="ic">🛡️</span>
+    <span class="ttl"><span data-en>Secure your account</span><span data-fr>Sécurisez votre compte</span></span>
+    <span class="menu"><span data-en>Settings</span><span data-fr>Réglages</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Enable MFA (required for admin roles) by scanning the QR code.</span><span data-fr>Activez la MFA (obligatoire pour les rôles admin) en scannant le code QR.</span></li>
+      <li><span data-en>Change your password any time (it signs out your other sessions).</span><span data-fr>Changez votre mot de passe à tout moment (cela déconnecte vos autres sessions).</span></li>
+      <li><span data-en>Switch language (EN/FR) from the top bar.</span><span data-fr>Changez la langue (EN/FR) depuis la barre supérieure.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">⊞</span>
+    <span class="ttl"><span data-en>Your Dashboard</span><span data-fr>Votre tableau de bord</span></span>
+    <span class="menu"><span data-en>Dashboard</span><span data-fr>Tableau de bord</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Compliance score, progress, and what needs attention.</span><span data-fr>Score de conformité, progression et ce qui requiert votre attention.</span></li>
+      <li><span data-en>The sidebar shows only sections your role can use.</span><span data-fr>La barre latérale n’affiche que les sections accessibles à votre rôle.</span></li>
+    </ul></div></details>
+
+  <!-- 2 COMPLIANCE WORK -->
+  <h2 class="sec"><span data-en>2 · Your compliance work — everyone</span><span data-fr>2 · Votre travail de conformité — tout le monde</span></h2>
+  <p class="secblurb"><span data-en>Viewers can see all of this but cannot upload, submit, or edit.</span><span data-fr>Les Lecteurs voient tout cela mais ne peuvent pas téléverser, soumettre ni modifier.</span></p>
+
+  <details class="box"><summary><span class="ic">☰</span><span class="ttl"><span data-en>Review your controls</span><span data-fr>Consultez vos contrôles</span></span><span class="menu"><span data-en>Controls</span><span data-fr>Contrôles</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Frameworks: CMMC L1/L2, NIST SP 800-171 R3, ITSP.10.171.</span><span data-fr>Référentiels : CMMC N1/N2, NIST SP 800-171 R3, ITSP.10.171.</span></li>
+      <li><span data-en>Each control shows status, coverage, and expected evidence.</span><span data-fr>Chaque contrôle affiche statut, couverture et preuves attendues.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">◎</span><span class="ttl"><span data-en>Self-assessment</span><span data-fr>Auto-évaluation</span></span><span class="menu"><span data-en>Maturity</span><span data-fr>Maturité</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Rate each control’s maturity; scores feed the dashboard and gap analysis.</span><span data-fr>Évaluez la maturité de chaque contrôle ; les scores alimentent le tableau de bord et l’analyse des écarts.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">📄</span><span class="ttl"><span data-en>Collect & submit evidence</span><span data-fr>Collectez et soumettez des preuves</span></span><span class="menu"><span data-en>Evidence</span><span data-fr>Preuves</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Upload a document per expected-evidence item, then Submit for review.</span><span data-fr>Téléversez un document par preuve attendue, puis Soumettez pour revue.</span></li>
+      <li><span data-en>Status: draft → submitted → accepted (or needs-more). Max 50 MB/file.</span><span data-fr>Statut : brouillon → soumis → accepté (ou complément requis). 50 Mo max/fichier.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">✦</span><span class="ttl"><span data-en>Close gaps</span><span data-fr>Comblez les écarts</span></span><span class="menu"><span data-en>Recommendations</span><span data-fr>Recommandations</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Curated (and AI-assisted) actions to raise weak controls; EN & FR.</span><span data-fr>Actions sélectionnées (et assistées par IA) pour renforcer les contrôles faibles ; EN et FR.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">📘</span><span class="ttl"><span data-en>Get the right policies</span><span data-fr>Obtenez les bonnes politiques</span></span><span class="menu"><span data-en>Policies</span><span data-fr>Politiques</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Filter by control family or search by topic.</span><span data-fr>Filtrez par famille de contrôles ou recherchez par sujet.</span></li>
+      <li><span data-en>Click the eye icon to preview the whole policy (EN/FR toggle), then download the .docx.</span><span data-fr>Cliquez sur l’icône œil pour prévisualiser toute la politique (bascule EN/FR), puis téléchargez le .docx.</span></li>
+    </ul></div></details>
+
+  <details class="box"><summary><span class="ic">↺</span><span class="ttl"><span data-en>Keep evidence current</span><span data-fr>Maintenez vos preuves à jour</span></span><span class="menu"><span data-en>Renewals</span><span data-fr>Renouvellements</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul><li><span data-en>See expiring evidence and re-upload before it lapses.</span><span data-fr>Voyez les preuves qui expirent et re-téléversez avant l’échéance.</span></li></ul></div></details>
+
+  <details class="box"><summary><span class="ic">⬇</span><span class="ttl"><span data-en>Export proof</span><span data-fr>Exportez vos preuves</span></span><span class="menu"><span data-en>Reports</span><span data-fr>Rapports</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul><li><span data-en>Download compliance reports (plan-dependent).</span><span data-fr>Téléchargez des rapports de conformité (selon le forfait).</span></li></ul></div></details>
+
+  <!-- 3 REVIEW -->
+  <h2 class="sec"><span data-en>3 · Review submitted evidence — reviewers</span><span data-fr>3 · Revoir les preuves soumises — réviseurs</span></h2>
+  <p class="secblurb"><span class="pill" style="background:#7C3AED">Super</span> <span class="pill" style="background:#0D9488">MSP</span> <span class="pill" style="background:#2563EB">EVA</span></p>
+  <details class="box"><summary><span class="ic">👁</span><span class="ttl"><span data-en>Work the review queue</span><span data-fr>Traitez la file de revue</span></span><span class="menu"><span data-en>Review Queue</span><span data-fr>File de revue</span></span><span class="chev">▸</span></summary>
+    <div class="body"><ul>
+      <li><span data-en>Accept, reject, or request more on each submission.</span><span data-fr>Acceptez, rejetez ou demandez un complément pour chaque soumission.</span></li>
+      <li><span data-en>Your decision updates the control status and notifies the client.</span><span data-fr>Votre décision met à jour le statut du contrôle et avertit le client.</span></li>
+    </ul></div></details>
+
+  <!-- 4 ADMIN CAPABILITIES -->
+  <h2 class="sec"><span data-en>4 · Admin capabilities by role</span><span data-fr>4 · Capacités admin par rôle</span></h2>
+
+  <div class="roleblock">
+    <h3 style="color:#D97706"><span data-en>Client Admin — runs one organization</span><span data-fr>Administrateur client — gère une organisation</span></h3>
+    <details class="box"><summary><span class="ic">👤</span><span class="ttl"><span data-en>Users & Roles</span><span data-fr>Utilisateurs et rôles</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul><li><span data-en>Invite team members (Contributor / Viewer); unlock accounts, reset MFA.</span><span data-fr>Invitez des membres (Contributeur / Lecteur) ; déverrouillez les comptes, réinitialisez la MFA.</span></li></ul></div></details>
+    <details class="box"><summary><span class="ic">💳</span><span class="ttl"><span data-en>Billing</span><span data-fr>Facturation</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul><li><span data-en>Manage subscription, plan, and invoices.</span><span data-fr>Gérez abonnement, forfait et factures.</span></li></ul></div></details>
+  </div>
+
+  <div class="roleblock">
+    <h3 style="color:#0D9488"><span data-en>MSP Admin / Analyst — manages many clients</span><span data-fr>Admin / Analyste MSP — gère plusieurs clients</span></h3>
+    <details class="box"><summary><span class="ic">📊</span><span class="ttl"><span data-en>Portfolio · Clients · Margin</span><span data-fr>Portefeuille · Clients · Marge</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul>
+        <li><span data-en>Cross-client posture, client management, pricing & margin.</span><span data-fr>Posture multi-clients, gestion des clients, prix et marge.</span></li>
+        <li><span data-en>Switch the active client from the top bar to act in their context.</span><span data-fr>Changez le client actif depuis la barre supérieure pour agir dans son contexte.</span></li>
+      </ul></div></details>
+    <details class="box"><summary><span class="ic">📚</span><span class="ttl"><span data-en>Frameworks & Import</span><span data-fr>Référentiels et import</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul><li><span data-en>Assign built-in frameworks or import a custom catalog (.xlsx). (MSP Admin)</span><span data-fr>Attribuez des référentiels intégrés ou importez un catalogue personnalisé (.xlsx). (Admin MSP)</span></li></ul></div></details>
+  </div>
+
+  <div class="roleblock">
+    <h3 style="color:#7C3AED"><span data-en>Super Admin — owns the platform</span><span data-fr>Super Admin — propriétaire de la plateforme</span></h3>
+    <details class="box"><summary><span class="ic">🏛</span><span class="ttl"><span data-en>Tenants, Plans, Training, Marketplace</span><span data-fr>Organisations, Forfaits, Formation, Place de marché</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul><li><span data-en>Approve/suspend organizations; edit plans & pricing; manage videos & service providers.</span><span data-fr>Approuvez/suspendez des organisations ; modifiez forfaits et prix ; gérez vidéos et fournisseurs.</span></li></ul></div></details>
+    <details class="box"><summary><span class="ic">✦</span><span class="ttl"><span data-en>AI Connector & Policy management</span><span data-fr>Connecteur IA et gestion des politiques</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul>
+        <li><span data-en>Configure the optional LLM (key encrypted; outbound restricted for security).</span><span data-fr>Configurez le LLM optionnel (clé chiffrée ; sortie restreinte par sécurité).</span></li>
+        <li><span data-en>Add/edit/replace/hide policies and map them to control families.</span><span data-fr>Ajoutez/modifiez/remplacez/masquez les politiques et associez-les aux familles de contrôles.</span></li>
+      </ul></div></details>
+    <details class="box"><summary><span class="ic">🗄</span><span class="ttl"><span data-en>Backup, Audit Logs, Support Console</span><span data-fr>Sauvegarde, Journaux, Console de support</span></span><span class="chev">▸</span></summary>
+      <div class="body"><ul><li><span data-en>Full export + signed restore; security/event trail; handle support cases.</span><span data-fr>Export complet + restauration signée ; trace de sécurité ; traitement des cas de support.</span></li></ul></div></details>
+  </div>
+
+  <div class="foot">
+    <span data-en>The sidebar hides sections your role can’t use. This same tour is built into the app under <b>Quick Tour</b>, where it adapts automatically to who is signed in.</span>
+    <span data-fr>La barre latérale masque les sections inaccessibles à votre rôle. Cette même visite est intégrée à l’application sous <b>Visite guidée</b>, où elle s’adapte automatiquement à l’utilisateur connecté.</span>
+  </div>
+</div>
+
+<script>
+  function setLang(l){
+    document.body.classList.toggle('fr', l==='fr');
+    document.getElementById('b-en').classList.toggle('on', l==='en');
+    document.getElementById('b-fr').classList.toggle('on', l==='fr');
+    document.documentElement.lang = l;
+  }
+</script>
+</body>
+</html>
