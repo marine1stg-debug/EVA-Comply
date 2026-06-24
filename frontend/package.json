@@ -18,7 +18,8 @@
     "react-hot-toast": "^2.4.1",
     "lucide-react": "^0.383.0",
     "recharts": "^2.12.7",
-    "date-fns": "^3.6.0"
+    "date-fns": "^3.6.0",
+    "docx-preview": "^0.3.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

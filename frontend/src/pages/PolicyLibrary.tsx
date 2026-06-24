@@ -1,5 +1,6 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { renderAsync } from 'docx-preview'
 import toast from 'react-hot-toast'
 import { api } from '../lib/api'
 import { useT } from '../lib/i18n'
@@ -29,6 +30,9 @@ export default function PolicyLibraryPage() {
   const replacingId = useRef<string | null>(null)
   const [preview, setPreview] = useState<Policy | null>(null)
   const [pvFr, setPvFr] = useState(false)
+  const docxRef = useRef<HTMLDivElement | null>(null)
+  const [pvLoading, setPvLoading] = useState(false)
+  const [pvError, setPvError] = useState(false)
 
   const { data, isLoading, isError, error } = useQuery<Resp>({
     queryKey: ['policies'],
@@ -37,12 +41,37 @@ export default function PolicyLibraryPage() {
 
   const refresh = () => { qc.invalidateQueries({ queryKey: ['policies'] }); qc.invalidateQueries({ queryKey: ['controls'] }) }
 
+  // Lightweight metadata only (has_fr → drives the FR toggle; name → title).
   const pv = useQuery<PreviewResp>({
     queryKey: ['policy-preview', preview?.id, pvFr],
     queryFn: async () => (await api.get(`/policy-templates/${preview!.id}/preview`, { params: { fr: pvFr } })).data,
     enabled: !!preview,
   })
   const openPreview = (p: Policy) => { setPvFr(false); setPreview(p) }
+
+  // Render the actual .docx with a Word-like viewer (pages, margins, tables).
+  useEffect(() => {
+    let cancelled = false
+    const el = docxRef.current
+    if (!preview || !el) return
+    setPvLoading(true); setPvError(false)
+    el.innerHTML = ''
+    ;(async () => {
+      try {
+        const res = await api.get(`/policy-templates/${preview.id}/file`, { params: { fr: pvFr }, responseType: 'blob' })
+        if (cancelled || !docxRef.current) return
+        await renderAsync(res.data, docxRef.current, undefined, {
+          className: 'docx', inWrapper: true, ignoreWidth: false, ignoreHeight: false,
+          breakPages: true, experimental: true, useBase64URL: true,
+        })
+      } catch {
+        if (!cancelled) setPvError(true)
+      } finally {
+        if (!cancelled) setPvLoading(false)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [preview, pvFr])
 
   const download = async (p: Policy) => {
     try {
@@ -176,10 +205,10 @@ export default function PolicyLibraryPage() {
                 <button className="tb-btn" style={{ padding: 4 }} onClick={() => setPreview(null)}><X size={16} aria-hidden /></button>
               </div>
             </div>
-            <div style={{ padding: '18px 22px', overflowY: 'auto' }}>
-              {pv.isLoading && <div className="page-sub">{t('Loading preview…')}</div>}
-              {pv.isError && <div className="page-sub" style={{ color: 'var(--red)' }}>{t('Could not load this preview.')}</div>}
-              {pv.data && <div className="policy-preview" style={{ color: 'var(--text)', lineHeight: 1.55, fontSize: 14 }} dangerouslySetInnerHTML={{ __html: pv.data.html }} />}
+            <div style={{ padding: '16px', overflowY: 'auto', background: '#e9edf3' }}>
+              {pvLoading && <div className="page-sub" style={{ padding: 12 }}>{t('Loading preview…')}</div>}
+              {pvError && <div className="page-sub" style={{ color: 'var(--red)', padding: 12 }}>{t('Could not load this preview.')}</div>}
+              <div ref={docxRef} className="docx-host" style={{ display: pvLoading || pvError ? 'none' : 'block' }} />
             </div>
           </div>
         </div>

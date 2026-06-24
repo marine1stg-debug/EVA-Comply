@@ -136,6 +136,7 @@ async def download_by_name(
 @router.get("/{policy_id}/file")
 async def download_by_id(
     policy_id: str,
+    fr: Optional[bool] = None,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
     lang: str = Depends(get_lang),
@@ -143,11 +144,14 @@ async def download_by_id(
     pol = await db.get(Policy, uuid.UUID(policy_id))
     if not pol or (not pol.is_active and not _is_admin(current_user)):
         raise HTTPException(status_code=404, detail="Policy not available")
-    path = _file_path(pol, lang)
+    # Explicit ?fr=true/false overrides the request language (used by the Word
+    # preview's EN/FR toggle); otherwise fall back to the X-Lang header.
+    want = ("fr" if fr else "en") if fr is not None else lang
+    path = _file_path(pol, want)
     if not os.path.isfile(path):
         raise HTTPException(status_code=404, detail="No file for this policy")
-    fr = path.endswith(".fr.docx")
-    return FileResponse(path, media_type=DOCX_MIME, filename=pol.slug + ("_FR.docx" if fr else ".docx"))
+    is_fr = path.endswith(".fr.docx")
+    return FileResponse(path, media_type=DOCX_MIME, filename=pol.slug + ("_FR.docx" if is_fr else ".docx"))
 
 
 import re as _re
