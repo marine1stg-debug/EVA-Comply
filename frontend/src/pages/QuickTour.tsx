@@ -412,7 +412,7 @@ export default function QuickTourPage() {
         .qt-box>summary::-webkit-details-marker{display:none}
         .qt-ic{font-size:18px;width:26px;text-align:center;flex:0 0 auto}
         .qt-ttl{font-weight:700;color:var(--text);font-size:14px}
-        .qt-menu{font-size:11px;color:var(--eva-blue, #2E5FA3);background:rgba(46,95,163,.12);
+        .qt-menu{font-size:11px;font-weight:700;color:#1B3A6B;background:#e8f0fb;
                  border-radius:6px;padding:2px 7px;margin-left:2px}
         .qt-chev{margin-left:auto;color:var(--text3, #8a93a3);transition:transform .15s ease;font-size:12px}
         .qt-box[open] .qt-chev{transform:rotate(90deg)}
