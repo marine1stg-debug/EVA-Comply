@@ -782,6 +782,7 @@ export const FR: Record<string, string> = {
   'Landing-page highlights (one per line)': 'Points forts de la page d’accueil (un par ligne)',
   'e.g. Framework compliance tracking\nEvidence collection & review\nExpert EVA audit decisions': 'p. ex. Suivi de conformité aux référentiels\nCollecte et revue des preuves\nDécisions d’audit par des experts EVA',
   'Shown as the ✓ bullets on the public landing page. Leave empty to use the default bullets.': 'Affichés comme les puces ✓ sur la page d’accueil publique. Laissez vide pour utiliser les puces par défaut.',
+  'Become an EVA partner: get listed in the marketplace and matched with clients who need help on specific controls — a steady stream of qualified leads. Showcase your skills, get found exactly when a client is stuck, and grow your compliance practice.': 'Devenez partenaire EVA : soyez référencé dans la place de marché et mis en relation avec des clients ayant besoin d’aide sur des contrôles précis — un flux régulier de prospects qualifiés. Mettez en avant vos compétences, soyez trouvé exactement quand un client bloque, et développez votre pratique de conformité.',
   'Turn on': 'Activer',
   'Turn off': 'Désactiver',
   'When ON, this client’s evidence goes to your MSP review queue before EVA. When OFF, it goes straight to EVA.': 'Quand ACTIVÉ, les preuves de ce client passent par votre file de revue MSP avant EVA. Quand DÉSACTIVÉ, elles vont directement à EVA.',

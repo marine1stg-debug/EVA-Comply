@@ -7,6 +7,7 @@ import { useAuthStore } from '../store/auth'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
 import LangSwitch from '../components/LangSwitch'
+import { PUBLIC_BG } from '../lib/publicBg'
 import { AgreementView } from '../components/AgreementGate'
 
 interface Plan { key: string; name: string; price: number; tenant_type: string; frameworks: string | string[] }
@@ -122,7 +123,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-5" style={{ background: '#0B1629' }}>
+    <div className="min-h-screen flex items-center justify-center p-5" style={PUBLIC_BG}>
       <LangSwitch />
       <div className="w-full max-w-md rounded-2xl p-7 shadow-2xl" style={{ background: '#111E35', border: '1px solid rgba(255,255,255,.07)' }}>
         <div className="text-center mb-5 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,.07)' }}>

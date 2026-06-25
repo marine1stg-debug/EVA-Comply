@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT, useI18n } from '../lib/i18n'
+import { PUBLIC_BG } from '../lib/publicBg'
 
 interface Plan { key: string; name: string; price: number; tenant_type: string; highlights?: string[] }
 
@@ -52,7 +53,7 @@ export default function WelcomePage() {
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0B1629', backgroundImage: 'linear-gradient(rgba(59,188,255,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(59,188,255,.10) 1px,transparent 1px)', backgroundSize: '40px 40px' }}>
+    <div style={{ minHeight: '100vh', ...PUBLIC_BG }}>
       <div style={{ maxWidth: 980, margin: '0 auto', padding: '24px 20px 60px' }}>
 
         {/* Header card — logo + language + sign in, on a panel so the logo reads clearly */}

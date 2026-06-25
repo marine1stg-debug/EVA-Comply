@@ -5,6 +5,7 @@ import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
 import LangSwitch from '../components/LangSwitch'
+import { PUBLIC_BG } from '../lib/publicBg'
 
 const inputStyle: React.CSSProperties = {
   width: '100%', borderRadius: 8, padding: '9px 12px', fontSize: 13, outline: 'none',
@@ -32,7 +33,7 @@ export default function ProviderSignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-5" style={{ background: '#0B1629' }}>
+    <div className="min-h-screen flex items-center justify-center p-5" style={PUBLIC_BG}>
       <LangSwitch />
       <div className="w-full max-w-md rounded-2xl p-7 shadow-2xl" style={{ background: '#111E35', border: '1px solid rgba(255,255,255,.07)' }}>
         <div className="text-center mb-5 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,.07)' }}>
@@ -48,6 +49,9 @@ export default function ProviderSignupPage() {
           </div>
         ) : (
           <>
+            <div style={{ background: 'rgba(26,143,209,.08)', border: '1px solid rgba(26,143,209,.25)', borderRadius: 10, padding: '12px 14px', marginBottom: 16, fontSize: 12.5, color: '#A9C4DD', lineHeight: 1.6 }}>
+              🤝 {t('Become an EVA partner: get listed in the marketplace and matched with clients who need help on specific controls — a steady stream of qualified leads. Showcase your skills, get found exactly when a client is stuck, and grow your compliance practice.')}
+            </div>
             <label style={{ fontSize: 11, fontWeight: 600, color: '#7094B8', display: 'block', marginBottom: 4 }}>{t('Company / provider name')}</label>
             <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} />
             <label style={{ fontSize: 11, fontWeight: 600, color: '#7094B8', display: 'block', marginBottom: 4 }}>{t('Contact name')}</label>
