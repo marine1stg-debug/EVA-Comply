@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.4.0'
+export const APP_VERSION = '1.5.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,19 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.5.0',
+    date: '2026-06-25',
+    changes: [
+      'French is now the default language, with an EN/FR toggle on the sign-in and other public pages.',
+      'Cleaner public landing page — logo, headline and notes are now in readable cards.',
+      'Help Center revamped: covers every feature, has a searchable FAQ, and lets EVA staff preview help "as" any user.',
+      'MSP pre-review is now configurable — an MSP-wide default plus a per-client on/off toggle; managed clients see a note in their Help Center.',
+      'Plan landing-page highlights are now editable in Plans & Pricing.',
+      'Evidence list now displays in French; a billing info banner clarifies the EVA internal organization.',
+      'Faster app load (the Word policy viewer now loads only when you open a preview).',
+    ],
+  },
   {
     version: '1.4.0',
     date: '2026-06-24',
