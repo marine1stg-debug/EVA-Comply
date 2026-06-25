@@ -124,6 +124,7 @@ async def billing_overview(
 
     return {
         "tenant": t.name,
+        "tenant_type": t.tenant_type.value,
         "plan": t.plan_name or (plan.name if plan else "—"),
         "status": t.subscription_status.value,
         "price": price,

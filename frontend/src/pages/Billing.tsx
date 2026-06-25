@@ -9,7 +9,7 @@ interface Invoice {
   status: string; issued_at: string | null; period_end: string | null
 }
 interface Billing {
-  tenant: string; plan: string; status: string; price: number
+  tenant: string; tenant_type?: string; plan: string; status: string; price: number
   yearly_price: number; yearly_discount_pct: number
   seats: number; frameworks: number; invoices: Invoice[]
   stripe_connected: boolean; stripe_enabled: boolean
@@ -101,6 +101,14 @@ export default function BillingPage() {
           </button>
         </div>
       </div>
+
+      {data.tenant_type === 'eva_internal' && (
+        <div style={{ margin: '4px 0 14px', padding: '10px 14px', borderRadius: 10,
+          border: '1px solid var(--border)', borderLeft: '4px solid var(--blue)',
+          background: 'var(--card2, rgba(46,95,163,.08))', fontSize: 13, color: 'var(--text2)' }}>
+          ℹ️ {t('This is the EVA internal organization — billing does not apply here. To manage a client’s subscription, use Tenants or Clients.')}
+        </div>
+      )}
 
       <div className="stat-grid fi2">
         <div className="stat-card blue"><div className="stat-icon blue">📦</div><div className="stat-lbl">{t('Plan')}</div><div className="stat-val blue" style={{ fontSize: 20 }}>{data.plan}</div><div className="stat-sub">${data.price}{t('/mo')}</div></div>

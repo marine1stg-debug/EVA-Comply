@@ -195,6 +195,7 @@ export default function Shell() {
       { path: '/audit-logs', icon: '📋', label: 'Audit Logs', show: !!role },
       { path: '/backup', icon: '🗄', label: 'Backup & Restore', show: canTenants },
       { path: '/config-guide', icon: '📖', label: 'Configuration Guide', show: canTenants },
+      { path: '/setup-guide', icon: '🚀', label: 'Setup & Update Guide', show: canTenants },
       { path: '/settings', icon: '⚙', label: 'Settings', show: true },
     ]},
   ]
@@ -365,6 +366,10 @@ export default function Shell() {
                   </div>
                 ))}
               </div>
+              <button className="submit-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 14 }}
+                onClick={() => { setShowChangelog(false); navigate('/setup-guide') }}>
+                📖 {t('Setup & Update Guide')}
+              </button>
             </div>
           </div>
         </div>

@@ -18,6 +18,7 @@ from app.core.config import settings
 from app.core import storage
 from app.core.entitlements import ensure_active
 from app.core.upload_guard import validate_upload
+from app.core.i18n import get_lang
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType
@@ -51,6 +52,12 @@ EV_LABEL = {
     "msp_pending": "In MSP review", "msp_approved": "MSP approved",
     "msp_flagged": "Flagged", "not_applicable": "N/A",
 }
+EV_LABEL_FR = {
+    "accepted": "Acceptée", "needs_more": "Complément requis", "draft": "Brouillon",
+    "rejected": "Rejetée", "client_submitted": "Soumise", "eva_pending": "En revue EVA",
+    "msp_pending": "En revue MSP", "msp_approved": "Approuvée MSP",
+    "msp_flagged": "Signalée", "not_applicable": "S.O.",
+}
 # Statuses that count as "submitted / under review"
 PENDING = {
     EvidenceStatus.client_submitted, EvidenceStatus.msp_pending, EvidenceStatus.eva_pending,
@@ -77,15 +84,21 @@ async def _target_org(db: AsyncSession, user: User):
     return await resolve_org(db, user)
 
 
-def _serialize(ev: EvidenceItem, ctrl_ref: str, who: str) -> dict:
+def _serialize(ev: EvidenceItem, ctrl_ref: str, who: str, lang: str = "en", ee_text_fr: str | None = None) -> dict:
     ext = (ev.file_name or "").rsplit(".", 1)[-1].lower() if ev.file_name and "." in ev.file_name else ""
+    # The stored title is the English expected-evidence text. In French, show the
+    # French requirement text (text_fr) of the linked expected-evidence when present.
+    title = ev.title
+    if lang == "fr" and ee_text_fr:
+        title = ee_text_fr
+    labels = EV_LABEL_FR if lang == "fr" else EV_LABEL
     return {
         "id": str(ev.id),
-        "title": ev.title,
+        "title": title,
         "icon": EXT_ICON.get(ext, "📎"),
         "status": ev.status.value,
         "statusBadge": EV_BADGE.get(ev.status.value, "b-gray"),
-        "statusLabel": EV_LABEL.get(ev.status.value, ev.status.value),
+        "statusLabel": labels.get(ev.status.value, ev.status.value),
         "ctrl_ref": ctrl_ref,
         "by": who,
         "date": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "—",
@@ -102,20 +115,22 @@ def _serialize(ev: EvidenceItem, ctrl_ref: str, who: str) -> dict:
 async def list_evidence(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    lang: str = Depends(get_lang),
 ):
     org_id = await _target_org(db, current_user)
     if not org_id:
         return {"items": [], "counts": {"all": 0, "accepted": 0, "submitted": 0, "needs_more": 0, "draft": 0}}
 
     rows = await db.execute(
-        select(EvidenceItem, Control.ref, User.display_name)
+        select(EvidenceItem, Control.ref, User.display_name, ExpectedEvidence.text_fr)
         .join(OrgControl, OrgControl.id == EvidenceItem.org_control_id)
         .join(Control, Control.id == OrgControl.control_id)
         .join(User, User.id == EvidenceItem.collected_by)
+        .outerjoin(ExpectedEvidence, ExpectedEvidence.id == EvidenceItem.expected_evidence_id)
         .where(EvidenceItem.org_id == org_id)
         .order_by(EvidenceItem.created_at.desc())
     )
-    items = [_serialize(ev, ref, who) for ev, ref, who in rows.all()]
+    items = [_serialize(ev, ref, who, lang, ee_fr) for ev, ref, who, ee_fr in rows.all()]
     counts = {
         "all": len(items),
         "accepted": sum(1 for i in items if i["status"] == "accepted"),
