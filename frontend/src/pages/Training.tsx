@@ -49,30 +49,58 @@ function RecordModal({ uploadPath, onClose, onSaved, briefId }: { uploadPath: st
   const [err, setErr] = useState('')
 
   useEffect(() => {
-    navigator.mediaDevices?.getUserMedia({ video: true, audio: true })
+    // getUserMedia only exists in a secure context (HTTPS or localhost).
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setErr(t('Camera recording requires HTTPS and a supported browser (Chrome, Edge, or Firefox).'))
+      return
+    }
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(stream => { streamRef.current = stream; if (videoRef.current) { videoRef.current.srcObject = stream; videoRef.current.muted = true; videoRef.current.play().catch(() => {}) } })
-      .catch(() => setErr(t('Cannot access camera/microphone. Check browser permissions.')))
+      .catch((e) => { console.error('[training] getUserMedia failed:', e); setErr(t('Cannot access camera/microphone. Check browser permissions.')) })
     return () => { streamRef.current?.getTracks().forEach(tr => tr.stop()); if (previewUrl) URL.revokeObjectURL(previewUrl) }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Pick a recording format the browser actually supports (Safari can't do webm).
+  const pickMime = (): string => {
+    const cands = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4']
+    if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return ''
+    return cands.find(c => MediaRecorder.isTypeSupported(c)) || ''
+  }
+
   const start = () => {
-    if (!streamRef.current) return
+    if (!streamRef.current) {
+      toast.error(t('Cannot access camera/microphone. Check browser permissions.')); return
+    }
+    if (typeof MediaRecorder === 'undefined') {
+      toast.error(t('Recording isn’t supported in this browser. Try Chrome or Edge.')); return
+    }
+    const mime = pickMime()
+    let mr: MediaRecorder
+    try {
+      mr = new MediaRecorder(streamRef.current, mime ? { mimeType: mime } : undefined)
+    } catch (e) {
+      console.error('[training] MediaRecorder init failed:', e)
+      toast.error(t('Recording isn’t supported in this browser. Try Chrome or Edge.')); return
+    }
     chunks.current = []
-    const mr = new MediaRecorder(streamRef.current, { mimeType: 'video/webm' })
     mr.ondataavailable = e => { if (e.data.size) chunks.current.push(e.data) }
     mr.onstop = () => {
-      const b = new Blob(chunks.current, { type: 'video/webm' })
+      const type = mr.mimeType || mime || 'video/webm'
+      const b = new Blob(chunks.current, { type })
       setBlob(b); setPreviewUrl(URL.createObjectURL(b)); setPhase('review')
     }
-    recRef.current = mr; mr.start(); setPhase('recording')
+    recRef.current = mr
+    try { mr.start() } catch { toast.error(t('Recording isn’t supported in this browser. Try Chrome or Edge.')); return }
+    setPhase('recording')
   }
   const stop = () => recRef.current?.stop()
   const upload = async () => {
     if (!blob) return
     setUploading(true)
     try {
+      const ext = blob.type.includes('mp4') ? 'mp4' : 'webm'
       const fd = new FormData()
-      fd.append('file', new File([blob], 'recording.webm', { type: 'video/webm' }))
+      fd.append('file', new File([blob], `recording.${ext}`, { type: blob.type || 'video/webm' }))
       await api.post(uploadPath, fd)
       toast.success(t('Video saved')); onSaved(); onClose()
     } catch (e: any) { toast.error(e?.response?.data?.detail || t('Upload failed')) }

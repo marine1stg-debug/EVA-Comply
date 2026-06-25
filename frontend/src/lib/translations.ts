@@ -783,6 +783,8 @@ export const FR: Record<string, string> = {
   'Use this recording': 'Utiliser cet enregistrement',
   'Video saved': 'Vidéo enregistrée',
   'Cannot access camera/microphone. Check browser permissions.': 'Impossible d’accéder à la caméra/au micro. Vérifiez les autorisations du navigateur.',
+  'Camera recording requires HTTPS and a supported browser (Chrome, Edge, or Firefox).': 'L’enregistrement par caméra nécessite HTTPS et un navigateur compatible (Chrome, Edge ou Firefox).',
+  'Recording isn’t supported in this browser. Try Chrome or Edge.': 'L’enregistrement n’est pas pris en charge par ce navigateur. Essayez Chrome ou Edge.',
   'Preview': 'Aperçu',
   'Download': 'Télécharger',
   'Remove evidence': 'Supprimer la preuve',
