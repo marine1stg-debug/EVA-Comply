@@ -6,12 +6,13 @@ import { useClientContext } from '../store/clientContext'
 import { useUnsavedGuard } from '../store/unsavedGuard'
 import { api } from '../lib/api'
 import { useT, useI18n } from '../lib/i18n'
-import { Info, X } from 'lucide-react'
+import { Info, X, Bug } from 'lucide-react'
 import { APP_VERSION, CHANGELOG } from '../lib/version'
 import { LOGO_LG } from '../assets/logo'
 import { LOGO_LIGHT } from '../assets/logoLight'
 import NotificationBell from './NotificationBell'
 import AgreementGate from './AgreementGate'
+import DevFeedback from './DevFeedback'
 import Ico from './Ico'
 
 interface ClientLite { id: string; name: string; compliance: number; pending_review: number }
@@ -196,6 +197,7 @@ export default function Shell() {
       { path: '/backup', icon: '🗄', label: 'Backup & Restore', show: canTenants },
       { path: '/config-guide', icon: '📖', label: 'Configuration Guide', show: canTenants },
       { path: '/setup-guide', icon: '🚀', label: 'Setup & Update Guide', show: canTenants },
+      { path: '/improvements', icon: '🛠', label: 'Improvement / Requests', show: canTenants },
       { path: '/settings', icon: '⚙', label: 'Settings', show: true },
     ]},
   ]
@@ -246,6 +248,10 @@ export default function Shell() {
                 border: `1px solid ${(ent.trial.days_left ?? 0) <= 3 ? 'rgba(220,38,38,.3)' : 'rgba(217,119,6,.3)'}` }}>
               ⏳ {t(ent.trial.days_left === 1 ? 'Trial - {days} day left · Subscribe' : 'Trial - {days} days left · Subscribe', { days: ent.trial.days_left ?? 0 })}
             </button>
+          )}
+          {role === 'super_admin' && (
+            <button className="icon-btn" title={t('Report a bug / request (Ctrl/Cmd+Shift+E)')}
+              onClick={() => window.dispatchEvent(new CustomEvent('eva-open-devtool'))}><Bug size={18} aria-hidden /></button>
           )}
           <button className="lang-toggle" title={lang === 'fr' ? 'Switch to English' : 'Passer en français'} onClick={switchLang}>
             <span className={lang === 'en' ? 'on' : ''}>EN</span>
@@ -331,6 +337,8 @@ export default function Shell() {
       </div>
 
       <AgreementGate />
+
+      {role === 'super_admin' && <DevFeedback />}
 
       {ent?.trial?.locked && loc.pathname !== '/billing' && (
         <div className="modal-overlay" style={{ zIndex: 60 }}>

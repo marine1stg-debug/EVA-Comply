@@ -37,6 +37,7 @@ import PolicyLibraryPage from './pages/PolicyLibrary'
 import QuickTourPage from './pages/QuickTour'
 import ConfigGuidePage from './pages/ConfigGuide'
 import SetupGuidePage from './pages/SetupGuide'
+import ImprovementsPage from './pages/Improvements'
 import Shell from './components/Shell'
 import MobileQuick from './pages/MobileQuick'
 
@@ -109,6 +110,7 @@ export default function App() {
           <Route path="backup" element={<RoleRoute allow={SUPER}><BackupRestorePage /></RoleRoute>} />
           <Route path="config-guide" element={<RoleRoute allow={SUPER}><ConfigGuidePage /></RoleRoute>} />
           <Route path="setup-guide" element={<RoleRoute allow={SUPER}><SetupGuidePage /></RoleRoute>} />
+          <Route path="improvements" element={<RoleRoute allow={SUPER}><ImprovementsPage /></RoleRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>

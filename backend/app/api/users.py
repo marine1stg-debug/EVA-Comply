@@ -96,6 +96,7 @@ async def list_users(
             "mfa_enabled": u.mfa_enabled,
             "is_active": u.is_active,
             "can_coach": u.can_coach,
+            "is_developer": u.is_developer,
             "locked": bool(u.locked_until and u.locked_until > now),
             "last_login": u.last_login_at.strftime("%b %d, %Y") if u.last_login_at else "Never",
             "is_self": u.id == current_user.id,
@@ -107,6 +108,7 @@ class InviteBody(BaseModel):
     email: str
     display_name: str
     role: str
+    is_developer: bool = False
 
 
 @router.get("/invitable-roles")
@@ -143,6 +145,9 @@ async def invite_user(
         tenant_id=current_user.tenant_id, email=body.email,
         password_hash=hash_password(random_password()),
         display_name=body.display_name, role=UserRole(body.role), is_active=False,
+        # Dev/tester tag only applies to Super Admin accounts (it grants no extra
+        # rights - it just labels the account). Ignored for any other role.
+        is_developer=bool(body.is_developer) and body.role == "super_admin",
     )
     db.add(u)
     await db.flush()
@@ -187,6 +192,34 @@ async def set_user_active(
                        target=u.email, org_id=u.tenant_id)
     await db.commit()
     return {"id": str(u.id), "is_active": u.is_active}
+
+
+class DevBody(BaseModel):
+    is_developer: bool
+
+
+@router.patch("/{user_id}/developer")
+async def set_user_developer(
+    user_id: str,
+    body: DevBody,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Tag/untag a Super Admin as a dev/tester (label only; grants no extra rights)."""
+    if current_user.role != UserRole.super_admin:
+        raise HTTPException(status_code=403, detail="Super Admin only")
+    try:
+        uid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="User not found")
+    u = (await db.execute(select(User).where(User.id == uid))).scalar_one_or_none()
+    if not u:
+        raise HTTPException(status_code=404, detail="User not found")
+    if u.role != UserRole.super_admin:
+        raise HTTPException(status_code=400, detail="The developer tag applies only to Super Admin accounts")
+    u.is_developer = bool(body.is_developer)
+    await db.commit()
+    return {"id": str(u.id), "is_developer": u.is_developer}
 
 
 async def _target_in_scope(db: AsyncSession, current_user: User, user_id: str, allow_self: bool = True) -> User:

@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.7.0'
+export const APP_VERSION = '1.8.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,15 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.8.0',
+    date: '2026-06-25',
+    changes: [
+      'New Improvement / Requests tool (Super Admin): log fixes and ideas with screenshots, track status, mark a request Implemented with a resolution note, copy a request for Claude, or export the whole log to Word.',
+      'Capture window: a movable panel to grab a region of the app or paste a screenshot, opened by the camera button next to the language toggle or with Ctrl/Cmd+Shift+E.',
+      'Super Admin accounts can be tagged as Dev/Tester (a label only - they keep full admin rights).',
+    ],
+  },
   {
     version: '1.7.0',
     date: '2026-06-25',

@@ -36,6 +36,10 @@ class User(Base, TimestampMixin):
     # Auditors: True = can coach/challenge (send controls back under review);
     # False = reviewer-only (accept/reject without re-opening).
     can_coach: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Marks a Super Admin account that belongs to the dev/tester team. Purely a
+    # label (these accounts already have full Super Admin rights); used to tag
+    # them in the user list and the Improvement/Request log.
+    is_developer: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
     # Brute-force lockout: 3 failed logins → locked_until set 15 min out.
     # Bumped on password change to invalidate all outstanding refresh tokens
     # (refresh tokens carry the version they were issued at; a mismatch is rejected).

@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from app.core.database import engine, Base
 from app.core.client_context import client_id_ctx
 from app.core.config import settings
-from app.api import auth, frameworks, controls, evidence, users, tenants, billing, reports, dashboard, review, msp, audit, plans, platform, promos, policy, maturity, llm_settings, recommendations, support, notifications, partners, videos, marketplace, backup, agreement
+from app.api import auth, frameworks, controls, evidence, users, tenants, billing, reports, dashboard, review, msp, audit, plans, platform, promos, policy, maturity, llm_settings, recommendations, support, notifications, partners, videos, marketplace, backup, agreement, improvements
 
 
 @asynccontextmanager
@@ -87,6 +87,7 @@ app.include_router(videos.router,     prefix="/api/v1/videos",      tags=["Train
 app.include_router(marketplace.router, prefix="/api/v1/marketplace", tags=["Marketplace"])
 app.include_router(backup.router,     prefix="/api/v1/backup",      tags=["Backup & Restore"])
 app.include_router(agreement.router,  prefix="/api/v1/agreement",   tags=["Agreement"])
+app.include_router(improvements.router, prefix="/api/v1/improvements", tags=["Improvement requests"])
 
 
 @app.get("/")

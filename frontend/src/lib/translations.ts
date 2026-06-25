@@ -1551,4 +1551,51 @@ export const FR: Record<string, string> = {
   'Reset all': 'Tout réinitialiser',
   'Delete ALL snapshots for this framework? This removes the Previous comparison.':
     'Supprimer TOUS les instantanés de ce cadre ? Cela retire la comparaison Antérieure.',
+
+  // ── Improvement / Requests ──
+  'Improvement / Requests': 'Améliorations / Demandes',
+  'Internal log of fixes and ideas for the EVA team. Capture a screenshot with the camera button (top bar) or the keyboard shortcut.':
+    'Journal interne des correctifs et idées pour l’équipe EVA. Capturez une capture d’écran avec le bouton appareil photo (barre du haut) ou le raccourci clavier.',
+  'Export all (Word)': 'Tout exporter (Word)',
+  "Won't fix": 'Ne sera pas corrigé',
+  '{n} request(s)': '{n} demande(s)',
+  'No requests yet': 'Aucune demande pour l’instant',
+  'Click “New request” or use the capture shortcut to log the first one.':
+    'Cliquez sur « Nouvelle demande » ou utilisez le raccourci de capture pour enregistrer la première.',
+  'Copy for Claude': 'Copier pour Claude',
+  'Resolution': 'Résolution',
+  'Resolution note': 'Note de résolution',
+  'How it was implemented, the commit, or any closing note…': 'Comment cela a été implémenté, le commit, ou toute note de clôture…',
+  'Mark implemented': 'Marquer comme implémenté',
+  'Save note': 'Enregistrer la note',
+  'Delete this request?': 'Supprimer cette demande ?',
+  'Request deleted': 'Demande supprimée',
+  'Copied to clipboard': 'Copié dans le presse-papiers',
+  'Could not copy': 'Impossible de copier',
+  'This tool is restricted to Super Admins.': 'Cet outil est réservé aux super administrateurs.',
+  'Failed to load requests.': 'Échec du chargement des demandes.',
+  '(no description)': '(aucune description)',
+  'Where': 'Où',
+  'By': 'Par',
+  'screenshot(s) attached - see the app or the Word export': 'capture(s) d’écran jointe(s) - voir l’app ou l’export Word',
+  // Capture widget
+  'Report a bug / request (Ctrl/Cmd+Shift+E)': 'Signaler un bogue / une demande (Ctrl/Cmd+Maj+E)',
+  'Short title': 'Titre court',
+  'Describe what to fix or improve… (you can paste a screenshot here)':
+    'Décrivez ce qu’il faut corriger ou améliorer… (vous pouvez coller une capture d’écran ici)',
+  'Bug / fix': 'Bogue / correctif',
+  'Improvement': 'Amélioration',
+  'Question': 'Question',
+  'Other': 'Autre',
+  'Capture an area': 'Capturer une zone',
+  'Tip: take an OS screenshot and paste it here, or capture an area above.':
+    'Astuce : faites une capture d’écran du système et collez-la ici, ou capturez une zone ci-dessus.',
+  'Log request': 'Consigner la demande',
+  'Drag to select an area to capture': 'Glissez pour sélectionner une zone à capturer',
+  'Region captured': 'Zone capturée',
+  'Capture failed - try pasting a screenshot instead': 'Échec de la capture - essayez plutôt de coller une capture d’écran',
+  'Screenshot pasted': 'Capture d’écran collée',
+  'Add a note or a screenshot first': 'Ajoutez d’abord une note ou une capture d’écran',
+  'Request logged': 'Demande consignée',
+  'Could not save the request': 'Impossible d’enregistrer la demande',
 }

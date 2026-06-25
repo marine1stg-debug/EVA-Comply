@@ -19,7 +19,8 @@
     "lucide-react": "^0.383.0",
     "recharts": "^2.12.7",
     "date-fns": "^3.6.0",
-    "docx-preview": "^0.3.3"
+    "docx-preview": "^0.3.3",
+    "html2canvas": "^1.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
