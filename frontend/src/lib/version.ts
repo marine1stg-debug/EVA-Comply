@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.3.0'
+export const APP_VERSION = '1.4.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,18 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.4.0',
+    date: '2026-06-24',
+    changes: [
+      'New Quick Tour: a role-aware guided walkthrough (sidebar + on first sign-in), with a sticky quick-access bar.',
+      'Super Admins get a Configuration & How-it-works guide under Administration.',
+      'Policy preview now uses a true Word-style viewer (real pages and formatting), and opens in your current language.',
+      'Added an EVA app icon for browser tabs, bookmarks, and home-screen shortcuts.',
+      'Standardized all sidebar icons for a consistent look.',
+      'More reliable webcam recording for training videos (clear errors, broader browser support).',
+    ],
+  },
   {
     version: '1.3.0',
     date: '2026-06-23',
