@@ -1,6 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { renderAsync } from 'docx-preview'
 import toast from 'react-hot-toast'
 import { api } from '../lib/api'
 import { useT, useI18n } from '../lib/i18n'
@@ -62,6 +61,10 @@ export default function PolicyLibraryPage() {
     ;(async () => {
       try {
         const res = await api.get(`/policy-templates/${preview.id}/file`, { params: { fr: pvFr }, responseType: 'blob' })
+        if (cancelled || !docxRef.current) return
+        // Load the (heavy) Word renderer only when a preview is actually opened,
+        // so it stays out of the main app bundle and the app loads fast.
+        const { renderAsync } = await import('docx-preview')
         if (cancelled || !docxRef.current) return
         await renderAsync(res.data, docxRef.current, undefined, {
           className: 'docx', inWrapper: true, ignoreWidth: false, ignoreHeight: false,
