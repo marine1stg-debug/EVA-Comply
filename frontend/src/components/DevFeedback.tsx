@@ -107,6 +107,9 @@ export default function DevFeedback() {
         useCORS: true, logging: false, scrollX: 0, scrollY: 0,
         windowWidth: document.documentElement.scrollWidth,
         windowHeight: document.documentElement.scrollHeight,
+        // Never render our own tool UI (the tinted selection overlay or the
+        // panel) into the screenshot - that is what made captures look faded.
+        ignoreElements: (el) => el.getAttribute?.('data-eva-devtool') === '1',
       })
       const blob: Blob | null = await new Promise(res => canvas.toBlob(b => res(b), 'image/png'))
       if (blob) { addShot(blob); toast.success(t('Region captured')) }
@@ -147,7 +150,7 @@ export default function DevFeedback() {
     <>
       {/* Region-select overlay */}
       {capturing && (
-        <div onPointerDown={onSelDown} onPointerMove={onSelMove} onPointerUp={onSelUp}
+        <div data-eva-devtool="1" onPointerDown={onSelDown} onPointerMove={onSelMove} onPointerUp={onSelUp}
           style={{ position: 'fixed', inset: 0, zIndex: 2147483646, cursor: 'crosshair', background: 'rgba(13,42,67,.18)' }}>
           <div style={{ position: 'fixed', top: 14, left: '50%', transform: 'translateX(-50%)', background: 'var(--eva-blue2, #1A8FD1)', color: '#fff', padding: '6px 14px', borderRadius: 999, fontSize: 12, fontWeight: 600 }}>
             {t('Drag to select an area to capture')}
@@ -157,7 +160,7 @@ export default function DevFeedback() {
       )}
 
       {/* Floating panel */}
-      <div style={{ position: 'fixed', left: pos.x, top: pos.y, width: 340, maxWidth: '94vw', zIndex: 2147483645,
+      <div data-eva-devtool="1" style={{ position: 'fixed', left: pos.x, top: pos.y, width: 340, maxWidth: '94vw', zIndex: 2147483645,
         background: 'var(--card2, var(--card))', border: '1px solid var(--border, rgba(0,0,0,.15))', borderRadius: 12,
         boxShadow: '0 12px 40px rgba(0,0,0,.28)', display: hideUI ? 'none' : 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div onPointerDown={onHeaderDown} onPointerMove={onHeaderMove} onPointerUp={onHeaderUp}
