@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend,
 } from 'recharts'
+import { BookOpen, Download, X } from 'lucide-react'
 import { api } from '../lib/api'
 import { useAuthStore } from '../store/auth'
 import { useClientContext } from '../store/clientContext'
-import { useT } from '../lib/i18n'
+import { useT, useI18n } from '../lib/i18n'
 
 interface FwItem { id: string; name: string }
 interface DomainRow {
@@ -34,11 +35,13 @@ function Stars({ level }: { level: number }) {
 
 export default function MaturityPage() {
   const t = useT()
+  const lang = useI18n(s => s.lang)
   const role = useAuthStore(s => s.user?.role || '')
   const isReviewer = ['super_admin', 'eva_auditor', 'msp_admin', 'msp_analyst'].includes(role)
   const clientId = useClientContext(s => s.clientId)
   const qc = useQueryClient()
   const [fwId, setFwId] = useState<string>('')
+  const [helpOpen, setHelpOpen] = useState(false)
 
   const { data: fwList } = useQuery<{ frameworks: FwItem[]; needs_client: boolean }>({
     queryKey: ['maturity-frameworks', clientId],
@@ -77,11 +80,17 @@ export default function MaturityPage() {
 
   const fws = fwList?.frameworks || []
   if (fws.length === 0) return (
-    <div className="detail-section" style={{ textAlign: 'center', padding: '48px 24px' }}>
-      <div style={{ fontSize: 30 }}>📡</div>
-      <div style={{ fontSize: 15, fontWeight: 600, marginTop: 8 }}>{t('No frameworks to assess')}</div>
-      <div className="page-sub" style={{ marginTop: 4 }}>{t('This client isn’t subscribed to any framework yet.')}</div>
-    </div>
+    <>
+      <div className="detail-section" style={{ textAlign: 'center', padding: '48px 24px' }}>
+        <div style={{ fontSize: 30 }}>📡</div>
+        <div style={{ fontSize: 15, fontWeight: 600, marginTop: 8 }}>{t('No frameworks to assess')}</div>
+        <div className="page-sub" style={{ marginTop: 4 }}>{t('This client isn’t subscribed to any framework yet.')}</div>
+        <button className="tb-btn" style={{ marginTop: 16 }} onClick={() => setHelpOpen(true)}>
+          <BookOpen size={13} aria-hidden /> {t('How maturity is calculated')}
+        </button>
+      </div>
+      {helpOpen && <MaturityHelpModal admin={isReviewer} lang={lang} onClose={() => setHelpOpen(false)} />}
+    </>
   )
 
   const radarData = (m?.domains || []).map(d => ({
@@ -126,6 +135,10 @@ export default function MaturityPage() {
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button className="tb-btn" onClick={() => setHelpOpen(true)}
+            title={t('How maturity is calculated')}>
+            <BookOpen size={13} aria-hidden /> {t('How maturity is calculated')}
+          </button>
           <select value={fwId} onChange={e => setFwId(e.target.value)}
             style={{ fontSize: 13, padding: '7px 10px', border: '1px solid var(--border-l)', borderRadius: 8, background: 'var(--card)', fontWeight: 600 }}>
             {fws.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
@@ -215,6 +228,91 @@ export default function MaturityPage() {
               {t('Current is auto-seeded from compliance; change it to override. Set Target to define the goal used by the radar and risk score.')}
             </div>
           )}
+        </div>
+      </div>
+
+      {helpOpen && <MaturityHelpModal admin={isReviewer} lang={lang} onClose={() => setHelpOpen(false)} />}
+    </div>
+  )
+}
+
+/**
+ * "How maturity is calculated" reference. Shows a real Word document, rendered
+ * in-app: the client edition (no technical annex) for client users, the
+ * internal edition (with the annex) for reviewers. EN/FR toggle + download.
+ * The .docx files are static assets under /references (served by the frontend).
+ */
+function MaturityHelpModal({ admin, lang, onClose }: { admin: boolean; lang: string; onClose: () => void }) {
+  const t = useT()
+  const [fr, setFr] = useState(lang === 'fr')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const hostRef = useRef<HTMLDivElement | null>(null)
+
+  const fileFor = (asFr: boolean) =>
+    `/references/maturity_how_it_works_${admin ? 'admin' : 'client'}_${asFr ? 'fr' : 'en'}.docx`
+
+  useEffect(() => {
+    let cancelled = false
+    const el = hostRef.current
+    if (!el) return
+    setLoading(true); setError(false)
+    el.innerHTML = ''
+    ;(async () => {
+      try {
+        const res = await fetch(fileFor(fr), { credentials: 'same-origin' })
+        if (!res.ok) throw new Error('not found')
+        const blob = await res.blob()
+        if (cancelled || !hostRef.current) return
+        // Load the heavy Word renderer only when the modal is opened, so it
+        // stays out of the main bundle and the app loads fast.
+        const { renderAsync } = await import('docx-preview')
+        if (cancelled || !hostRef.current) return
+        await renderAsync(blob, hostRef.current, undefined, {
+          className: 'docx', inWrapper: true, breakPages: true, experimental: true, useBase64URL: true,
+        })
+      } catch {
+        if (!cancelled) setError(true)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [fr, admin])
+
+  const download = async () => {
+    try {
+      const res = await fetch(fileFor(fr), { credentials: 'same-origin' })
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fr ? 'Comment_la_maturite_est_calculee.docx' : 'How_Maturity_Is_Calculated.docx'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch { /* ignore */ }
+  }
+
+  return (
+    <div className="modal-overlay" style={{ zIndex: 60 }} onClick={onClose}>
+      <div className="modal-card" style={{ maxWidth: 820, width: '92%', display: 'flex', flexDirection: 'column', maxHeight: '88vh' }} onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '14px 18px', borderBottom: '1px solid var(--border, rgba(255,255,255,.12))' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {t('How maturity is calculated')}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+            <div style={{ display: 'flex', border: '1px solid var(--border, rgba(255,255,255,.15))', borderRadius: 8, overflow: 'hidden' }}>
+              <button className="tb-btn" style={{ border: 'none', borderRadius: 0, background: !fr ? 'var(--accent, #2E5FA3)' : 'transparent', color: !fr ? '#fff' : 'var(--text2)' }} onClick={() => setFr(false)}>EN</button>
+              <button className="tb-btn" style={{ border: 'none', borderRadius: 0, background: fr ? 'var(--accent, #2E5FA3)' : 'transparent', color: fr ? '#fff' : 'var(--text2)' }} onClick={() => setFr(true)}>FR</button>
+            </div>
+            <button className="tb-btn" onClick={download} title={t('Download')}><Download size={13} aria-hidden /></button>
+            <button className="tb-btn" style={{ padding: 4 }} onClick={onClose}><X size={16} aria-hidden /></button>
+          </div>
+        </div>
+        <div style={{ padding: '16px', overflowY: 'auto', background: '#e9edf3' }}>
+          {loading && <div className="page-sub" style={{ padding: 12 }}>{t('Loading preview…')}</div>}
+          {error && <div className="page-sub" style={{ color: 'var(--red)', padding: 12 }}>{t('Could not load this preview.')}</div>}
+          <div ref={hostRef} className="docx-host" style={{ display: loading || error ? 'none' : 'block' }} />
         </div>
       </div>
     </div>

@@ -1532,4 +1532,7 @@ export const FR: Record<string, string> = {
   'Download full backup': 'Télécharger la sauvegarde complète',
   'Preparing…': 'Préparation…',
   'Full backup downloaded': 'Sauvegarde complète téléchargée',
+
+  // ── Maturity reference ──
+  'How maturity is calculated': 'Comment la maturité est calculée',
 }

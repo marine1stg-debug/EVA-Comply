@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.5.0'
+export const APP_VERSION = '1.6.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,15 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.6.0',
+    date: '2026-06-25',
+    changes: [
+      'New "How maturity is calculated" reference on the Maturity page - opens a real Word document, in English or French, with a download button.',
+      'Clients get a plain-language edition; EVA and MSP reviewers get an internal edition that adds the exact formulas and a technical annex.',
+      'Lighter background grid on the public pages for better readability.',
+    ],
+  },
   {
     version: '1.5.0',
     date: '2026-06-25',
