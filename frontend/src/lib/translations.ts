@@ -1535,4 +1535,20 @@ export const FR: Record<string, string> = {
 
   // ── Maturity reference ──
   'How maturity is calculated': 'Comment la maturité est calculée',
+
+  // ── Maturity snapshots ──
+  'Snapshots': 'Instantanés',
+  'View, choose, or reset saved snapshots': 'Voir, choisir ou réinitialiser les instantanés enregistrés',
+  'Saved snapshots': 'Instantanés enregistrés',
+  'The snapshot marked “In use” draws the Previous line on the radar. Star a different date to compare against it, or delete the ones you don’t need.':
+    'L’instantané marqué « Utilisé » trace la ligne Antérieure sur le radar. Mettez une autre date en favori pour la comparer, ou supprimez ceux dont vous n’avez pas besoin.',
+  'No snapshots yet. Use “Save snapshot” to freeze the current levels.':
+    'Aucun instantané pour l’instant. Utilisez « Enregistrer un instantané » pour figer les niveaux actuels.',
+  'Overall {n}/5': 'Global {n}/5',
+  'Pinned': 'Épinglé',
+  'Un-pin (use the most recent instead)': 'Désépingler (utiliser le plus récent)',
+  'Use this date as the comparison': 'Utiliser cette date comme comparaison',
+  'Reset all': 'Tout réinitialiser',
+  'Delete ALL snapshots for this framework? This removes the Previous comparison.':
+    'Supprimer TOUS les instantanés de ce cadre ? Cela retire la comparaison Antérieure.',
 }

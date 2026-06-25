@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend,
 } from 'recharts'
-import { BookOpen, Download, X } from 'lucide-react'
+import { Calculator, Download, X, History, Star, Trash2 } from 'lucide-react'
 import { api } from '../lib/api'
 import { useAuthStore } from '../store/auth'
 import { useClientContext } from '../store/clientContext'
@@ -42,6 +42,7 @@ export default function MaturityPage() {
   const qc = useQueryClient()
   const [fwId, setFwId] = useState<string>('')
   const [helpOpen, setHelpOpen] = useState(false)
+  const [snapOpen, setSnapOpen] = useState(false)
 
   const { data: fwList } = useQuery<{ frameworks: FwItem[]; needs_client: boolean }>({
     queryKey: ['maturity-frameworks', clientId],
@@ -85,8 +86,8 @@ export default function MaturityPage() {
         <div style={{ fontSize: 30 }}>📡</div>
         <div style={{ fontSize: 15, fontWeight: 600, marginTop: 8 }}>{t('No frameworks to assess')}</div>
         <div className="page-sub" style={{ marginTop: 4 }}>{t('This client isn’t subscribed to any framework yet.')}</div>
-        <button className="tb-btn" style={{ marginTop: 16 }} onClick={() => setHelpOpen(true)}>
-          <BookOpen size={13} aria-hidden /> {t('How maturity is calculated')}
+        <button className="tb-btn" style={{ ...helpBtnStyle, marginTop: 16 }} onClick={() => setHelpOpen(true)}>
+          <Calculator size={14} aria-hidden /> {t('How maturity is calculated')}
         </button>
       </div>
       {helpOpen && <MaturityHelpModal admin={isReviewer} lang={lang} onClose={() => setHelpOpen(false)} />}
@@ -136,8 +137,8 @@ export default function MaturityPage() {
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           <button className="tb-btn" onClick={() => setHelpOpen(true)}
-            title={t('How maturity is calculated')}>
-            <BookOpen size={13} aria-hidden /> {t('How maturity is calculated')}
+            style={helpBtnStyle} title={t('How maturity is calculated')}>
+            <Calculator size={14} aria-hidden /> {t('How maturity is calculated')}
           </button>
           <select value={fwId} onChange={e => setFwId(e.target.value)}
             style={{ fontSize: 13, padding: '7px 10px', border: '1px solid var(--border-l)', borderRadius: 8, background: 'var(--card)', fontWeight: 600 }}>
@@ -146,6 +147,10 @@ export default function MaturityPage() {
           {m?.can_edit && (
             <button className="tb-btn" disabled={snapshot.isPending} onClick={() => snapshot.mutate()}
               title={t("Freeze today's levels as the new 'Previous' baseline")}>{t('📸 Save snapshot')}</button>
+          )}
+          {m?.can_edit && (
+            <button className="tb-btn" onClick={() => setSnapOpen(true)}
+              title={t('View, choose, or reset saved snapshots')}><History size={13} aria-hidden /> {t('Snapshots')}</button>
           )}
         </div>
       </div>
@@ -232,6 +237,93 @@ export default function MaturityPage() {
       </div>
 
       {helpOpen && <MaturityHelpModal admin={isReviewer} lang={lang} onClose={() => setHelpOpen(false)} />}
+      {snapOpen && <SnapshotsModal fwId={fwId} clientId={clientId} onClose={() => setSnapOpen(false)} />}
+    </div>
+  )
+}
+
+interface SnapRow { id: string; taken_at: string | null; label: string | null; overall: number | null; is_baseline: boolean; is_effective: boolean }
+
+/**
+ * Manage saved maturity snapshots: see every dated baseline, pick which one is
+ * the "Previous" comparison (pin/un-pin), delete one, or reset them all.
+ */
+function SnapshotsModal({ fwId, clientId, onClose }: { fwId: string; clientId: string | null; onClose: () => void }) {
+  const t = useT()
+  const qc = useQueryClient()
+  const refreshRadar = () => qc.invalidateQueries({ queryKey: ['maturity', fwId, clientId] })
+
+  const { data, isLoading } = useQuery<{ can_edit: boolean; snapshots: SnapRow[] }>({
+    queryKey: ['maturity-snapshots', fwId, clientId],
+    queryFn: async () => (await api.get(`/maturity/${fwId}/snapshots`)).data,
+    enabled: !!fwId,
+  })
+  const after = () => { qc.invalidateQueries({ queryKey: ['maturity-snapshots', fwId, clientId] }); refreshRadar() }
+
+  const pin = useMutation({
+    mutationFn: async (id: string) => (await api.post(`/maturity/${fwId}/snapshots/${id}/baseline`, {})).data,
+    onSuccess: after,
+  })
+  const del = useMutation({
+    mutationFn: async (id: string) => (await api.delete(`/maturity/${fwId}/snapshots/${id}`)).data,
+    onSuccess: after,
+  })
+  const reset = useMutation({
+    mutationFn: async () => (await api.delete(`/maturity/${fwId}/snapshots`)).data,
+    onSuccess: after,
+  })
+
+  const snaps = data?.snapshots || []
+
+  return (
+    <div className="modal-overlay" style={{ zIndex: 60 }} onClick={onClose}>
+      <div className="modal-card" style={{ maxWidth: 560, width: '92%', display: 'flex', flexDirection: 'column', maxHeight: '86vh' }} onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '14px 18px', borderBottom: '1px solid var(--border, rgba(255,255,255,.12))' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>{t('Saved snapshots')}</div>
+          <button className="tb-btn" style={{ padding: 4 }} onClick={onClose}><X size={16} aria-hidden /></button>
+        </div>
+        <div style={{ padding: '14px 18px', overflowY: 'auto' }}>
+          <div className="page-sub" style={{ fontSize: 11.5, marginBottom: 12 }}>
+            {t('The snapshot marked “In use” draws the Previous line on the radar. Star a different date to compare against it, or delete the ones you don’t need.')}
+          </div>
+          {isLoading ? <div className="page-sub">{t('Loading…')}</div> : snaps.length === 0 ? (
+            <div className="page-sub">{t('No snapshots yet. Use “Save snapshot” to freeze the current levels.')}</div>
+          ) : (
+            <div style={{ display: 'grid', gap: 8 }}>
+              {snaps.map(s => (
+                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', border: '1px solid var(--border-l)', borderRadius: 8, background: s.is_effective ? 'var(--soft)' : 'var(--card)' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600, fontSize: 13 }}>
+                      {s.taken_at || '—'}
+                      {s.label ? <span style={{ color: 'var(--text3)', fontWeight: 400 }}> · {s.label}</span> : null}
+                    </div>
+                    <div style={{ fontSize: 11, color: 'var(--text3)', marginTop: 2, display: 'flex', gap: 6, alignItems: 'center' }}>
+                      {s.overall !== null && <span>{t('Overall {n}/5', { n: s.overall })}</span>}
+                      {s.is_effective && <span className="badge b-green" style={{ fontSize: 9 }}>{t('In use')}</span>}
+                      {s.is_baseline && <span className="badge b-blue" style={{ fontSize: 9 }}>{t('Pinned')}</span>}
+                    </div>
+                  </div>
+                  <button className="tb-btn" disabled={pin.isPending} onClick={() => pin.mutate(s.id)}
+                    title={s.is_baseline ? t('Un-pin (use the most recent instead)') : t('Use this date as the comparison')}
+                    style={{ color: s.is_baseline ? 'var(--sky, #1A8FD1)' : 'var(--text3)' }}>
+                    <Star size={14} aria-hidden fill={s.is_baseline ? 'currentColor' : 'none'} />
+                  </button>
+                  <button className="tb-btn" disabled={del.isPending} onClick={() => { if (confirm(t('Delete this snapshot?'))) del.mutate(s.id) }}
+                    title={t('Delete')} style={{ color: 'var(--red)' }}><Trash2 size={14} aria-hidden /></button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {snaps.length > 0 && (
+          <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border, rgba(255,255,255,.12))', display: 'flex', justifyContent: 'flex-end' }}>
+            <button className="tb-btn" disabled={reset.isPending} style={{ color: 'var(--red)' }}
+              onClick={() => { if (confirm(t('Delete ALL snapshots for this framework? This removes the Previous comparison.'))) reset.mutate() }}>
+              <Trash2 size={13} aria-hidden /> {t('Reset all')}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -320,3 +412,11 @@ function MaturityHelpModal({ admin, lang, onClose }: { admin: boolean; lang: str
 }
 
 const lvlSel = { fontSize: 12, padding: '3px 6px', border: '1px solid var(--border-l)', borderRadius: 6, background: 'var(--card)' }
+
+// Highlighted accent pill so the maturity reference stands out from plain buttons.
+const helpBtnStyle: React.CSSProperties = {
+  display: 'inline-flex', alignItems: 'center', gap: 6, fontWeight: 600,
+  color: '#fff', background: 'var(--sky, #1A8FD1)',
+  border: '1px solid var(--sky, #1A8FD1)', borderRadius: 8,
+  boxShadow: '0 1px 4px rgba(26,143,209,.35)',
+}

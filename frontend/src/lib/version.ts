@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.6.0'
+export const APP_VERSION = '1.7.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,14 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.7.0',
+    date: '2026-06-25',
+    changes: [
+      'Maturity snapshots can now be managed: a new "Snapshots" button lists every saved date, lets you pick which one the radar compares against ("Previous"), delete individual ones, or reset them all.',
+      'By default the most recent snapshot is used; star any earlier date to compare against it instead.',
+    ],
+  },
   {
     version: '1.6.0',
     date: '2026-06-25',

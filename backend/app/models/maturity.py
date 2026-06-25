@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import String, Integer, Text, Float, JSON, DateTime, ForeignKey, UniqueConstraint, func
+from sqlalchemy import String, Integer, Text, Float, JSON, DateTime, Boolean, ForeignKey, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
 from app.core.database import Base
@@ -43,3 +43,5 @@ class MaturitySnapshot(Base, TimestampMixin):
     label: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
     payload: Mapped[list] = mapped_column(JSON, default=list)
     overall: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    # When True, this snapshot (not simply the latest) is the 'Previous' baseline.
+    is_baseline: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)

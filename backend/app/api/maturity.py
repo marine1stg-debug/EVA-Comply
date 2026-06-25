@@ -104,12 +104,14 @@ async def _build(db: AsyncSession, org_id, framework: Framework, can_edit: bool)
         )
     )).scalars().all()}
 
-    # Latest snapshot → previous levels.
-    snap = (await db.execute(
+    # Baseline snapshot → previous levels. A reviewer can pin one specific dated
+    # snapshot (is_baseline); otherwise we fall back to the most recent one.
+    snaps = (await db.execute(
         select(MaturitySnapshot)
         .where(MaturitySnapshot.org_id == org_id, MaturitySnapshot.framework_id == framework.id)
         .order_by(MaturitySnapshot.taken_at.desc())
-    )).scalars().first()
+    )).scalars().all()
+    snap = next((s for s in snaps if s.is_baseline), None) or (snaps[0] if snaps else None)
     prev_map = {row["domain"]: row["level"] for row in (snap.payload or [])} if snap else {}
 
     domains = []
@@ -339,5 +341,119 @@ async def take_snapshot(
         label=(body.label or "").strip() or None,
         payload=payload, overall=built["overall_current"],
     ))
+    await db.commit()
+    return await _build(db, org_id, fw, True)
+
+
+# ── Snapshot management ──────────────────────────────────────────────────────
+async def _scoped_snapshots(db: AsyncSession, org_id, fw_id) -> list[MaturitySnapshot]:
+    return (await db.execute(
+        select(MaturitySnapshot)
+        .where(MaturitySnapshot.org_id == org_id, MaturitySnapshot.framework_id == fw_id)
+        .order_by(MaturitySnapshot.taken_at.desc())
+    )).scalars().all()
+
+
+@router.get("/{framework_id}/snapshots")
+async def list_snapshots(
+    framework_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Every saved baseline for this client/framework, newest first. Marks which
+    one is the active 'Previous' comparison (pinned, or newest when none pinned)."""
+    org_id = await resolve_org(db, current_user)
+    if org_id is None:
+        raise HTTPException(status_code=400, detail="No client organization in scope")
+    fw = await _load_fw(db, framework_id)
+    snaps = await _scoped_snapshots(db, org_id, fw.id)
+    pinned = next((s for s in snaps if s.is_baseline), None)
+    effective_id = pinned.id if pinned else (snaps[0].id if snaps else None)
+    return {
+        "can_edit": current_user.role in EDIT_ROLES,
+        "snapshots": [{
+            "id": str(s.id),
+            "taken_at": s.taken_at.strftime("%b %d, %Y") if s.taken_at else None,
+            "label": s.label,
+            "overall": s.overall,
+            "is_baseline": s.is_baseline,
+            "is_effective": s.id == effective_id,
+        } for s in snaps],
+    }
+
+
+async def _get_snapshot(db, org_id, fw_id, snapshot_id) -> MaturitySnapshot:
+    try:
+        sid = uuid.UUID(snapshot_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Snapshot not found")
+    snap = (await db.execute(
+        select(MaturitySnapshot).where(
+            MaturitySnapshot.id == sid,
+            MaturitySnapshot.org_id == org_id,
+            MaturitySnapshot.framework_id == fw_id,
+        )
+    )).scalar_one_or_none()
+    if not snap:
+        raise HTTPException(status_code=404, detail="Snapshot not found")
+    return snap
+
+
+@router.post("/{framework_id}/snapshots/{snapshot_id}/baseline")
+async def set_baseline(
+    framework_id: str, snapshot_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Pin this snapshot as the 'Previous' comparison. If it is already pinned,
+    un-pin it (revert to using the most recent snapshot)."""
+    if current_user.role not in EDIT_ROLES:
+        raise HTTPException(status_code=403, detail="Only reviewers can change the baseline")
+    org_id = await resolve_org(db, current_user)
+    if org_id is None:
+        raise HTTPException(status_code=400, detail="No client organization in scope")
+    fw = await _load_fw(db, framework_id)
+    target = await _get_snapshot(db, org_id, fw.id, snapshot_id)
+    was_pinned = target.is_baseline
+    for s in await _scoped_snapshots(db, org_id, fw.id):
+        s.is_baseline = False
+    target.is_baseline = not was_pinned
+    await db.commit()
+    return await _build(db, org_id, fw, True)
+
+
+@router.delete("/{framework_id}/snapshots/{snapshot_id}")
+async def delete_snapshot(
+    framework_id: str, snapshot_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if current_user.role not in EDIT_ROLES:
+        raise HTTPException(status_code=403, detail="Only reviewers can delete snapshots")
+    org_id = await resolve_org(db, current_user)
+    if org_id is None:
+        raise HTTPException(status_code=400, detail="No client organization in scope")
+    fw = await _load_fw(db, framework_id)
+    snap = await _get_snapshot(db, org_id, fw.id, snapshot_id)
+    await db.delete(snap)
+    await db.commit()
+    return await _build(db, org_id, fw, True)
+
+
+@router.delete("/{framework_id}/snapshots")
+async def reset_snapshots(
+    framework_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Delete every snapshot for this client/framework (removes the 'Previous' series)."""
+    if current_user.role not in EDIT_ROLES:
+        raise HTTPException(status_code=403, detail="Only reviewers can reset snapshots")
+    org_id = await resolve_org(db, current_user)
+    if org_id is None:
+        raise HTTPException(status_code=400, detail="No client organization in scope")
+    fw = await _load_fw(db, framework_id)
+    for s in await _scoped_snapshots(db, org_id, fw.id):
+        await db.delete(s)
     await db.commit()
     return await _build(db, org_id, fw, True)
