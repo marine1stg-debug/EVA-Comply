@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
+import LangSwitch from '../components/LangSwitch'
 
 const inputStyle: React.CSSProperties = {
   width: '100%', borderRadius: 8, padding: '9px 12px', fontSize: 13, outline: 'none',
@@ -32,6 +33,7 @@ export default function ProviderSignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5" style={{ background: '#0B1629' }}>
+      <LangSwitch />
       <div className="w-full max-w-md rounded-2xl p-7 shadow-2xl" style={{ background: '#111E35', border: '1px solid rgba(255,255,255,.07)' }}>
         <div className="text-center mb-5 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,.07)' }}>
           <img src={LOGO_LG} alt="EVA" className="mx-auto" style={{ width: 180 }} />

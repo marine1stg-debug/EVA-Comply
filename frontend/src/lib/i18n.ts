@@ -8,7 +8,7 @@ function initialLang(): Lang {
     const saved = localStorage.getItem('eva-lang')
     if (saved === 'en' || saved === 'fr') return saved
   } catch { /* ignore */ }
-  return 'en'
+  return 'fr'  // French by default; users can switch to EN (choice is remembered)
 }
 
 interface I18nState {

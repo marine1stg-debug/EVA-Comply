@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
+import LangSwitch from '../components/LangSwitch'
 
 export default function UnlockPage() {
   const navigate = useNavigate()
@@ -20,6 +21,7 @@ export default function UnlockPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5" style={{ background: '#0B1629' }}>
+      <LangSwitch />
       <div className="w-full max-w-sm rounded-2xl p-7 shadow-2xl text-center" style={{ background: '#111E35', border: '1px solid rgba(255,255,255,.07)' }}>
         <div className="mb-5 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,.07)' }}>
           <img src={LOGO_LG} alt="EVA" className="mx-auto" style={{ width: 180 }} />

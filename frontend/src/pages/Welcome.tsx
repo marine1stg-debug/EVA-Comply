@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
+import LangSwitch from '../components/LangSwitch'
 
 interface Plan { key: string; name: string; price: number; tenant_type: string; highlights?: string[] }
 
@@ -42,6 +43,7 @@ export default function WelcomePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#0B1629', backgroundImage: 'linear-gradient(#3BBCFF 1px,transparent 1px),linear-gradient(90deg,#3BBCFF 1px,transparent 1px)', backgroundSize: '40px 40px' }}>
+      <LangSwitch />
       <div style={{ maxWidth: 980, margin: '0 auto', padding: '28px 24px 60px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <img src={LOGO_LG} alt="EVA Technologies" style={{ width: 180 }} />

@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/auth'
 import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
+import LangSwitch from '../components/LangSwitch'
 import toast from 'react-hot-toast'
 
 export default function LoginPage() {
@@ -60,6 +61,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-5"
       style={{ background: '#0B1629', backgroundImage: 'linear-gradient(#3BBCFF 1px,transparent 1px),linear-gradient(90deg,#3BBCFF 1px,transparent 1px)', backgroundSize: '36px 36px', backgroundOpacity: '.03' }}>
+      <LangSwitch />
       <div className="w-full max-w-sm rounded-2xl p-7 shadow-2xl" style={{ background: '#111E35', border: '1px solid rgba(255,255,255,.07)' }}>
 
         {/* Logo */}
