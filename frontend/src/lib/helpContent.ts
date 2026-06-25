@@ -1,4 +1,4 @@
-// Help Center content — bilingual, owner's-manual style, tagged by audience.
+// Help Center content - bilingual, owner's-manual style, tagged by audience.
 // Audience groups: 'all' (everyone), 'client' (client roles), 'msp', 'eva' (EVA staff).
 
 export type Audience = 'all' | 'client' | 'msp' | 'eva'
@@ -45,7 +45,7 @@ export const HELP_CATEGORIES: { id: string; title: Bi }[] = [
   { id: 'review', title: { en: 'Review & evidence', fr: 'Revue et preuves' } },
   { id: 'msp', title: { en: 'For MSPs', fr: 'Pour les MSP' } },
   { id: 'admin', title: { en: 'Administration', fr: 'Administration' } },
-  { id: 'faq', title: { en: 'FAQ — frequently asked questions', fr: 'FAQ — questions fréquentes' } },
+  { id: 'faq', title: { en: 'FAQ - frequently asked questions', fr: 'FAQ - questions fréquentes' } },
 ]
 
 export const HELP_ARTICLES: HelpArticle[] = [
@@ -73,8 +73,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Reading your dashboard', fr: 'Lire votre tableau de bord' },
     summary: { en: 'The KPI cards, maturity bar and framework cards explained.', fr: 'Les cartes KPI, la barre de maturité et les cartes de référentiel expliquées.' },
     body: {
-      en: 'The dashboard summarizes your posture. The KPI cards show Compliance %, Controls done, Evidence pending and Critical gaps. EVA staff also see an Open support card.\n\nThe maturity bar compares how you rate yourself (perceived) versus the assessed level. Framework cards show only the frameworks assigned to you — not the whole library.\n\nReviewers (MSP/EVA) see a roll-up across their clients, or a single client when one is selected in the top bar.',
-      fr: 'Le tableau de bord résume votre posture. Les cartes KPI affichent le % de conformité, les contrôles complétés, les preuves en attente et les écarts critiques. Le personnel EVA voit aussi une carte Support ouvert.\n\nLa barre de maturité compare votre auto-évaluation (perçue) au niveau évalué. Les cartes de référentiel n’affichent que les référentiels qui vous sont attribués — pas toute la bibliothèque.\n\nLes réviseurs (MSP/EVA) voient un cumul de leurs clients, ou un seul client quand il est sélectionné en haut.',
+      en: 'The dashboard summarizes your posture. The KPI cards show Compliance %, Controls done, Evidence pending and Critical gaps. EVA staff also see an Open support card.\n\nThe maturity bar compares how you rate yourself (perceived) versus the assessed level. Framework cards show only the frameworks assigned to you - not the whole library.\n\nReviewers (MSP/EVA) see a roll-up across their clients, or a single client when one is selected in the top bar.',
+      fr: 'Le tableau de bord résume votre posture. Les cartes KPI affichent le % de conformité, les contrôles complétés, les preuves en attente et les écarts critiques. Le personnel EVA voit aussi une carte Support ouvert.\n\nLa barre de maturité compare votre auto-évaluation (perçue) au niveau évalué. Les cartes de référentiel n’affichent que les référentiels qui vous sont attribués - pas toute la bibliothèque.\n\nLes réviseurs (MSP/EVA) voient un cumul de leurs clients, ou un seul client quand il est sélectionné en haut.',
     },
   },
   {
@@ -100,8 +100,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Contacting support', fr: 'Contacter le support' },
     summary: { en: 'Raise a request to the EVA team and track its status.', fr: 'Envoyer une demande à l’équipe EVA et suivre son statut.' },
     body: {
-      en: 'Open "Contact Support" from the sidebar. Choose a category, write a subject and message, and optionally attach a screenshot. MSPs can also choose whether the request is for themselves or one of their clients.\n\nYour requests appear below the form with a status filter. Each party adds their own replies in the thread — nobody edits anyone else’s comments.',
-      fr: 'Ouvrez « Contacter le support » dans la barre latérale. Choisissez une catégorie, écrivez un sujet et un message, et joignez au besoin une capture d’écran. Les MSP peuvent aussi indiquer si la demande concerne eux-mêmes ou un de leurs clients.\n\nVos demandes apparaissent sous le formulaire avec un filtre de statut. Chaque partie ajoute ses propres réponses dans le fil — personne ne modifie les commentaires d’autrui.',
+      en: 'Open "Contact Support" from the sidebar. Choose a category, write a subject and message, and optionally attach a screenshot. MSPs can also choose whether the request is for themselves or one of their clients.\n\nYour requests appear below the form with a status filter. Each party adds their own replies in the thread - nobody edits anyone else’s comments.',
+      fr: 'Ouvrez « Contacter le support » dans la barre latérale. Choisissez une catégorie, écrivez un sujet et un message, et joignez au besoin une capture d’écran. Les MSP peuvent aussi indiquer si la demande concerne eux-mêmes ou un de leurs clients.\n\nVos demandes apparaissent sous le formulaire avec un filtre de statut. Chaque partie ajoute ses propres réponses dans le fil - personne ne modifie les commentaires d’autrui.',
     },
   },
   // ── Compliance (clients) ──
@@ -110,8 +110,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Understanding controls', fr: 'Comprendre les contrôles' },
     summary: { en: 'What a control is and what each tab on its page means.', fr: 'Ce qu’est un contrôle et ce que signifie chaque onglet de sa page.' },
     body: {
-      en: 'A framework is a list of controls — the individual requirements you must meet. Open Controls to see them with status, risk and evidence coverage.\n\nOpening a control shows a plain-language explanation, its objective, the official guidance, best practices, the evidence expected, a training video when available, and the evidence you’ve submitted. A control counts as "done" once it is implemented or verified.',
-      fr: 'Un référentiel est une liste de contrôles — les exigences individuelles à satisfaire. Ouvrez Contrôles pour les voir avec leur statut, leur risque et la couverture de preuves.\n\nOuvrir un contrôle affiche une explication en langage clair, son objectif, les directives officielles, les bonnes pratiques, les preuves attendues, une vidéo de formation lorsque disponible, et les preuves que vous avez soumises. Un contrôle est « complété » une fois implémenté ou vérifié.',
+      en: 'A framework is a list of controls - the individual requirements you must meet. Open Controls to see them with status, risk and evidence coverage.\n\nOpening a control shows a plain-language explanation, its objective, the official guidance, best practices, the evidence expected, a training video when available, and the evidence you’ve submitted. A control counts as "done" once it is implemented or verified.',
+      fr: 'Un référentiel est une liste de contrôles - les exigences individuelles à satisfaire. Ouvrez Contrôles pour les voir avec leur statut, leur risque et la couverture de preuves.\n\nOuvrir un contrôle affiche une explication en langage clair, son objectif, les directives officielles, les bonnes pratiques, les preuves attendues, une vidéo de formation lorsque disponible, et les preuves que vous avez soumises. Un contrôle est « complété » une fois implémenté ou vérifié.',
     },
   },
   {
@@ -119,8 +119,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Self-assessing maturity', fr: 'Auto-évaluer la maturité' },
     summary: { en: 'Rate each control 0–5 and see perceived vs assessed.', fr: 'Évaluez chaque contrôle de 0 à 5 et comparez perçu et évalué.' },
     body: {
-      en: 'Maturity captures how mature each control is on a 0–5 ladder. Your self-rating is the "perceived" level; the reviewed value is the "assessed" level.\n\nThe radar and the dashboard flag big gaps — for example if you rate yourself far above what the evidence supports — so you can focus your effort honestly.',
-      fr: 'La maturité mesure le niveau de chaque contrôle sur une échelle de 0 à 5. Votre auto-évaluation est le niveau « perçu » ; la valeur révisée est le niveau « évalué ».\n\nLe radar et le tableau de bord signalent les grands écarts — par exemple si vous vous notez bien au-dessus de ce que les preuves justifient — pour concentrer vos efforts honnêtement.',
+      en: 'Maturity captures how mature each control is on a 0–5 ladder. Your self-rating is the "perceived" level; the reviewed value is the "assessed" level.\n\nThe radar and the dashboard flag big gaps - for example if you rate yourself far above what the evidence supports - so you can focus your effort honestly.',
+      fr: 'La maturité mesure le niveau de chaque contrôle sur une échelle de 0 à 5. Votre auto-évaluation est le niveau « perçu » ; la valeur révisée est le niveau « évalué ».\n\nLe radar et le tableau de bord signalent les grands écarts - par exemple si vous vous notez bien au-dessus de ce que les preuves justifient - pour concentrer vos efforts honnêtement.',
     },
   },
   {
@@ -137,8 +137,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Reports & renewals', fr: 'Rapports et renouvellements' },
     summary: { en: 'Generate branded reports and keep evidence from expiring.', fr: 'Générer des rapports de marque et éviter l’expiration des preuves.' },
     body: {
-      en: 'Reports produces branded PDF/DOCX/XLSX documents (with the EVA logo and a confidentiality footer) and an Evidence Register ZIP — a spreadsheet index plus all evidence files organized by framework then control.\n\nRenewals tracks evidence and policies that expire, so nothing lapses before your audit.',
-      fr: 'Rapports produit des documents PDF/DOCX/XLSX de marque (avec le logo EVA et un pied de page de confidentialité) et un registre de preuves en ZIP — un index tableur et tous les fichiers de preuve organisés par référentiel puis par contrôle.\n\nRenouvellements suit les preuves et politiques qui expirent, pour que rien ne périme avant votre audit.',
+      en: 'Reports produces branded PDF/DOCX/XLSX documents (with the EVA logo and a confidentiality footer) and an Evidence Register ZIP - a spreadsheet index plus all evidence files organized by framework then control.\n\nRenewals tracks evidence and policies that expire, so nothing lapses before your audit.',
+      fr: 'Rapports produit des documents PDF/DOCX/XLSX de marque (avec le logo EVA et un pied de page de confidentialité) et un registre de preuves en ZIP - un index tableur et tous les fichiers de preuve organisés par référentiel puis par contrôle.\n\nRenouvellements suit les preuves et politiques qui expirent, pour que rien ne périme avant votre audit.',
     },
   },
   // ── Review & evidence ──
@@ -194,8 +194,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Plans, pricing & partner terms', fr: 'Forfaits, tarifs et conditions partenaire' },
     summary: { en: 'Define plans (retail + wholesale), limits, and MSP margins.', fr: 'Définir les forfaits (détail + gros), les limites et les marges MSP.' },
     body: {
-      en: 'Plans & Pricing defines each package: retail price, wholesale price (the MSP’s cost), included frameworks and feature modules, and seat/client limits. You also set the signup billing mode, trials and promo codes here.\n\nPartner terms (set from a MSP’s row in Tenant Management) control the volume tiers — how the wholesale discount grows with the number of active clients.',
-      fr: 'Forfaits et tarifs définit chaque offre : prix de détail, prix de gros (le coût du MSP), référentiels et modules inclus, et limites de sièges/clients. Vous y définissez aussi le mode de facturation à l’inscription, les essais et les codes promo.\n\nLes conditions partenaire (depuis la ligne d’un MSP dans Gestion des organisations) contrôlent les paliers de volume — comment la remise de gros augmente avec le nombre de clients actifs.',
+      en: 'Plans & Pricing defines each package: retail price, wholesale price (the MSP’s cost), included frameworks and feature modules, and seat/client limits. You also set the signup billing mode, trials and promo codes here.\n\nPartner terms (set from a MSP’s row in Tenant Management) control the volume tiers - how the wholesale discount grows with the number of active clients.',
+      fr: 'Forfaits et tarifs définit chaque offre : prix de détail, prix de gros (le coût du MSP), référentiels et modules inclus, et limites de sièges/clients. Vous y définissez aussi le mode de facturation à l’inscription, les essais et les codes promo.\n\nLes conditions partenaire (depuis la ligne d’un MSP dans Gestion des organisations) contrôlent les paliers de volume - comment la remise de gros augmente avec le nombre de clients actifs.',
     },
   },
   {
@@ -203,8 +203,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Users & roles', fr: 'Utilisateurs et rôles' },
     summary: { en: 'Invite, edit, unlock, reset password/MFA, deactivate.', fr: 'Inviter, modifier, déverrouiller, réinitialiser MDP/MFA, désactiver.' },
     body: {
-      en: 'Users & Roles lists the people in your scope; filter by organization. Invite a teammate with a role you’re allowed to assign. For any account you can edit the name/role, unlock it, send a password-reset link, reset MFA, or deactivate it.\n\nPrefer deactivating over deleting — it preserves the audit trail. Only the Super Admin can permanently delete an account.',
-      fr: 'Utilisateurs et rôles liste les personnes de votre périmètre ; filtrez par organisation. Invitez un collègue avec un rôle que vous avez le droit d’attribuer. Pour tout compte, vous pouvez modifier le nom/rôle, le déverrouiller, envoyer un lien de réinitialisation, réinitialiser le MFA, ou le désactiver.\n\nPréférez la désactivation à la suppression — elle préserve la piste d’audit. Seul le super administrateur peut supprimer définitivement un compte.',
+      en: 'Users & Roles lists the people in your scope; filter by organization. Invite a teammate with a role you’re allowed to assign. For any account you can edit the name/role, unlock it, send a password-reset link, reset MFA, or deactivate it.\n\nPrefer deactivating over deleting - it preserves the audit trail. Only the Super Admin can permanently delete an account.',
+      fr: 'Utilisateurs et rôles liste les personnes de votre périmètre ; filtrez par organisation. Invitez un collègue avec un rôle que vous avez le droit d’attribuer. Pour tout compte, vous pouvez modifier le nom/rôle, le déverrouiller, envoyer un lien de réinitialisation, réinitialiser le MFA, ou le désactiver.\n\nPréférez la désactivation à la suppression - elle préserve la piste d’audit. Seul le super administrateur peut supprimer définitivement un compte.',
     },
   },
   {
@@ -232,8 +232,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Policy library & Word preview', fr: 'Bibliothèque de politiques et aperçu Word' },
     summary: { en: 'Browse, preview and download ready-made policy templates.', fr: 'Parcourir, prévisualiser et télécharger des modèles de politiques prêts à l’emploi.' },
     body: {
-      en: 'Policies is a library of ready-made policy templates (.docx) mapped to control families. Search by topic or filter by category to find the one you need.\n\nClick the eye icon to preview the full policy right in the app — it renders as a real Word-style document (pages and formatting), and opens in your current language (EN/FR) with a toggle. Then download the .docx and adapt it to your organization. Controls also suggest the matching policy where one exists.\n\nSuper Admins additionally manage the library: add, edit, replace the file, hide/show, and set which control family each policy covers.',
-      fr: 'Politiques est une bibliothèque de modèles de politiques (.docx) associés aux familles de contrôles. Recherchez par sujet ou filtrez par catégorie pour trouver celui qu’il vous faut.\n\nCliquez sur l’icône œil pour prévisualiser toute la politique dans l’app — elle s’affiche comme un vrai document Word (pages et mise en forme) et s’ouvre dans votre langue actuelle (EN/FR), avec une bascule. Téléchargez ensuite le .docx et adaptez-le. Les contrôles suggèrent aussi la politique correspondante lorsqu’elle existe.\n\nLes super administrateurs gèrent en plus la bibliothèque : ajouter, modifier, remplacer le fichier, masquer/afficher, et définir la famille de contrôles couverte.',
+      en: 'Policies is a library of ready-made policy templates (.docx) mapped to control families. Search by topic or filter by category to find the one you need.\n\nClick the eye icon to preview the full policy right in the app - it renders as a real Word-style document (pages and formatting), and opens in your current language (EN/FR) with a toggle. Then download the .docx and adapt it to your organization. Controls also suggest the matching policy where one exists.\n\nSuper Admins additionally manage the library: add, edit, replace the file, hide/show, and set which control family each policy covers.',
+      fr: 'Politiques est une bibliothèque de modèles de politiques (.docx) associés aux familles de contrôles. Recherchez par sujet ou filtrez par catégorie pour trouver celui qu’il vous faut.\n\nCliquez sur l’icône œil pour prévisualiser toute la politique dans l’app - elle s’affiche comme un vrai document Word (pages et mise en forme) et s’ouvre dans votre langue actuelle (EN/FR), avec une bascule. Téléchargez ensuite le .docx et adaptez-le. Les contrôles suggèrent aussi la politique correspondante lorsqu’elle existe.\n\nLes super administrateurs gèrent en plus la bibliothèque : ajouter, modifier, remplacer le fichier, masquer/afficher, et définir la famille de contrôles couverte.',
     },
   },
   {
@@ -241,8 +241,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Frameworks library & import', fr: 'Bibliothèque de référentiels et import' },
     summary: { en: 'Assign built-in frameworks or import a custom control catalog.', fr: 'Attribuer des référentiels intégrés ou importer un catalogue personnalisé.' },
     body: {
-      en: 'Library lists the frameworks available to assign (CMMC L1/L2, NIST SP 800-171 R3, ITSP.10.171, and any you have imported).\n\nImport lets you bring in your own control catalog from an Excel (.xlsx) file, so you can run an organization against a framework that isn’t built in. Once imported it behaves like any other framework — controls, evidence, maturity and reports all work the same.',
-      fr: 'Bibliothèque liste les référentiels attribuables (CMMC N1/N2, NIST SP 800-171 R3, ITSP.10.171, et ceux que vous avez importés).\n\nImport permet d’importer votre propre catalogue de contrôles depuis un fichier Excel (.xlsx), pour évaluer une organisation selon un référentiel non intégré. Une fois importé, il se comporte comme les autres — contrôles, preuves, maturité et rapports fonctionnent de la même façon.',
+      en: 'Library lists the frameworks available to assign (CMMC L1/L2, NIST SP 800-171 R3, ITSP.10.171, and any you have imported).\n\nImport lets you bring in your own control catalog from an Excel (.xlsx) file, so you can run an organization against a framework that isn’t built in. Once imported it behaves like any other framework - controls, evidence, maturity and reports all work the same.',
+      fr: 'Bibliothèque liste les référentiels attribuables (CMMC N1/N2, NIST SP 800-171 R3, ITSP.10.171, et ceux que vous avez importés).\n\nImport permet d’importer votre propre catalogue de contrôles depuis un fichier Excel (.xlsx), pour évaluer une organisation selon un référentiel non intégré. Une fois importé, il se comporte comme les autres - contrôles, preuves, maturité et rapports fonctionnent de la même façon.',
     },
   },
   {
@@ -250,8 +250,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'AI connector (optional)', fr: 'Connecteur IA (optionnel)' },
     summary: { en: 'Connect an LLM to power AI recommendations & video scripts.', fr: 'Connecter un LLM pour les recommandations IA et scripts vidéo.' },
     body: {
-      en: 'The AI Connector lets a Super Admin plug in a language model (OpenAI, Anthropic, or a self-hosted Ollama) used to generate recommendations and training-video scripts. It is OFF by default.\n\nEnter the provider, model and API key (the key is encrypted and never shown back), set a timeout, then use "Test connection" before enabling. For security, the connector cannot call internal/private addresses unless the operator explicitly allows it via an environment setting.\n\nIf you don’t connect an LLM, the app still works — recommendations come from the built-in curated library instead.',
-      fr: 'Le Connecteur IA permet à un super administrateur de brancher un modèle de langage (OpenAI, Anthropic, ou un Ollama auto-hébergé) pour générer recommandations et scripts de vidéos. Il est DÉSACTIVÉ par défaut.\n\nSaisissez le fournisseur, le modèle et la clé API (chiffrée, jamais réaffichée), réglez un délai d’expiration, puis utilisez « Tester la connexion » avant d’activer. Par sécurité, le connecteur ne peut pas appeler d’adresses internes/privées sauf autorisation explicite via une variable d’environnement.\n\nSans LLM connecté, l’app fonctionne quand même — les recommandations proviennent alors de la bibliothèque intégrée.',
+      en: 'The AI Connector lets a Super Admin plug in a language model (OpenAI, Anthropic, or a self-hosted Ollama) used to generate recommendations and training-video scripts. It is OFF by default.\n\nEnter the provider, model and API key (the key is encrypted and never shown back), set a timeout, then use "Test connection" before enabling. For security, the connector cannot call internal/private addresses unless the operator explicitly allows it via an environment setting.\n\nIf you don’t connect an LLM, the app still works - recommendations come from the built-in curated library instead.',
+      fr: 'Le Connecteur IA permet à un super administrateur de brancher un modèle de langage (OpenAI, Anthropic, ou un Ollama auto-hébergé) pour générer recommandations et scripts de vidéos. Il est DÉSACTIVÉ par défaut.\n\nSaisissez le fournisseur, le modèle et la clé API (chiffrée, jamais réaffichée), réglez un délai d’expiration, puis utilisez « Tester la connexion » avant d’activer. Par sécurité, le connecteur ne peut pas appeler d’adresses internes/privées sauf autorisation explicite via une variable d’environnement.\n\nSans LLM connecté, l’app fonctionne quand même - les recommandations proviennent alors de la bibliothèque intégrée.',
     },
   },
   {
@@ -259,8 +259,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Billing & subscription', fr: 'Facturation et abonnement' },
     summary: { en: 'See your plan, invoices and manage the subscription.', fr: 'Voir votre forfait, vos factures et gérer l’abonnement.' },
     body: {
-      en: 'Billing shows YOUR organization’s plan, seats in use, frameworks, monthly/yearly total and invoice history. "Activate plan" starts or updates the subscription.\n\nIf a real payment provider (Stripe) is configured it opens a secure checkout; if not, the subscription is simulated (marked active with a local invoice) — handy for testing, no real charge.\n\nNote: this page is about your own organization. The EVA internal organization shows an information banner because billing doesn’t apply to the platform owner — manage client subscriptions from Tenants or Clients instead.',
-      fr: 'Facturation affiche le forfait de VOTRE organisation, les sièges utilisés, les référentiels, le total mensuel/annuel et l’historique des factures. « Activate plan » démarre ou met à jour l’abonnement.\n\nSi un fournisseur de paiement réel (Stripe) est configuré, un paiement sécurisé s’ouvre ; sinon, l’abonnement est simulé (marqué actif avec une facture locale) — pratique pour tester, sans prélèvement réel.\n\nNote : cette page concerne votre propre organisation. L’organisation interne EVA affiche un bandeau d’information car la facturation ne s’applique pas au propriétaire de la plateforme — gérez les abonnements clients via Organisations ou Clients.',
+      en: 'Billing shows YOUR organization’s plan, seats in use, frameworks, monthly/yearly total and invoice history. "Activate plan" starts or updates the subscription.\n\nIf a real payment provider (Stripe) is configured it opens a secure checkout; if not, the subscription is simulated (marked active with a local invoice) - handy for testing, no real charge.\n\nNote: this page is about your own organization. The EVA internal organization shows an information banner because billing doesn’t apply to the platform owner - manage client subscriptions from Tenants or Clients instead.',
+      fr: 'Facturation affiche le forfait de VOTRE organisation, les sièges utilisés, les référentiels, le total mensuel/annuel et l’historique des factures. « Activate plan » démarre ou met à jour l’abonnement.\n\nSi un fournisseur de paiement réel (Stripe) est configuré, un paiement sécurisé s’ouvre ; sinon, l’abonnement est simulé (marqué actif avec une facture locale) - pratique pour tester, sans prélèvement réel.\n\nNote : cette page concerne votre propre organisation. L’organisation interne EVA affiche un bandeau d’information car la facturation ne s’applique pas au propriétaire de la plateforme - gérez les abonnements clients via Organisations ou Clients.',
     },
   },
   {
@@ -295,12 +295,12 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Quick Tour & the built-in guides', fr: 'Visite guidée et guides intégrés' },
     summary: { en: 'Where to find the guided walkthrough and admin guides.', fr: 'Où trouver le parcours guidé et les guides admin.' },
     body: {
-      en: 'Quick Tour (in the sidebar, and shown on your first sign-in) is a short, role-aware walkthrough of the app — click any step to expand the details. You can reopen it anytime.\n\nSuper Admins also have two reference guides under Administration: the Configuration Guide (how every setting works) and the Setup & Update Guide (how the app is hosted and how to deploy an update). The Setup guide is also reachable from the "What’s new" window next to the version number.',
-      fr: 'Visite guidée (dans la barre latérale, et affichée à votre première connexion) est un court parcours adapté à votre rôle — cliquez sur une étape pour déplier les détails. Vous pouvez la rouvrir à tout moment.\n\nLes super administrateurs disposent aussi de deux guides sous Administration : le Guide de configuration (fonctionnement de chaque réglage) et le Guide d’installation et de mise à jour (hébergement de l’app et déploiement d’une mise à jour). Ce dernier est aussi accessible depuis la fenêtre « Nouveautés » à côté du numéro de version.',
+      en: 'Quick Tour (in the sidebar, and shown on your first sign-in) is a short, role-aware walkthrough of the app - click any step to expand the details. You can reopen it anytime.\n\nSuper Admins also have two reference guides under Administration: the Configuration Guide (how every setting works) and the Setup & Update Guide (how the app is hosted and how to deploy an update). The Setup guide is also reachable from the "What’s new" window next to the version number.',
+      fr: 'Visite guidée (dans la barre latérale, et affichée à votre première connexion) est un court parcours adapté à votre rôle - cliquez sur une étape pour déplier les détails. Vous pouvez la rouvrir à tout moment.\n\nLes super administrateurs disposent aussi de deux guides sous Administration : le Guide de configuration (fonctionnement de chaque réglage) et le Guide d’installation et de mise à jour (hébergement de l’app et déploiement d’une mise à jour). Ce dernier est aussi accessible depuis la fenêtre « Nouveautés » à côté du numéro de version.',
     },
   },
 
-  // ── FAQ — common questions at all levels ──
+  // ── FAQ - common questions at all levels ──
   {
     id: 'faq_login', category: 'faq', audience: ['all'], icon: '🔐',
     title: { en: 'I can’t sign in or my account is locked', fr: 'Je n’arrive pas à me connecter ou mon compte est verrouillé' },
@@ -330,11 +330,11 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     id: 'faq_ev_status', category: 'faq', audience: ['all'], icon: '📎',
-    title: { en: 'My evidence says “In EVA review” — what now?', fr: 'Ma preuve indique « En revue EVA » — et maintenant ?' },
+    title: { en: 'My evidence says “In EVA review” - what now?', fr: 'Ma preuve indique « En revue EVA » - et maintenant ?' },
     summary: { en: 'What each evidence status means.', fr: 'Ce que signifie chaque statut de preuve.' },
     body: {
-      en: 'Evidence moves through statuses: Draft → Submitted → In MSP review → In EVA review → Accepted (or Needs more / Rejected). "In EVA review" means it’s waiting for an EVA auditor to decide — there’s nothing more for you to do until they respond. If it comes back as "Needs more" or "Rejected", open it to read the note, fix the issue and re-submit.\n\nTip: if your engagement is set to "self-audit", evidence is accepted immediately with no review step.',
-      fr: 'Une preuve passe par des statuts : Brouillon → Soumise → En revue MSP → En revue EVA → Acceptée (ou Complément requis / Rejetée). « En revue EVA » signifie qu’elle attend la décision d’un auditeur EVA — vous n’avez rien à faire de plus en attendant. Si elle revient en « Complément requis » ou « Rejetée », ouvrez-la pour lire la note, corrigez et re-soumettez.\n\nAstuce : si votre engagement est en « auto-audit », la preuve est acceptée immédiatement, sans étape de revue.',
+      en: 'Evidence moves through statuses: Draft → Submitted → In MSP review → In EVA review → Accepted (or Needs more / Rejected). "In EVA review" means it’s waiting for an EVA auditor to decide - there’s nothing more for you to do until they respond. If it comes back as "Needs more" or "Rejected", open it to read the note, fix the issue and re-submit.\n\nTip: if your engagement is set to "self-audit", evidence is accepted immediately with no review step.',
+      fr: 'Une preuve passe par des statuts : Brouillon → Soumise → En revue MSP → En revue EVA → Acceptée (ou Complément requis / Rejetée). « En revue EVA » signifie qu’elle attend la décision d’un auditeur EVA - vous n’avez rien à faire de plus en attendant. Si elle revient en « Complément requis » ou « Rejetée », ouvrez-la pour lire la note, corrigez et re-soumettez.\n\nAstuce : si votre engagement est en « auto-audit », la preuve est acceptée immédiatement, sans étape de revue.',
     },
   },
   {
@@ -342,8 +342,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'My file upload was rejected', fr: 'Mon téléversement de fichier a été refusé' },
     summary: { en: 'Allowed file types and size limits.', fr: 'Types de fichiers et tailles autorisés.' },
     body: {
-      en: 'Evidence files must be 50 MB or less and of an allowed type: documents (PDF, Word, Excel, PowerPoint, CSV, TXT), images (PNG, JPG, GIF, WebP…) and archives (ZIP). Executables, scripts, HTML and SVG are blocked for security — even if renamed. Policy uploads must be .docx; training videos must be a common video format (MP4, MOV, WebM…).',
-      fr: 'Les fichiers de preuve doivent faire 50 Mo ou moins et être d’un type autorisé : documents (PDF, Word, Excel, PowerPoint, CSV, TXT), images (PNG, JPG, GIF, WebP…) et archives (ZIP). Les exécutables, scripts, HTML et SVG sont bloqués par sécurité — même renommés. Les politiques doivent être en .docx ; les vidéos dans un format courant (MP4, MOV, WebM…).',
+      en: 'Evidence files must be 50 MB or less and of an allowed type: documents (PDF, Word, Excel, PowerPoint, CSV, TXT), images (PNG, JPG, GIF, WebP…) and archives (ZIP). Executables, scripts, HTML and SVG are blocked for security - even if renamed. Policy uploads must be .docx; training videos must be a common video format (MP4, MOV, WebM…).',
+      fr: 'Les fichiers de preuve doivent faire 50 Mo ou moins et être d’un type autorisé : documents (PDF, Word, Excel, PowerPoint, CSV, TXT), images (PNG, JPG, GIF, WebP…) et archives (ZIP). Les exécutables, scripts, HTML et SVG sont bloqués par sécurité - même renommés. Les politiques doivent être en .docx ; les vidéos dans un format courant (MP4, MOV, WebM…).',
     },
   },
   {
@@ -360,8 +360,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'How do I download a compliance report?', fr: 'Comment télécharger un rapport de conformité ?' },
     summary: { en: 'Generate reports from the Reports page.', fr: 'Générer des rapports depuis la page Rapports.' },
     body: {
-      en: 'Open Reports, choose the framework and format (PDF, Word or Excel), and generate. You can also download an Evidence Register ZIP — a spreadsheet index plus every evidence file, organized by framework and control. Report availability can depend on your plan.',
-      fr: 'Ouvrez Rapports, choisissez le référentiel et le format (PDF, Word ou Excel), puis générez. Vous pouvez aussi télécharger un registre de preuves en ZIP — un index tableur plus chaque fichier de preuve, organisé par référentiel et contrôle. La disponibilité des rapports peut dépendre de votre forfait.',
+      en: 'Open Reports, choose the framework and format (PDF, Word or Excel), and generate. You can also download an Evidence Register ZIP - a spreadsheet index plus every evidence file, organized by framework and control. Report availability can depend on your plan.',
+      fr: 'Ouvrez Rapports, choisissez le référentiel et le format (PDF, Word ou Excel), puis générez. Vous pouvez aussi télécharger un registre de preuves en ZIP - un index tableur plus chaque fichier de preuve, organisé par référentiel et contrôle. La disponibilité des rapports peut dépendre de votre forfait.',
     },
   },
   {
@@ -378,8 +378,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'The webcam recording button isn’t working', fr: 'Le bouton d’enregistrement webcam ne fonctionne pas' },
     summary: { en: 'Camera access needs HTTPS and permission.', fr: 'L’accès caméra nécessite HTTPS et une autorisation.' },
     body: {
-      en: 'Recording happens in your browser, not on the server. The camera needs: a secure (HTTPS) page, and permission. If nothing happens, check the address bar for a blocked-camera icon and allow it, and make sure you clicked the "Record" (camera) button — not the "Save script" button. Chrome, Edge and Firefox are supported; very old browsers may not record.',
-      fr: 'L’enregistrement se fait dans votre navigateur, pas sur le serveur. La caméra nécessite : une page sécurisée (HTTPS) et une autorisation. Si rien ne se passe, vérifiez l’icône de caméra bloquée dans la barre d’adresse et autorisez-la, et assurez-vous d’avoir cliqué sur le bouton « Enregistrer » (caméra) — pas « Enregistrer le script ». Chrome, Edge et Firefox sont pris en charge ; de très vieux navigateurs peuvent ne pas enregistrer.',
+      en: 'Recording happens in your browser, not on the server. The camera needs: a secure (HTTPS) page, and permission. If nothing happens, check the address bar for a blocked-camera icon and allow it, and make sure you clicked the "Record" (camera) button - not the "Save script" button. Chrome, Edge and Firefox are supported; very old browsers may not record.',
+      fr: 'L’enregistrement se fait dans votre navigateur, pas sur le serveur. La caméra nécessite : une page sécurisée (HTTPS) et une autorisation. Si rien ne se passe, vérifiez l’icône de caméra bloquée dans la barre d’adresse et autorisez-la, et assurez-vous d’avoir cliqué sur le bouton « Enregistrer » (caméra) - pas « Enregistrer le script ». Chrome, Edge et Firefox sont pris en charge ; de très vieux navigateurs peuvent ne pas enregistrer.',
     },
   },
   {
@@ -387,8 +387,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: { en: 'Why does Billing show a plan for EVA itself?', fr: 'Pourquoi la facturation affiche-t-elle un forfait pour EVA ?' },
     summary: { en: 'The Billing page is about your own org.', fr: 'La page Facturation concerne votre propre organisation.' },
     body: {
-      en: 'The Billing page always shows your OWN organization’s subscription. Signed in as EVA’s Super Admin, you see EVA’s own (which isn’t meaningful — EVA is the vendor, it doesn’t subscribe to itself). That’s why an information banner appears. To manage a client’s subscription, use Tenants or Clients instead. The "Viewing client" selector at the top only changes compliance screens, not billing.',
-      fr: 'La page Facturation affiche toujours l’abonnement de VOTRE organisation. Connecté comme Super Admin d’EVA, vous voyez celle d’EVA (sans intérêt — EVA est le fournisseur, elle ne s’abonne pas à elle-même). D’où le bandeau d’information. Pour gérer l’abonnement d’un client, passez par Organisations ou Clients. Le sélecteur « Viewing client » en haut ne change que les écrans de conformité, pas la facturation.',
+      en: 'The Billing page always shows your OWN organization’s subscription. Signed in as EVA’s Super Admin, you see EVA’s own (which isn’t meaningful - EVA is the vendor, it doesn’t subscribe to itself). That’s why an information banner appears. To manage a client’s subscription, use Tenants or Clients instead. The "Viewing client" selector at the top only changes compliance screens, not billing.',
+      fr: 'La page Facturation affiche toujours l’abonnement de VOTRE organisation. Connecté comme Super Admin d’EVA, vous voyez celle d’EVA (sans intérêt - EVA est le fournisseur, elle ne s’abonne pas à elle-même). D’où le bandeau d’information. Pour gérer l’abonnement d’un client, passez par Organisations ou Clients. Le sélecteur « Viewing client » en haut ne change que les écrans de conformité, pas la facturation.',
     },
   },
   {

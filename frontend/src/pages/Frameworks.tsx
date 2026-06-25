@@ -136,7 +136,7 @@ function ImportWizard({ onClose }: { onClose: () => void }) {
                           {t(FIELD_LABEL[f] || f)}{REQUIRED.includes(f) && <span style={{ color: 'var(--red)' }}> *</span>}
                         </span>
                         <select value={mapping[f] || ''} onChange={e => setMap(f, e.target.value)} style={sel}>
-                          <option value="">{t('— none —')}</option>
+                          <option value="">{t('- none -')}</option>
                           {preview.columns.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                       </div>

@@ -1,5 +1,5 @@
 """
-Billing API — subscription, plan, usage and numbered invoices.
+Billing API - subscription, plan, usage and numbered invoices.
 
 Direct clients pay EVA via Stripe Checkout (monthly or yearly). Each paid
 Stripe invoice is mirrored as a numbered Invoice row (INV-YYYY-NNNN) so the
@@ -125,7 +125,7 @@ async def billing_overview(
     return {
         "tenant": t.name,
         "tenant_type": t.tenant_type.value,
-        "plan": t.plan_name or (plan.name if plan else "—"),
+        "plan": t.plan_name or (plan.name if plan else "-"),
         "status": t.subscription_status.value,
         "price": price,
         "yearly_price": yearly,
@@ -188,15 +188,15 @@ async def checkout(
         await db.commit()
         inv = await record_invoice(
             db, tenant=t, kind="subscription", amount_cents=amount * 100,
-            lines=[{"description": f"{body.plan} — {rec}ly subscription", "qty": 1, "amount": amount}],
+            lines=[{"description": f"{body.plan} - {rec}ly subscription", "qty": 1, "amount": amount}],
             status="paid", period_start=today, period_end=period_end,
-            notes="Simulated — no Stripe key configured.",
+            notes="Simulated - no Stripe key configured.",
         )
         # Payment confirmed (simulated) → email the agreement to the admins.
         from app.core.agreement_email import send_contract_email
         await send_contract_email(db, t)
         return {"simulated": True, "status": "active", "invoice": invoice_dict(inv),
-                "message": "Subscription activated (simulated — no Stripe key configured)."}
+                "message": "Subscription activated (simulated - no Stripe key configured)."}
 
     # Stripe-managed trial when the platform is in card-trial mode.
     from app.core.platform import get_settings
@@ -214,7 +214,7 @@ async def checkout(
             line_items=[{
                 "price_data": {
                     "currency": "usd",
-                    "product_data": {"name": f"EVA Portal — {body.plan} ({rec}ly)"},
+                    "product_data": {"name": f"EVA Portal - {body.plan} ({rec}ly)"},
                     "unit_amount": amount * 100,
                     "recurring": {"interval": rec},
                 },
@@ -271,7 +271,7 @@ async def resume_subscription(current_user: User = Depends(get_current_user), db
 # ════════════════ WEBHOOK ════════════════
 @router.post("/webhook")
 async def stripe_webhook(request: Request, db: AsyncSession = Depends(get_db)):
-    """Stripe webhook — unauthenticated; signature-verified with the webhook secret."""
+    """Stripe webhook - unauthenticated; signature-verified with the webhook secret."""
     payload = await request.body()
     sig = request.headers.get("stripe-signature", "")
     if not settings.STRIPE_WEBHOOK_SECRET:
@@ -397,7 +397,7 @@ def _invoice_html(inv: Invoice) -> str:
                   "manual": "Invoice"}.get(inv.kind, "Invoice")
     period = ""
     if inv.period_start or inv.period_end:
-        period = f"<p><b>Period:</b> {inv.period_start or '—'} → {inv.period_end or '—'}</p>"
+        period = f"<p><b>Period:</b> {inv.period_start or '-'} → {inv.period_end or '-'}</p>"
     return f"""<!doctype html><html><head><meta charset="utf-8">
 <title>{inv.number}</title>
 <style>
@@ -421,7 +421,7 @@ def _invoice_html(inv: Invoice) -> str:
     <div class="muted">Issued {inv.issued_at.strftime('%Y-%m-%d') if inv.issued_at else ''}</div>
   </div>
 </div>
-<p><b>Billed to:</b> {esc(inv.tenant_name or '—')}</p>
+<p><b>Billed to:</b> {esc(inv.tenant_name or '-')}</p>
 {period}
 <p>Status: <span class="badge {'paid' if inv.status=='paid' else 'open'}">{esc(inv.status.upper())}</span></p>
 <table><thead><tr><th>Description</th><th style="text-align:center">Qty</th><th style="text-align:right">Amount</th></tr></thead>

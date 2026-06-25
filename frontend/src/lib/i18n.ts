@@ -29,7 +29,7 @@ export const useI18n = create<I18nState>((set, get) => ({
 
 /**
  * Translation helper. English text is the key; French comes from the FR dict.
- * Missing translations fall back to the English key, so the UI never breaks —
+ * Missing translations fall back to the English key, so the UI never breaks -
  * untranslated strings simply stay in English until added to translations.ts.
  *
  *   const t = useT()

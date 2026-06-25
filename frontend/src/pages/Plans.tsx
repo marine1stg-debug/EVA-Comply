@@ -69,7 +69,7 @@ function PlanEditor({ plan, frameworks, featureKeys, onClose }: {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" style={{ maxWidth: 560 }} onClick={e => e.stopPropagation()}>
-        <div className="modal-hdr"><span className="card-title">{isNew ? t('New plan') : t('Edit — {name}', { name: plan!.name })}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
+        <div className="modal-hdr"><span className="card-title">{isNew ? t('New plan') : t('Edit - {name}', { name: plan!.name })}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
         <div className="modal-body">
           <div style={{ display: 'flex', gap: 10 }}>
             <div className="form-row" style={{ flex: 1 }}><label className="form-label">{t('Plan name')}</label><input className="form-input" value={name} onChange={e => setName(e.target.value)} /></div>
@@ -313,7 +313,7 @@ export default function PlansPage() {
   }
   if (!data) return null
 
-  const fwName = (id: string) => frameworks.find(f => f.id === id)?.name || '—'
+  const fwName = (id: string) => frameworks.find(f => f.id === id)?.name || '-'
 
   return (
     <>
@@ -342,7 +342,7 @@ export default function PlansPage() {
                   <td><span className={`t-type ${p.tier === 'msp' ? 't-msp' : 't-client'}`}>{p.tier === 'msp' ? 'MSP' : t('Client')}</span></td>
                   <td>${p.price_monthly}{t('/mo')}<div style={{ fontSize: 10, color: 'var(--text3)' }}>{t('wholesale')} ${p.wholesale_monthly}</div></td>
                   <td style={{ fontSize: 11, maxWidth: 160 }}>{fw}</td>
-                  <td style={{ fontSize: 11, maxWidth: 180 }}>{feats.length ? feats.join(', ') : '—'}</td>
+                  <td style={{ fontSize: 11, maxWidth: 180 }}>{feats.length ? feats.join(', ') : '-'}</td>
                   <td style={{ fontSize: 11 }}>{p.inclusions.max_users || '∞'} {t('users')}{p.tier === 'msp' ? ` · ${p.inclusions.max_clients || '∞'} clients` : ''}</td>
                   <td>{p.tenants}</td>
                   <td>

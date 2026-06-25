@@ -28,7 +28,7 @@ export default function BillingPage() {
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search).get('checkout')
-    if (p === 'success') { toast.success(t('Payment complete — subscription active')); qc.invalidateQueries({ queryKey: ['billing'] }) }
+    if (p === 'success') { toast.success(t('Payment complete - subscription active')); qc.invalidateQueries({ queryKey: ['billing'] }) }
     if (p === 'cancel') toast(t('Checkout cancelled'))
     if (p) window.history.replaceState({}, '', '/billing')
   }, [qc])
@@ -50,7 +50,7 @@ export default function BillingPage() {
   const setRenew = useMutation({
     mutationFn: async (on: boolean) => (await api.post(`/billing/${on ? 'resume' : 'cancel'}`)).data,
     onSuccess: (_d, on) => {
-      toast.success(on ? t('Auto-renewal re-enabled') : t('Auto-renewal turned off — plan stays active until the period ends'))
+      toast.success(on ? t('Auto-renewal re-enabled') : t('Auto-renewal turned off - plan stays active until the period ends'))
       qc.invalidateQueries({ queryKey: ['billing'] })
     },
     onError: (e: any) => toast.error(e?.response?.data?.detail || t('Could not update auto-renewal')),
@@ -106,7 +106,7 @@ export default function BillingPage() {
         <div style={{ margin: '4px 0 14px', padding: '10px 14px', borderRadius: 10,
           border: '1px solid var(--border)', borderLeft: '4px solid var(--blue)',
           background: 'var(--card2, rgba(46,95,163,.08))', fontSize: 13, color: 'var(--text2)' }}>
-          ℹ️ {t('This is the EVA internal organization — billing does not apply here. To manage a client’s subscription, use Tenants or Clients.')}
+          ℹ️ {t('This is the EVA internal organization - billing does not apply here. To manage a client’s subscription, use Tenants or Clients.')}
         </div>
       )}
 
@@ -130,7 +130,7 @@ export default function BillingPage() {
                 <tr key={inv.id}>
                   <td style={{ fontFamily: 'var(--mono)', fontSize: 11 }}>{inv.number}</td>
                   <td>{kindLabel(inv.kind)}</td>
-                  <td>{inv.issued_at ? inv.issued_at.slice(0, 10) : '—'}</td>
+                  <td>{inv.issued_at ? inv.issued_at.slice(0, 10) : '-'}</td>
                   <td>${inv.amount.toFixed(2)}</td>
                   <td><span className={`badge ${inv.status === 'paid' ? 'b-green' : inv.status === 'void' ? 'b-red' : 'b-amber'}`}>{inv.status}</span></td>
                   <td><button className="ev-action-btn download" style={{ fontSize: 10 }} onClick={() => openInvoice(inv)}>⬇ {t('View')}</button></td>

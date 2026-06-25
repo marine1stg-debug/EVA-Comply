@@ -1,5 +1,5 @@
 """
-Review API — the evidence approval workflow.
+Review API - the evidence approval workflow.
 
 Two stages, chosen by the caller's role:
   • MSP roles  → see evidence in `msp_pending` from their clients, and can
@@ -35,7 +35,7 @@ ACTION_LABELS_FR = {
     "✓ Accept": "✓ Accepter",
     "✗ Reject": "✗ Rejeter",
     "⏳ Needs more": "⏳ Complément requis",
-    "— Not applicable": "— Non applicable",
+    "- Not applicable": "- Non applicable",
 }
 
 def _loc_actions(actions, lang):
@@ -53,7 +53,7 @@ _PENDING_EV = {EvidenceStatus.client_submitted, EvidenceStatus.msp_pending, Evid
 
 @router.get("/clients")
 async def review_clients(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
-    """Clients the current reviewer may view — drives the header client selector."""
+    """Clients the current reviewer may view - drives the header client selector."""
     if current_user.role in EVA_ROLES:
         rows = (await db.execute(
             select(Tenant).where(Tenant.tenant_type == TenantType.single_client, Tenant.archived == False)  # noqa: E712
@@ -96,7 +96,7 @@ EVA_ACTIONS = [
     {"action": "accept", "label": "✓ Accept", "cls": "q-approve"},
     {"action": "reject", "label": "✗ Reject", "cls": "q-flag"},
     {"action": "needs_more", "label": "⏳ Needs more", "cls": "q-return"},
-    {"action": "na", "label": "— Not applicable", "cls": "q-return"},
+    {"action": "na", "label": "- Not applicable", "cls": "q-return"},
 ]
 
 
@@ -163,7 +163,7 @@ async def review_queue(
                 "ev_title": ev_title,
                 "ev_icon": _icon(ev.file_name),
                 "by": who,
-                "submitted": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "—",
+                "submitted": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "-",
                 "size": _humanize(ev.file_size),
                 "framework": fw,
                 "client_note": ev.description or "",
@@ -179,7 +179,7 @@ async def review_queue(
 
 def _humanize(n) -> str:
     if not n:
-        return "—"
+        return "-"
     if n < 1024:
         return f"{n} B"
     if n < 1024 * 1024:

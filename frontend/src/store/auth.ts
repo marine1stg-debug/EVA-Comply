@@ -21,7 +21,7 @@ interface AuthState {
   logout: () => void
 }
 
-// Bare client with NO interceptors — used for /auth/refresh so a 401 here can't
+// Bare client with NO interceptors - used for /auth/refresh so a 401 here can't
 // recurse into the refresh logic on the main client.
 const api = axios.create({ baseURL: '/api/v1' })
 

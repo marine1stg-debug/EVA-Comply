@@ -2,7 +2,7 @@
 are already in the database (so you don't have to re-import the catalog).
 
 Matches by control `ref` (03.xx.xx); CMMC controls already carry risk and are
-untouched. Dry run by default — add --yes to commit.
+untouched. Dry run by default - add --yes to commit.
 
 USAGE (inside the api container):
     docker compose exec api python -m app.backfill_risk            # dry run
@@ -14,7 +14,7 @@ import asyncio
 from sqlalchemy import select
 
 from app.core.database import AsyncSessionLocal
-from app.models import evidence  # noqa: F401 — registers relationships
+from app.models import evidence  # noqa: F401 - registers relationships
 from app.models.framework import Control, ControlRisk
 
 # Same map authored in the catalog build (NIST r3 IDs, reused by ITSP + 03.14.09).
@@ -111,7 +111,7 @@ async def run(commit: bool):
             await db.commit()
             print("✅ Risk ratings updated.")
         else:
-            print("Dry run — re-run with --yes to apply.")
+            print("Dry run - re-run with --yes to apply.")
 
 
 def main():

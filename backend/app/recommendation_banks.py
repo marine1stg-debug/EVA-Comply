@@ -3,8 +3,8 @@
 NIST SP 800-171r3 control refs (03.xx.xx). Each value is a list of
 recommendations, each a dict: {title, text, title_fr, text_fr, effort, impact}.
 
-  effort ∈ {low, medium, high}   — relative implementation lift
-  impact ∈ {low, medium, high}   — security/compliance value of doing it
+  effort ∈ {low, medium, high}   - relative implementation lift
+  impact ∈ {low, medium, high}   - security/compliance value of doing it
 
 title_fr / text_fr carry the Canadian-French (Québécois) translation; the API
 serves them when the request language is French and falls back to English.

@@ -1,11 +1,11 @@
 """Synchronous report generation: gather org posture, render to PDF / Word / Excel.
 
 Reports
-  readiness        — control-by-control posture with evidence status
-  gap              — controls not yet compliant, worst-risk first
-  executive        — one-page KPI + maturity summary
-  recommendations  — Top 10 priorities, quick wins, then the full list
-  evidence         — evidence register (Excel only)
+  readiness        - control-by-control posture with evidence status
+  gap              - controls not yet compliant, worst-risk first
+  executive        - one-page KPI + maturity summary
+  recommendations  - Top 10 priorities, quick wins, then the full list
+  evidence         - evidence register (Excel only)
 
 PDF via WeasyPrint, Word via python-docx, Excel via openpyxl. All produced in
 memory and returned as (bytes, mime, filename).
@@ -73,7 +73,7 @@ async def gather(db: AsyncSession, org_id) -> dict:
         counts[ds] = counts.get(ds, 0) + 1
         rows.append({
             "ref": c.ref, "title": c.title, "domain": c.domain or "General",
-            "framework": fw_map.get(c.framework_id, "—"),
+            "framework": fw_map.get(c.framework_id, "-"),
             "risk": (c.risk_rating.value if c.risk_rating else "low"),
             "priority": (c.priority.value if c.priority else "low"),
             "status": ds, "status_label": AUDIT_LABEL.get(ds, ds),
@@ -97,10 +97,10 @@ async def gather(db: AsyncSession, org_id) -> dict:
         "framework": fw_map.get(fwid, "Framework"),
         "ctrl_ref": ref, "ctrl_title": title, "title": ev.title,
         "status": EV_STATUS_LABEL.get(ev.status.value, ev.status.value),
-        "file_name": ev.file_name or "—",
+        "file_name": ev.file_name or "-",
         "file_key": ev.file_key or "",
         "note": ev.review_note or "",
-        "date": ev.created_at.strftime("%Y-%m-%d") if ev.created_at else "—",
+        "date": ev.created_at.strftime("%Y-%m-%d") if ev.created_at else "-",
     } for ev, ref, title, fwid in ev_rows]
 
     # Recommendations
@@ -171,7 +171,7 @@ _BADGE = {
 
 def _html_shell(title: str, d: dict, body: str) -> str:
     year = datetime.now(timezone.utc).year
-    footer = f"Confidential — EVA Technologies {year}"
+    footer = f"Confidential - EVA Technologies {year}"
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>
     @page {{ size: A4; margin: 1.7cm 1.6cm 2cm;
       @bottom-left {{ content: "{footer}"; font-size: 8px; color: #94A3B8; }}
@@ -204,7 +204,7 @@ def _html_shell(title: str, d: dict, body: str) -> str:
       <span class="tag">Confidential</span>
     </div>
     <div class="cover"><h1>{_esc(title)}</h1>
-      <div class="meta">{_esc(d['client'])} &nbsp;·&nbsp; {_esc(', '.join(d['frameworks']) or '—')} &nbsp;·&nbsp; {_esc(d['generated_at'])}</div>
+      <div class="meta">{_esc(d['client'])} &nbsp;·&nbsp; {_esc(', '.join(d['frameworks']) or '-')} &nbsp;·&nbsp; {_esc(d['generated_at'])}</div>
     </div>
     {body}
     </body></html>"""
@@ -245,14 +245,14 @@ def _body_gap(d: dict) -> str:
     )
     return f"""<p class="muted">{len(gaps)} of {d['total']} controls are not yet compliant, ordered by risk.</p>
     <table><thead><tr><th>Ref</th><th>Control</th><th>Risk</th><th>Status</th><th>Coverage</th></tr></thead>
-    <tbody>{rows or '<tr><td colspan=5 class=muted>No open gaps — all controls compliant.</td></tr>'}</tbody></table>"""
+    <tbody>{rows or '<tr><td colspan=5 class=muted>No open gaps - all controls compliant.</td></tr>'}</tbody></table>"""
 
 
 def _body_executive(d: dict) -> str:
     m = d["maturity"]
     c = d["counts"]
     mat = (f"<div class='kpi'><div class='v'>{m['assessed']}/5</div><div class='l'>Assessed maturity</div></div>"
-           f"<div class='kpi'><div class='v'>{m['perceived'] if m.get('perceived') is not None else '—'}</div><div class='l'>Perceived maturity</div></div>") if m.get("has_data") else ""
+           f"<div class='kpi'><div class='v'>{m['perceived'] if m.get('perceived') is not None else '-'}</div><div class='l'>Perceived maturity</div></div>") if m.get("has_data") else ""
     return f"""<div class="kpis">
       <div class="kpi"><div class="v">{d['compliance_pct']}%</div><div class="l">Compliance</div></div>
       <div class="kpi"><div class="v">{c.get('compliant',0)}/{d['total']}</div><div class="l">Controls compliant</div></div>
@@ -266,14 +266,14 @@ def _body_executive(d: dict) -> str:
       <tr><td>{_badge('Not Started','not_started')}</td><td>{c.get('not_started',0)}</td></tr>
     </tbody></table>
     <h2>Top priorities</h2>
-    <ol>{''.join(f"<li><b>{_esc(r['control_ref'])}</b> — {_esc(r['title'])}</li>" for r in d['top10'][:5]) or '<li class=muted>No recommendations generated yet.</li>'}</ol>"""
+    <ol>{''.join(f"<li><b>{_esc(r['control_ref'])}</b> - {_esc(r['title'])}</li>" for r in d['top10'][:5]) or '<li class=muted>No recommendations generated yet.</li>'}</ol>"""
 
 
 def _body_recommendations(d: dict) -> str:
     def card(r, i=None):
         rank = f"<span class='rank'>#{i}</span> " if i else ""
         qw = " <span class='qw'>⚡ Quick win</span>" if r["quick_win"] else ""
-        return (f"<div class='top'>{rank}<b>{_esc(r['control_ref'])}</b> — {_esc(r['title'])}{qw}"
+        return (f"<div class='top'>{rank}<b>{_esc(r['control_ref'])}</b> - {_esc(r['title'])}{qw}"
                 f"<div>{_esc(r['text'])}</div>"
                 f"<div class='muted'>Impact: {_esc(r['impact'])} · Effort: {_esc(r['effort'])} · {_esc(r['domain'])}</div></div>")
     top = "".join(card(r, i + 1) for i, r in enumerate(d["top10"]))
@@ -323,7 +323,7 @@ def render_docx(report_type: str, d: dict) -> bytes:
     # Confidential footer with current year on every page
     try:
         footer_p = doc.sections[0].footer.paragraphs[0]
-        footer_p.text = f"Confidential — EVA Technologies {datetime.now(timezone.utc).year}"
+        footer_p.text = f"Confidential - EVA Technologies {datetime.now(timezone.utc).year}"
         footer_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         run = footer_p.runs[0]
         run.font.size = Pt(8)
@@ -333,7 +333,7 @@ def render_docx(report_type: str, d: dict) -> bytes:
 
     title = REPORT_TITLES.get(report_type, "Report")
     doc.add_heading(title, level=0)
-    doc.add_paragraph(f"{d['client']} · {', '.join(d['frameworks']) or '—'} · {d['generated_at']}")
+    doc.add_paragraph(f"{d['client']} · {', '.join(d['frameworks']) or '-'} · {d['generated_at']}")
 
     c = d["counts"]
 
@@ -363,7 +363,7 @@ def render_docx(report_type: str, d: dict) -> bytes:
         doc.add_heading("Top 10 priorities", level=1)
         for i, r in enumerate(d["top10"], 1):
             p = doc.add_paragraph()
-            p.add_run(f"#{i}  {r['control_ref']} — {r['title']}").bold = True
+            p.add_run(f"#{i}  {r['control_ref']} - {r['title']}").bold = True
             if r["quick_win"]:
                 p.add_run("  ⚡ Quick win")
             doc.add_paragraph(r["text"])
@@ -375,14 +375,14 @@ def render_docx(report_type: str, d: dict) -> bytes:
         m = d["maturity"]
         doc.add_paragraph(f"Compliance: {d['compliance_pct']}%  ·  {c.get('compliant',0)}/{d['total']} controls compliant.")
         if m.get("has_data"):
-            doc.add_paragraph(f"Maturity — assessed {m['assessed']}/5, perceived {m.get('perceived', '—')}/5.")
+            doc.add_paragraph(f"Maturity - assessed {m['assessed']}/5, perceived {m.get('perceived', '-')}/5.")
         doc.add_heading("Posture at a glance", level=1)
         table(["Status", "Controls"],
               [["Compliant", c.get("compliant", 0)], ["In Progress", c.get("in_progress", 0)],
                ["Non-Compliant", c.get("non_compliant", 0)], ["Not Started", c.get("not_started", 0)]])
         doc.add_heading("Top priorities", level=1)
         for i, r in enumerate(d["top10"][:5], 1):
-            doc.add_paragraph(f"{i}. {r['control_ref']} — {r['title']}")
+            doc.add_paragraph(f"{i}. {r['control_ref']} - {r['title']}")
 
     buf = io.BytesIO()
     doc.save(buf)
@@ -408,7 +408,7 @@ def render_xlsx(report_type: str, d: dict) -> bytes:
     for i, w in enumerate(widths, 1):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
     ws.freeze_panes = "A2"
-    ws.oddFooter.center.text = f"Confidential — EVA Technologies {datetime.now(timezone.utc).year}"
+    ws.oddFooter.center.text = f"Confidential - EVA Technologies {datetime.now(timezone.utc).year}"
     ws.oddFooter.center.size = 8
     buf = io.BytesIO()
     wb.save(buf)
@@ -473,9 +473,9 @@ def render_evidence_zip(d: dict) -> bytes:
         cell.fill = hdr_fill
     link_font = Font(color="1A8FD1", underline="single")
     for e, rel_folder, rel_file, src in plans:
-        # "Location" is always plain text (works everywhere — navigate the extracted ZIP).
+        # "Location" is always plain text (works everywhere - navigate the extracted ZIP).
         location = rel_file if rel_file else f"{rel_folder}/  (no file)"
-        ws.append([e.get("framework", "—"), e["ctrl_ref"], e["ctrl_title"], e["title"],
+        ws.append([e.get("framework", "-"), e["ctrl_ref"], e["ctrl_title"], e["title"],
                    e["status"], e["date"], e["note"], e["file_name"], location])
         # "Open file" → relative HYPERLINK to the actual document (opens the file, not a folder).
         link_cell = ws.cell(row=ws.max_row, column=8)
@@ -485,7 +485,7 @@ def render_evidence_zip(d: dict) -> bytes:
     for i, w in enumerate([20, 14, 32, 26, 13, 12, 26, 26, 40], 1):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = w
     ws.freeze_panes = "A2"
-    ws.oddFooter.center.text = f"Confidential — EVA Technologies {datetime.now(timezone.utc).year}"
+    ws.oddFooter.center.text = f"Confidential - EVA Technologies {datetime.now(timezone.utc).year}"
     ws.oddFooter.center.size = 8
     xbuf = io.BytesIO()
     wb.save(xbuf)
@@ -496,8 +496,8 @@ def render_evidence_zip(d: dict) -> bytes:
         z.writestr("Evidence_Register.xlsx", xbuf.getvalue())
         z.writestr("README.txt",
                    "Evidence bundle\n"
-                   f"Client: {d.get('client', '—')}\n"
-                   f"Generated: {d.get('generated_at', '—')}\n\n"
+                   f"Client: {d.get('client', '-')}\n"
+                   f"Generated: {d.get('generated_at', '-')}\n\n"
                    "1. Extract this ZIP, then open 'Evidence_Register.xlsx'.\n"
                    "2. Each row's 'Open file' link opens that evidence document.\n"
                    "3. The 'Location' column shows the exact path inside this bundle:\n"
@@ -505,7 +505,7 @@ def render_evidence_zip(d: dict) -> bytes:
                    "Note: Excel for Mac is sandboxed and may block clickable local links.\n"
                    "If a link does not open, use the 'Location' path to find the file in the\n"
                    "extracted 'evidences' folder via Finder/Explorer.\n\n"
-                   f"Confidential — EVA Technologies {datetime.now(timezone.utc).year}\n")
+                   f"Confidential - EVA Technologies {datetime.now(timezone.utc).year}\n")
         folders_with_files = set()
         for e, rel_folder, rel_file, src in plans:
             if rel_file and src:
@@ -568,7 +568,7 @@ async def gather_aggregate(db: AsyncSession, org_ids: list, scope_name: str) -> 
             continue
         po = await _org_posture(db, oid)
         rows.append({"name": t.name, "type": t.tenant_type.value,
-                     "plan": (t.plan_name or "—"), **po})
+                     "plan": (t.plan_name or "-"), **po})
     rows.sort(key=lambda r: r["compliance_pct"])
     tot_controls = sum(r["total"] for r in rows)
     tot_compliant = sum(r["compliant"] for r in rows)
@@ -622,7 +622,7 @@ def render_aggregate_docx(d: dict) -> bytes:
         pass
     try:
         fp = doc.sections[0].footer.paragraphs[0]
-        fp.text = f"Confidential — EVA Technologies {datetime.now(timezone.utc).year}"
+        fp.text = f"Confidential - EVA Technologies {datetime.now(timezone.utc).year}"
         fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
         fp.runs[0].font.size = Pt(8); fp.runs[0].font.color.rgb = RGBColor(0x94, 0xA3, 0xB8)
     except Exception:

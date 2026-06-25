@@ -5,7 +5,7 @@ deployment. Counters live in memory per worker process; with multiple workers
 each enforces its own share, which is still a meaningful brake on brute force /
 credential stuffing on the authentication endpoints.
 
-Limits are deliberately generous — normal interactive use never hits them. The
+Limits are deliberately generous - normal interactive use never hits them. The
 limiter FAILS OPEN: any internal error lets the request through rather than
 locking users out.
 """
@@ -80,5 +80,5 @@ def enforce(request: Request, bucket: str, *, limit: int, window_seconds: int) -
     except HTTPException:
         raise
     except Exception:
-        # Fail open — never block a legitimate request because of a limiter bug.
+        # Fail open - never block a legitimate request because of a limiter bug.
         return

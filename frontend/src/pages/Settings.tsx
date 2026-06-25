@@ -64,9 +64,9 @@ export default function SettingsPage() {
         {/* Profile */}
         <div className="detail-section">
           <div className="card-hdr" style={{ marginBottom: 10 }}><span className="card-title">{t('Profile')}</span></div>
-          <div className="meta-row"><span className="meta-key">{t('Name')}</span><span className="meta-val">{me?.display_name || '—'}</span></div>
-          <div className="meta-row"><span className="meta-key">{t('Email')}</span><span className="meta-val">{me?.email || '—'}</span></div>
-          <div className="meta-row"><span className="meta-key">{t('Role')}</span><span className="meta-val">{me ? t(ROLE_LABEL[me.role] || me.role) : '—'}</span></div>
+          <div className="meta-row"><span className="meta-key">{t('Name')}</span><span className="meta-val">{me?.display_name || '-'}</span></div>
+          <div className="meta-row"><span className="meta-key">{t('Email')}</span><span className="meta-val">{me?.email || '-'}</span></div>
+          <div className="meta-row"><span className="meta-key">{t('Role')}</span><span className="meta-val">{me ? t(ROLE_LABEL[me.role] || me.role) : '-'}</span></div>
           <div className="meta-row"><span className="meta-key">MFA</span><span className={`badge ${me?.mfa_enabled ? 'b-green' : 'b-gray'}`}>{me?.mfa_enabled ? t('Enabled') : t('Off')}</span></div>
         </div>
 

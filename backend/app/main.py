@@ -31,7 +31,7 @@ app = FastAPI(
     openapi_url=None if _PROD else "/openapi.json",
 )
 
-# CORS — explicit origins, methods, and headers (no wildcards with credentials).
+# CORS - explicit origins, methods, and headers (no wildcards with credentials).
 # In production the SPA is served same-origin via the proxy, so CORS rarely
 # applies; the prod origin is included for completeness.
 _cors_origins = [

@@ -45,18 +45,18 @@ export default function RenewalsPage() {
       <div className="page-hdr fi">
         <div>
           <div className="page-title">{t('Renewals')}</div>
-          <div className="page-sub">{t('Periodic evidence that needs renewal — keep your audit package current.')}</div>
+          <div className="page-sub">{t('Periodic evidence that needs renewal - keep your audit package current.')}</div>
         </div>
       </div>
 
       <div className="stat-grid fi" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
-        <div className="stat-card red"><div className="stat-lbl">{t('⛔ Expired — renew now')}</div><div className="stat-val red">{data.counts.expired}</div></div>
+        <div className="stat-card red"><div className="stat-lbl">{t('⛔ Expired - renew now')}</div><div className="stat-val red">{data.counts.expired}</div></div>
         <div className="stat-card amber"><div className="stat-lbl">{t('⚠️ Expiring within 30 days')}</div><div className="stat-val amber">{data.counts.soon}</div></div>
         <div className="stat-card green"><div className="stat-lbl">{t('✅ Up to date')}</div><div className="stat-val green">{data.counts.ok}</div></div>
       </div>
 
-      {data.items.length === 0 && <div className="queue-empty"><div className="queue-empty-icon">📭</div><div className="page-sub">{t('No periodic evidence yet — uploads with a recurring frequency appear here.')}</div></div>}
-      {expired.length > 0 && <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--red)', margin: '4px 0 8px' }} className="fi">{t('⛔ Expired — immediate action required')}</div>}
+      {data.items.length === 0 && <div className="queue-empty"><div className="queue-empty-icon">📭</div><div className="page-sub">{t('No periodic evidence yet - uploads with a recurring frequency appear here.')}</div></div>}
+      {expired.length > 0 && <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--red)', margin: '4px 0 8px' }} className="fi">{t('⛔ Expired - immediate action required')}</div>}
       {expired.map(r => <Row key={r.id} r={r} />)}
       {soon.length > 0 && <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--amber)', margin: '14px 0 8px' }} className="fi">{t('⚠️ Expiring soon')}</div>}
       {soon.map(r => <Row key={r.id} r={r} />)}

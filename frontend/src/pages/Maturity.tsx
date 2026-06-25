@@ -99,7 +99,7 @@ export default function MaturityPage() {
           <div style={{ fontSize: 22 }}>🙋</div>
           <div>
             <div className="page-sub" style={{ fontSize: 11 }}>{t('Overall Perceived Maturity')}</div>
-            <div style={{ fontSize: 26, fontWeight: 700, color: '#0EA5E9' }}>{m?.overall_perceived ?? '—'}<span style={{ fontSize: 13, color: 'var(--text3)' }}> / {m?.scale_max ?? 5}</span></div>
+            <div style={{ fontSize: 26, fontWeight: 700, color: '#0EA5E9' }}>{m?.overall_perceived ?? '-'}<span style={{ fontSize: 13, color: 'var(--text3)' }}> / {m?.scale_max ?? 5}</span></div>
             <div style={{ fontSize: 9, color: 'var(--text3)' }}>{t('client self-assessment')}</div>
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function MaturityPage() {
                     </div>
                   </td>
                   <td style={{ padding: '7px 4px', color: d.perceived !== null ? '#0EA5E9' : 'var(--text3)', fontWeight: 600 }}>
-                    {d.perceived !== null ? d.perceived : '—'}
+                    {d.perceived !== null ? d.perceived : '-'}
                   </td>
                   <td style={{ padding: '7px 4px' }}>
                     {m?.can_edit ? (

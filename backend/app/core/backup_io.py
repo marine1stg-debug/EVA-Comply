@@ -2,7 +2,7 @@
 """Selective backup / restore engine.
 
 Serializes chosen data CATEGORIES (optionally narrowed to specific client
-tenants) into a JSON bundle, and restores a bundle by UPSERTing rows (merge —
+tenants) into a JSON bundle, and restores a bundle by UPSERTing rows (merge -
 never deletes). Generic: works off SQLAlchemy column introspection so it covers
 every model without per-field code.
 
@@ -133,7 +133,7 @@ def _pk_col(model):
 
 # ── integrity signing ─────────────────────────────────────────────────────────
 # An HMAC over the bundle content lets restore distinguish a file produced by
-# THIS system (trusted — safe to restore in full) from a hand-crafted one (which
+# THIS system (trusted - safe to restore in full) from a hand-crafted one (which
 # could otherwise flip a user to super_admin or rewrite another tenant's rows).
 def _bundle_digest(bundle: dict) -> str:
     payload = {k: bundle.get(k) for k in ("version", "created_at", "categories", "client_ids", "tables")}
@@ -214,7 +214,7 @@ async def import_bundle(db: AsyncSession, bundle: dict, only_categories: Optiona
             existing = await db.get(model, pk_val) if pk_val is not None else None
             if existing is None:
                 if tname == "users" and not data.get("password_hash"):
-                    # Restored users get an unusable hash — they must use the
+                    # Restored users get an unusable hash - they must use the
                     # password-reset flow before they can log in.
                     data["password_hash"] = "!locked!"
                 db.add(model(**data))

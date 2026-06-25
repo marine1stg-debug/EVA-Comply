@@ -8,7 +8,7 @@ files users actually upload:
      executables, scripts, and markup (.exe, .sh, .js, .html, …).
   2. **Magic-byte sniff** (best-effort, via python-magic). Even if the extension
      looks fine, we reject content that sniffs as an executable, shared library,
-     or HTML — catching a payload renamed to a safe extension. If libmagic is
+     or HTML - catching a payload renamed to a safe extension. If libmagic is
      unavailable, this layer is skipped silently so uploads still work.
 
 Client-supplied Content-Type is never trusted for the decision.
@@ -21,7 +21,7 @@ from fastapi import HTTPException
 
 # Per-kind allowed lowercase extensions (no leading dot).
 _DOCS = {"pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "csv", "txt", "md", "rtf", "odt", "ods"}
-# NOTE: SVG is deliberately excluded — it can carry embedded <script>/onload and
+# NOTE: SVG is deliberately excluded - it can carry embedded <script>/onload and
 # would be a stored-XSS vector if served inline. Use PNG/JPG for image evidence.
 _IMAGES = {"png", "jpg", "jpeg", "gif", "webp", "bmp", "tiff", "heic"}
 _ARCHIVES = {"zip", "7z", "rar", "gz", "tgz"}

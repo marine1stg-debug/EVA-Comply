@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Selective backup / restore — Super Admin only.
+"""Selective backup / restore - Super Admin only.
 
 Pick data categories (and optionally specific client orgs), then either download
 a JSON bundle or keep it as a server-side snapshot. Restore merges a bundle back
-in (upsert by primary key — never deletes).
+in (upsert by primary key - never deletes).
 """
 import os
 import io
@@ -56,7 +56,7 @@ def _path(fid) -> str:
 
 
 def _scope_text(categories: list, client_ids: list) -> str:
-    cats = ", ".join(bio.CATEGORIES.get(c, (c,))[0] for c in categories) or "—"
+    cats = ", ".join(bio.CATEGORIES.get(c, (c,))[0] for c in categories) or "-"
     who = f"{len(client_ids)} client(s)" if client_ids else "tous les clients"
     return f"{cats} · {who}"
 
@@ -137,7 +137,7 @@ async def list_snapshots(current_user: User = Depends(get_current_user), db: Asy
         "categories": b.categories or [], "client_ids": b.client_ids or [],
         "total_rows": b.total_rows, "size_bytes": b.size_bytes,
         "created_by": b.created_by_name,
-        "created_at": b.created_at.strftime("%Y-%m-%d %H:%M") if b.created_at else "—",
+        "created_at": b.created_at.strftime("%Y-%m-%d %H:%M") if b.created_at else "-",
     } for b in rows]}
 
 
@@ -185,13 +185,13 @@ async def full_backup(current_user: User = Depends(get_current_user), db: AsyncS
                     except OSError:
                         pass
         z.writestr("MANIFEST.txt", (
-            "EVA Comply — FULL BACKUP\n"
+            "EVA Comply - FULL BACKUP\n"
             f"Created: {dt.datetime.now().isoformat()}\n"
             f"Data categories: {', '.join(bio.CATEGORIES.keys())}\n"
             f"Uploaded files included: {file_count}\n\n"
             "Contents:\n"
-            "  data/eva-data-*.json   — all database records (restore via the Restore tab / API)\n"
-            "  uploads/...            — evidence files and uploaded/replaced policy documents\n\n"
+            "  data/eva-data-*.json   - all database records (restore via the Restore tab / API)\n"
+            "  uploads/...            - evidence files and uploaded/replaced policy documents\n\n"
             "Note: the 18 built-in policy templates and framework catalogs ship with the\n"
             "application image and are not duplicated here.\n"
         ).encode("utf-8"))
@@ -212,7 +212,7 @@ async def download_frameworks_zip(current_user: User = Depends(get_current_user)
         with open(os.path.join(CATALOG_DIR, name), "rb") as f:
             payload[name] = f.read()
     payload["README.txt"] = (
-        "EVA Comply — catalogues de référentiels (EN + FR)\n"
+        "EVA Comply - catalogues de référentiels (EN + FR)\n"
         f"Exporté le {dt.datetime.utcnow():%Y-%m-%d %H:%M} UTC\n"
         f"{len(files)} fichiers : " + ", ".join(files) + "\n"
     ).encode("utf-8")
@@ -296,7 +296,7 @@ async def restore_upload(file: UploadFile = File(...), categories: str = Form(""
     except (ValueError, UnicodeDecodeError):
         raise HTTPException(status_code=400, detail="JSON invalide")
     cats = [c for c in (categories.split(",") if categories else []) if c]
-    # Uploaded files are untrusted — _do_restore requires a valid signature.
+    # Uploaded files are untrusted - _do_restore requires a valid signature.
     return await _do_restore(db, bundle, cats, trusted=False, user=current_user)
 
 

@@ -2,7 +2,7 @@
 
 Holds the connection to a private/self-hosted or hosted LLM API used for
 AI-assisted evidence review and recommendation generation. The API key is
-stored server-side only and is NEVER returned to the browser — responses
+stored server-side only and is NEVER returned to the browser - responses
 expose a masked hint (``••••1234``) plus a ``has_key`` flag instead.
 """
 import uuid
@@ -26,7 +26,7 @@ class LlmSettings(Base, TimestampMixin):
     base_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     model: Mapped[str | None] = mapped_column(String(200), nullable=True)
 
-    # Secret — server-side only, never serialized to clients.
+    # Secret - server-side only, never serialized to clients.
     api_key: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     enabled: Mapped[bool] = mapped_column(Boolean, default=False)

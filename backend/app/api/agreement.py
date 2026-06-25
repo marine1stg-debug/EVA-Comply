@@ -74,5 +74,5 @@ async def list_acceptances(current_user: User = Depends(get_current_user), db: A
         "id": str(a.id), "user_name": a.user_name, "user_role": a.user_role,
         "org_name": a.org_name, "account_type": a.account_type, "version": a.version,
         "ip_address": a.ip_address,
-        "accepted_at": a.created_at.strftime("%Y-%m-%d %H:%M") if a.created_at else "—",
+        "accepted_at": a.created_at.strftime("%Y-%m-%d %H:%M") if a.created_at else "-",
     } for a in rows]}

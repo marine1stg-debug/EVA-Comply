@@ -80,8 +80,8 @@ export default function ReviewPage() {
       {clients.length > 1 && (
         <div className="queue-filters fi">
           <select className="filter-select" value={clientFilter} onChange={e => setClientFilter(e.target.value)} style={{ minWidth: 240, fontWeight: 600 }}>
-            <option value="all">{t('All clients — {n} pending', { n: items.length })}</option>
-            {clients.map(c => <option key={c} value={c}>{t('{name} — {n} pending', { name: mask(c), n: items.filter(i => i.client === c).length })}</option>)}
+            <option value="all">{t('All clients - {n} pending', { n: items.length })}</option>
+            {clients.map(c => <option key={c} value={c}>{t('{name} - {n} pending', { name: mask(c), n: items.filter(i => i.client === c).length })}</option>)}
           </select>
           <span style={{ fontSize: 11, color: 'var(--text3)', marginLeft: 'auto' }}>{t('{n} items showing', { n: filtered.length })}</span>
         </div>

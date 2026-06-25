@@ -39,7 +39,7 @@ class SupportCase(Base, TimestampMixin):
 
 
 class SupportComment(Base, TimestampMixin):
-    """One reply in a support case thread. Append-only — authors don't edit each other."""
+    """One reply in a support case thread. Append-only - authors don't edit each other."""
     __tablename__ = "support_comments"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)

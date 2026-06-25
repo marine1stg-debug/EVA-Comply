@@ -245,7 +245,7 @@ async def set_script(control_id: str, body: ScriptBody, current_user: User = Dep
 def _key_points(c: Control) -> str:
     parts = [p for p in [(c.objective or "").strip(), (c.best_practices or "").strip(),
                          (c.plain_language or "").strip()] if p]
-    return "\n".join(parts) or "(none provided — infer the intent from the control name)"
+    return "\n".join(parts) or "(none provided - infer the intent from the control name)"
 
 
 def _template_script(c: Control, lang: str) -> str:
@@ -261,7 +261,7 @@ def _template_script(c: Control, lang: str) -> str:
             f"C'est important parce que cela réduit le risque et montre que votre organisation prend la sécurité au sérieux. "
             f"Concrètement, {bp.lower() if bp else 'définissez la règle, attribuez un responsable, et appliquez-la de façon constante'}. "
             f"Lors d'un audit, on cherchera surtout des preuves que c'est réellement fait et tenu à jour. "
-            f"Point clé : {obj or c.title} — faites-le simplement, et gardez la preuve."
+            f"Point clé : {obj or c.title} - faites-le simplement, et gardez la preuve."
         )
     return (
         f"Let's talk about the control \"{c.title}\". "
@@ -270,7 +270,7 @@ def _template_script(c: Control, lang: str) -> str:
         f"It matters because it lowers risk and shows your organization takes security seriously. "
         f"In practice, {bp.lower() if bp else 'define the rule, assign an owner, and apply it consistently'}. "
         f"During an audit, the assessor mainly looks for evidence that this is actually done and kept current. "
-        f"Key takeaway: {obj or c.title} — keep it simple, and keep the proof."
+        f"Key takeaway: {obj or c.title} - keep it simple, and keep the proof."
     )
 
 
@@ -382,7 +382,7 @@ def _norm_title(t: Optional[str]) -> str:
 @router.get("/reuse/suggestions")
 async def reuse_suggestions(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     """Find controls in OTHER frameworks that have no video but are equivalent to a
-    control that does — via official mappings, then by identical title."""
+    control that does - via official mappings, then by identical title."""
     _require_admin(current_user)
     rows = (await db.execute(
         select(Control, Framework.name).join(Framework, Framework.id == Control.framework_id)

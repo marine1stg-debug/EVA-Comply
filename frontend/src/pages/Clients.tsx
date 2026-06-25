@@ -38,7 +38,7 @@ function AddClientModal({ onClose }: { onClose: () => void }) {
       plan: 'Professional', monthly_price: price, msp_review_enabled: review, framework_ids: fwIds,
     })).data,
     onSuccess: (r) => {
-      toast.success(t('Client created — send them the invite'))
+      toast.success(t('Client created - send them the invite'))
       qc.invalidateQueries({ queryKey: ['msp-clients'] }); qc.invalidateQueries({ queryKey: ['msp-portfolio'] })
       setInviteLink(r.invite_link || 'sent')
     },
@@ -85,7 +85,7 @@ function AddClientModal({ onClose }: { onClose: () => void }) {
                   </label>
                 ))}
               </div>
-              <div className="page-sub" style={{ marginTop: 8 }}>{t('The client admin gets an invite link to set their own password — you don’t set it.')}</div>
+              <div className="page-sub" style={{ marginTop: 8 }}>{t('The client admin gets an invite link to set their own password - you don’t set it.')}</div>
               <button className="submit-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 12 }} disabled={!ok || create.isPending} onClick={() => create.mutate()}>
                 {create.isPending ? t('Creating…') : t('Create client & generate invite')}
               </button>

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Delete superseded framework catalogs everywhere (framework + controls + all
 dependent rows). Removes old versions left behind when a catalog was rebuilt:
-  • CyberSecure Canada  — any version other than the current 'Baseline V1.2'
-  • CIS Controls        — any version other than the current '8.1.2'
+  • CyberSecure Canada  - any version other than the current 'Baseline V1.2'
+  • CIS Controls        - any version other than the current '8.1.2'
 
 USAGE (inside the api container):
     docker compose exec api python -m app.cleanup_stale_catalogs            # dry run (counts only)
@@ -53,19 +53,19 @@ async def run(commit: bool):
             f"(SELECT count(*) FROM controls c WHERE c.framework_id = f.id) AS n "
             f"FROM frameworks f WHERE {COND} ORDER BY f.name, f.version"), PARAMS)).all()
         if not rows:
-            print("Nothing to clean — no superseded CyberSecure/CIS frameworks found.")
+            print("Nothing to clean - no superseded CyberSecure/CIS frameworks found.")
             return
         print("Superseded frameworks found:")
         for name, version, n in rows:
-            print(f"  • {name}  (version '{version}')  — {n} controls")
+            print(f"  • {name}  (version '{version}')  - {n} controls")
         if not commit:
-            print("\nDRY RUN — nothing deleted. Re-run with --yes to delete the above everywhere.")
+            print("\nDRY RUN - nothing deleted. Re-run with --yes to delete the above everywhere.")
             return
         for sql in DELETES:
             res = await db.execute(text(sql), PARAMS)
             print(f"  deleted {res.rowcount:>5}  ::  {sql.split(' WHERE')[0].replace('DELETE FROM ', '')[:48]}")
         await db.commit()
-        print("\nDone — superseded catalogs removed everywhere.")
+        print("\nDone - superseded catalogs removed everywhere.")
 
 
 if __name__ == "__main__":

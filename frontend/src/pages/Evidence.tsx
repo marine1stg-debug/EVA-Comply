@@ -108,7 +108,7 @@ export default function EvidencePage() {
       <div className="page-hdr fi">
         <div>
           <div className="page-title">{t('Evidence')}</div>
-          <div className="page-sub">{t('All evidence items across your assigned controls — {n} total', { n: counts.all })}</div>
+          <div className="page-sub">{t('All evidence items across your assigned controls - {n} total', { n: counts.all })}</div>
         </div>
       </div>
 
@@ -193,7 +193,7 @@ export default function EvidencePage() {
                 <select className="form-select" value={controlId} onChange={e => setControlId(e.target.value)}>
                   <option value="">{t('Select a control…')}</option>
                   {(controls?.items || []).map(c => (
-                    <option key={c.id} value={c.id}>{c.ref} — {c.title.slice(0, 40)}</option>
+                    <option key={c.id} value={c.id}>{c.ref} - {c.title.slice(0, 40)}</option>
                   ))}
                 </select>
               </div>

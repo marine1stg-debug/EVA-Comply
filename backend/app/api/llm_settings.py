@@ -1,4 +1,4 @@
-"""LLM connector settings API — super-admin only.
+"""LLM connector settings API - super-admin only.
 
 The API key is write-only from the client's perspective: it is accepted on PUT,
 stored server-side, and never returned. GET returns a masked hint + has_key

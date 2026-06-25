@@ -73,7 +73,7 @@ function StatementsSection({ mspId }: { mspId: string }) {
             {rows.map(s => (
               <tr key={s.id}>
                 <td style={{ fontFamily: 'var(--mono)', fontSize: 11 }}>{s.number}</td>
-                <td>{s.issued_at ? s.issued_at.slice(0, 10) : '—'}</td>
+                <td>{s.issued_at ? s.issued_at.slice(0, 10) : '-'}</td>
                 <td style={{ fontWeight: 700, color: 'var(--green)' }}>${s.amount.toFixed(2)}</td>
                 <td><span className={`badge ${s.status === 'paid' ? 'b-green' : 'b-amber'}`}>{s.status}</span></td>
                 <td><button className="ev-action-btn download" style={{ fontSize: 10 }} onClick={() => open(s)}>⬇ {t('View')}</button></td>
@@ -96,7 +96,7 @@ export default function PartnerPage() {
 
   if (isLoading) return <div className="page-sub">{t('Loading…')}</div>
   // This page is the MSP self-view. Super admins (and any non-MSP account) get a
-  // 403 from /partners/me — show guidance instead of a blank screen.
+  // 403 from /partners/me - show guidance instead of a blank screen.
   if (isError || !data) return (
     <>
       <div className="page-hdr fi">
@@ -157,7 +157,7 @@ export default function PartnerPage() {
       ) : (
         <div className="detail-section fi" style={{ marginBottom: 16 }}>
           <div className="card-hdr"><span className="card-title">{t('Volume tiers')}</span>
-            <span className="page-sub" style={{ fontSize: 10.5 }}>{data.tier_basis === 'revenue' ? t('More annual revenue lowers your wholesale cost — set by EVA') : t('More active clients lowers your wholesale cost — set by EVA')}</span></div>
+            <span className="page-sub" style={{ fontSize: 10.5 }}>{data.tier_basis === 'revenue' ? t('More annual revenue lowers your wholesale cost - set by EVA') : t('More active clients lowers your wholesale cost - set by EVA')}</span></div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
             {data.volume_tiers.map((tr, i) => {
               const isCurrent = data.current_tier && tr.min_clients === data.current_tier.min_clients && (data.current_tier as any).min_revenue === (tr as any).min_revenue

@@ -4,7 +4,7 @@ and expected-evidence rows) so you can import new catalogs into a clean slate.
 Keeps tenants, users, billing plans, and platform settings. Stored evidence
 FILES on disk are left in place (orphaned, harmless); only DB rows are removed.
 
-DRY RUN by default — prints what it would delete and exits. Add --yes to commit.
+DRY RUN by default - prints what it would delete and exits. Add --yes to commit.
 
 USAGE (inside the api container):
     docker compose exec api python -m app.flush_frameworks            # dry run
@@ -16,7 +16,7 @@ import asyncio
 from sqlalchemy import select, delete, func
 
 from app.core.database import AsyncSessionLocal
-from app.models import framework, evidence  # noqa: F401 — register mappers
+from app.models import framework, evidence  # noqa: F401 - register mappers
 from app.models.framework import Framework, Control
 from app.models.evidence import OrgControl, EvidenceItem, ExpectedEvidence
 
@@ -36,7 +36,7 @@ async def run(commit: bool):
         print(f"  frameworks ................ {await _count(db, Framework)}")
 
         if not commit:
-            print("\nDry run only — re-run with --yes to apply.")
+            print("\nDry run only - re-run with --yes to apply.")
             return
 
         # FK-safe order: children first.

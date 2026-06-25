@@ -24,7 +24,7 @@ SCOPES (choose with --scope, default = content):
             then re-create only the EVA tenant + super admin. Billing plans and
             platform settings are preserved (re-created if missing). Truly empty.
 
-SAFETY: this is a DRY RUN by default — it prints what it would delete and exits.
+SAFETY: this is a DRY RUN by default - it prints what it would delete and exits.
 Add --yes to actually commit the changes.
 
 USAGE (from eva-portal/backend, with the app's env/DB reachable):
@@ -122,7 +122,7 @@ async def run(scope, commit):
         print(await preview(db, scope))
 
         if not commit:
-            print("\nDry run only — re-run with --yes to apply.")
+            print("\nDry run only - re-run with --yes to apply.")
             return
 
         # Always clear posture + evidence (FK children first).

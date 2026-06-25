@@ -1,5 +1,5 @@
 """
-Reports API — list report types and generate them synchronously as a download.
+Reports API - list report types and generate them synchronously as a download.
 PDF (WeasyPrint) and Word (python-docx) for narrative reports; Excel for the
 evidence register. Targets the selected client (reviewers) or the user's tenant.
 """
@@ -67,8 +67,8 @@ class AggregateBody(BaseModel):
 @router.post("/aggregate")
 async def generate_aggregate(body: AggregateBody, current_user: User = Depends(get_current_user),
                              db: AsyncSession = Depends(get_db)):
-    """Portfolio report across many clients: an MSP's whole base, or — for a
-    super admin — every client org. Client-level roles cannot run it."""
+    """Portfolio report across many clients: an MSP's whole base, or - for a
+    super admin - every client org. Client-level roles cannot run it."""
     await ensure_feature(db, current_user, "reports")
     role = current_user.role
     if role == UserRole.super_admin:

@@ -76,7 +76,7 @@ export default function ImportPage() {
 
       <Stepper step={step} />
 
-      {/* Step 1 — upload */}
+      {/* Step 1 - upload */}
       {step === 1 && (
         <div className="ev-upload-card fi" style={{ maxWidth: 560 }}>
           <div className="form-row"><label className="form-label">{t('Framework name *')}</label>
@@ -96,7 +96,7 @@ export default function ImportPage() {
         </div>
       )}
 
-      {/* Step 2 — mapping */}
+      {/* Step 2 - mapping */}
       {step === 2 && preview && (
         <div className="detail-section fi" style={{ maxWidth: 640 }}>
           <div className="card-hdr"><span className="card-title">{t('Map your columns ({n} rows)', { n: preview.row_count })}</span></div>
@@ -104,7 +104,7 @@ export default function ImportPage() {
             <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
               <span style={{ fontSize: 12, color: 'var(--text2)', minWidth: 130 }}>{t(FIELD_LABEL[f] || f)}</span>
               <select className="form-select" style={{ flex: 1 }} value={mapping[f] || ''} onChange={e => setMapping(m => ({ ...m, [f]: e.target.value }))}>
-                <option value="">{t('— not mapped —')}</option>
+                <option value="">{t('- not mapped -')}</option>
                 {preview.columns.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
@@ -117,10 +117,10 @@ export default function ImportPage() {
         </div>
       )}
 
-      {/* Step 3 — review */}
+      {/* Step 3 - review */}
       {step === 3 && preview && (
         <div className="detail-section fi">
-          <div className="card-hdr"><span className="card-title">{t('Review — {n} controls into “{name}” v{version}', { n: preview.row_count, name, version })}</span></div>
+          <div className="card-hdr"><span className="card-title">{t('Review - {n} controls into “{name}” v{version}', { n: preview.row_count, name, version })}</span></div>
           <table className="tenant-table">
             <thead><tr>{preview.fields.filter(f => mapping[f]).map(f => <th key={f}>{f}</th>)}</tr></thead>
             <tbody>
@@ -139,7 +139,7 @@ export default function ImportPage() {
         </div>
       )}
 
-      {/* Step 4 — done */}
+      {/* Step 4 - done */}
       {step === 4 && result && (
         <div className="detail-section fi" style={{ maxWidth: 560, textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 8 }}>✅</div>

@@ -1,4 +1,4 @@
-"""Contact Support — users raise cases; the EVA team reviews them in the
+"""Contact Support - users raise cases; the EVA team reviews them in the
 Super Admin console. Config (enabled / categories / intro) is Super-Admin editable."""
 import os
 import uuid
@@ -169,7 +169,7 @@ async def create_case(
         logging.getLogger("eva.support").exception("create_case failed")
         raise HTTPException(status_code=500, detail=f"Could not save case: {type(e).__name__}: {e}")
 
-    # Alert the EVA team (best-effort — never breaks the request).
+    # Alert the EVA team (best-effort - never breaks the request).
     try:
         recipients = (await db.execute(select(User.email).where(User.role.in_(list(EVA_ROLES))))).scalars().all()
         send_email(
@@ -300,7 +300,7 @@ async def get_attachment(case_id: str, current_user: User = Depends(get_current_
 
 
 async def open_case_count(db: AsyncSession) -> int:
-    """Open + in-progress cases — used by the notifications bell."""
+    """Open + in-progress cases - used by the notifications bell."""
     n = (await db.execute(
         select(func.count(SupportCase.id)).where(
             SupportCase.status.in_([SupportStatus.open, SupportStatus.in_progress])

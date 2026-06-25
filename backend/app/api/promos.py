@@ -1,4 +1,4 @@
-"""Promo code admin (EVA super admin) — create/list/update signup codes that
+"""Promo code admin (EVA super admin) - create/list/update signup codes that
 grant a billing mode (no-card trial / card trial / charge immediately)."""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel

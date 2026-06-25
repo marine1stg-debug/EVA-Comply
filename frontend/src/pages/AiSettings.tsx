@@ -145,7 +145,7 @@ export default function AiSettingsPage() {
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input className="form-input" type="password" autoComplete="off" value={keyInput || ''}
-                placeholder={t('Paste key — stored encrypted server-side, never shown again')}
+                placeholder={t('Paste key - stored encrypted server-side, never shown again')}
                 onChange={e => setKeyInput(e.target.value)} style={{ flex: 1 }} />
               {data.has_key && <button className="tb-btn" onClick={() => setKeyInput(null)}>{t('Cancel')}</button>}
             </div>
@@ -168,7 +168,7 @@ export default function AiSettingsPage() {
         </div>
 
         <details style={{ marginTop: 4 }}>
-          <summary style={{ cursor: 'pointer', fontSize: 12, color: 'var(--text2)' }}>{t('Advanced — custom auth header')}</summary>
+          <summary style={{ cursor: 'pointer', fontSize: 12, color: 'var(--text2)' }}>{t('Advanced - custom auth header')}</summary>
           <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
             <div className="form-row" style={{ flex: 1 }}>
               <label className="form-label">{t('Header name')}</label>

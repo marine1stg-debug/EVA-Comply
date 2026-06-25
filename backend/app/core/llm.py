@@ -76,7 +76,7 @@ def extra_header_value_plain(s: LlmSettings) -> str | None:
 
 
 def masked_settings(s: LlmSettings) -> dict:
-    """Client-safe view — never includes the raw API key."""
+    """Client-safe view - never includes the raw API key."""
     key = api_key_plain(s)
     return {
         "provider": s.provider,
@@ -211,7 +211,7 @@ async def test_connection(db: AsyncSession, s: LlmSettings) -> dict:
         msg = f"Connected. Model replied ({latency_ms} ms): {reply[:80]}"
     except LlmError as e:
         msg = str(e)
-    except Exception as e:  # defensive — never leak a stack to the client
+    except Exception as e:  # defensive - never leak a stack to the client
         msg = f"Unexpected error: {e}"
 
     s.last_tested_at = datetime.now(timezone.utc)

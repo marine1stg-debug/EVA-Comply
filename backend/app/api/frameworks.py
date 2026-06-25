@@ -1,5 +1,5 @@
 """
-Framework library API — list built-in/custom frameworks and per-framework
+Framework library API - list built-in/custom frameworks and per-framework
 detail (domain breakdown, levels, sample controls, orgs-using count).
 """
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
@@ -25,8 +25,8 @@ router = APIRouter()
 ADMIN_ROLES = {UserRole.super_admin, UserRole.msp_admin}
 FW_VISUAL = {
     "CMMC 2.0":     {"icon": "🛡", "color": "#2563EB", "bg": "#EFF6FF"},
-    "CMMC 2.0 — Level 1": {"icon": "🛡", "color": "#2563EB", "bg": "#EFF6FF"},
-    "CMMC 2.0 — Level 2": {"icon": "🛡", "color": "#1D4ED8", "bg": "#EFF6FF"},
+    "CMMC 2.0 - Level 1": {"icon": "🛡", "color": "#2563EB", "bg": "#EFF6FF"},
+    "CMMC 2.0 - Level 2": {"icon": "🛡", "color": "#1D4ED8", "bg": "#EFF6FF"},
     "NIST CSF":     {"icon": "⎇",  "color": "#7C3AED", "bg": "#EDE9FE"},
     "NIST SP 800-171 Rev. 3": {"icon": "⎇", "color": "#7C3AED", "bg": "#EDE9FE"},
     "ITSP.10.171 (CPCSC)": {"icon": "⚑",  "color": "#D97706", "bg": "#FFFBEB"},
@@ -65,7 +65,7 @@ async def list_frameworks(
         raise HTTPException(status_code=403, detail="Framework library requires admin access")
 
     # The Library is the framework CATALOG admins browse and assign from, so it
-    # always shows the full set of frameworks an admin can manage — NOT only the
+    # always shows the full set of frameworks an admin can manage - NOT only the
     # selected client's assigned frameworks.
     #   • super_admin → every framework (system + all imported)
     #   • msp_admin   → all system frameworks + ones they imported
@@ -89,7 +89,7 @@ async def list_frameworks(
             "domains": await _domains_count(db, fw.id),
             "levels": fw.levels or [],
             "orgs_using": await _orgs_using(db, fw.id),
-            "last_updated": fw.updated_at.strftime("%b %d, %Y") if fw.updated_at else "—",
+            "last_updated": fw.updated_at.strftime("%b %d, %Y") if fw.updated_at else "-",
             **vis,
         })
     out.sort(key=lambda f: (f["type"] != "system", f["name"]))
@@ -153,7 +153,7 @@ async def framework_detail(
         "domains_count": len(domains),
         "levels": fw.levels or [],
         "orgs_using": await _orgs_using(db, fid),
-        "last_updated": fw.updated_at.strftime("%b %d, %Y") if fw.updated_at else "—",
+        "last_updated": fw.updated_at.strftime("%b %d, %Y") if fw.updated_at else "-",
         "samples": samples,
         **vis,
     }

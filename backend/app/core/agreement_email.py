@@ -52,19 +52,19 @@ async def send_contract_email(db: AsyncSession, tenant) -> bool:
         if acc:
             when = acc.created_at.strftime("%Y-%m-%d %H:%M") if acc.created_at else ""
             accepted_line = (f"\nAccepté par : {acc.user_name} ({acc.user_role}) le {when} "
-                             f"— IP {acc.ip_address}.")
+                             f"- IP {acc.ip_address}.")
 
         org = getattr(tenant, "name", "")
-        subject = f"Votre contrat EVA Comply — {org} / Your EVA Comply agreement"
+        subject = f"Votre contrat EVA Comply - {org} / Your EVA Comply agreement"
         body = (
-            f"Bonjour,\n\nMerci — votre paiement pour EVA Comply est confirmé. "
+            f"Bonjour,\n\nMerci - votre paiement pour EVA Comply est confirmé. "
             f"Vous trouverez ci-joint votre contrat d’abonnement et conditions d’utilisation "
             f"(version {doc['version']}, type de compte : {doc['label_fr']}).{accepted_line}\n\n"
-            f"Conservez ce document pour vos dossiers.\n\n— L’équipe EVA Comply\n"
+            f"Conservez ce document pour vos dossiers.\n\n- L’équipe EVA Comply\n"
             f"------------------------------------------------------------\n"
-            f"Hello,\n\nThank you — your EVA Comply payment is confirmed. Attached is your "
+            f"Hello,\n\nThank you - your EVA Comply payment is confirmed. Attached is your "
             f"subscription agreement and terms of use (version {doc['version']}, "
-            f"account type: {doc['label_en']}). Please keep it for your records.\n\n— The EVA Comply team"
+            f"account type: {doc['label_en']}). Please keep it for your records.\n\n- The EVA Comply team"
         )
         attachments = [("EVA_Comply_Agreement.html", _full_html(doc), "text/html")]
         ok = send_email(recipients, subject, body, sender="invoicing",

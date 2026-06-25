@@ -75,7 +75,7 @@ export default function ReportsPage() {
           <div className="card-hdr" style={{ marginBottom: 6 }}><span className="card-title">{t('Portfolio report')}</span></div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
             <div className="page-sub" style={{ flex: 1, minWidth: 240 }}>
-              {t('Aggregate compliance across your whole client base (super admins: across all clients) — overall and per-client.')}
+              {t('Aggregate compliance across your whole client base (super admins: across all clients) - overall and per-client.')}
             </div>
             <button className="tb-btn pri" disabled={busy !== null} onClick={() => generateAggregate('pdf')}>
               {busy === 'aggregate:pdf' ? t('Generating…') : '⬇ PDF'}

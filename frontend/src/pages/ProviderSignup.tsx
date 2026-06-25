@@ -50,7 +50,7 @@ export default function ProviderSignupPage() {
         ) : (
           <>
             <div style={{ background: 'rgba(26,143,209,.08)', border: '1px solid rgba(26,143,209,.25)', borderRadius: 10, padding: '12px 14px', marginBottom: 16, fontSize: 12.5, color: '#A9C4DD', lineHeight: 1.6 }}>
-              🤝 {t('Become an EVA partner: get listed in the marketplace and matched with clients who need help on specific controls — a steady stream of qualified leads. Showcase your skills, get found exactly when a client is stuck, and grow your compliance practice.')}
+              🤝 {t('Become an EVA partner: get listed in the marketplace and matched with clients who need help on specific controls - a steady stream of qualified leads. Showcase your skills, get found exactly when a client is stuck, and grow your compliance practice.')}
             </div>
             <label style={{ fontSize: 11, fontWeight: 600, color: '#7094B8', display: 'block', marginBottom: 4 }}>{t('Company / provider name')}</label>
             <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} />

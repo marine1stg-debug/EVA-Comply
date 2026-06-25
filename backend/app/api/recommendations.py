@@ -1,4 +1,4 @@
-"""Recommendations API — per-client remediation actions for maturity gaps.
+"""Recommendations API - per-client remediation actions for maturity gaps.
 
 GET    /                       rollup for the in-scope client (all + Top 10 + Quick Wins)
 POST   /generate               (re)generate for every gapped control (source=premade|ai)

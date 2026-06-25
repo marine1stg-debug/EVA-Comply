@@ -24,7 +24,7 @@ from app.models.marketplace import ServiceProvider, MarketplaceSkill
 router = APIRouter()
 STATUSES = {"pending", "active", "suspended"}
 
-# Canonical skill labels — merges spelling variants across frameworks
+# Canonical skill labels - merges spelling variants across frameworks
 # (e.g. "Audit and accountability" / "Audit & Accountability" → one skill).
 _CANON = {
     "access control": "Access Control",
@@ -95,7 +95,7 @@ class RegisterBody(BaseModel):
 
 @router.post("/register")
 async def register_provider(body: RegisterBody, db: AsyncSession = Depends(get_db)):
-    """Public — a provider applies to join. Created pending; EVA authorizes it."""
+    """Public - a provider applies to join. Created pending; EVA authorizes it."""
     if not body.name.strip() or not body.contact_email.strip():
         raise HTTPException(status_code=400, detail="Name and contact email are required")
     p = ServiceProvider(

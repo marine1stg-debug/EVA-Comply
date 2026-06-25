@@ -1,5 +1,5 @@
 """
-Users & roles API — list users in scope + activate/deactivate.
+Users & roles API - list users in scope + activate/deactivate.
 Scope: super_admin → all; MSP admin → own MSP + client tenants;
 client_admin → own tenant only.
 """
@@ -278,7 +278,7 @@ async def reset_password(user_id: str, current_user: User = Depends(get_current_
 
 @router.delete("/{user_id}")
 async def delete_user(user_id: str, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
-    """Hard delete — Super Admin only. Prefer deactivating instead; this is for
+    """Hard delete - Super Admin only. Prefer deactivating instead; this is for
     GDPR-style erasure. Blocked if the account is still referenced by records."""
     if current_user.role != UserRole.super_admin:
         raise HTTPException(status_code=403, detail="Only the Super Admin can delete accounts")

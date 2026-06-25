@@ -74,7 +74,7 @@ function CaseRow({ c }: { c: Case }) {
   return (
     <div className="queue-item" style={{ borderLeft: `3px solid ${done ? 'var(--border-l)' : 'var(--eva-blue2)'}`, opacity: done ? 0.72 : 1 }}>
       <div className="queue-item-hdr">
-        <span className="queue-client">{c.org_name || '—'}</span>
+        <span className="queue-client">{c.org_name || '-'}</span>
         <span className="badge b-gray" style={{ fontSize: 9 }}>{c.category}</span>
         <span className="queue-ev-name">{c.subject}</span>
         <span className={`badge ${STATUS_BADGE[c.status] || 'b-gray'}`}>{done ? '✓ ' : ''}{t(STATUS_LABEL[c.status] || c.status)}</span>

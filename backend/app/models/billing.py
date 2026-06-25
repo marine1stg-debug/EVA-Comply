@@ -43,7 +43,7 @@ FEATURE_KEYS = ["reports", "import", "msp_review", "audit_logs", "api"]
 
 
 class Invoice(Base, TimestampMixin):
-    """A numbered invoice — Stripe subscription charges or MSP monthly consolidations."""
+    """A numbered invoice - Stripe subscription charges or MSP monthly consolidations."""
     __tablename__ = "invoices"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)

@@ -33,7 +33,7 @@ export default function MobileQuick() {
       return (await api.post('/support/cases', fd)).data
     },
     onSuccess: (_d, incident) => {
-      toast.success(incident ? t('Incident declared — we’ll respond urgently') : t('Case submitted'))
+      toast.success(incident ? t('Incident declared - we’ll respond urgently') : t('Case submitted'))
       setSubject(''); setMessage(''); setTab('cases')
       qc.invalidateQueries({ queryKey: ['support-cases-mine'] })
     },

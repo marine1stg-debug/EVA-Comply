@@ -18,7 +18,7 @@ import asyncio
 from sqlalchemy import select
 
 from app.core.database import AsyncSessionLocal
-from app.models import framework, evidence  # noqa: F401 — register mappers
+from app.models import framework, evidence  # noqa: F401 - register mappers
 from app.models.framework import Control
 from app.maturity_banks import NIST_171R3
 try:
@@ -32,7 +32,7 @@ _SHORT_FR = {5: "Optimisé", 4: "Géré", 3: "Défini", 2: "Initial", 1: "Aucun"
 
 def bank(prompt: str, statements: list[str], fr: tuple | None = None) -> list[dict]:
     """statements: 5 entries, highest maturity (5) first → lowest (1) last.
-    fr (optional): (prompt_fr, [s5_fr..s1_fr]) — adds prompt_fr / short_fr / label_fr."""
+    fr (optional): (prompt_fr, [s5_fr..s1_fr]) - adds prompt_fr / short_fr / label_fr."""
     prompt_fr, statements_fr = (fr or (None, []))
     opts = []
     for i, text in enumerate(statements):
@@ -95,7 +95,7 @@ def r3_for_cmmc(ref: str):
 
 async def run(commit: bool):
     """Apply authored questions to EVERY control whose ref matches (across all
-    frameworks — NIST 800-171r3, ITSP.10.171, etc., which share the 03.xx.xx
+    frameworks - NIST 800-171r3, ITSP.10.171, etc., which share the 03.xx.xx
     IDs). Reports coverage per framework and lists controls still on the generic
     ladder so any framework-specific gaps are visible."""
     from app.models.framework import Framework
@@ -134,7 +134,7 @@ async def run(commit: bool):
             await db.commit()
             print("Committed. Every other control keeps the generic ladder.")
         else:
-            print("Dry run only — re-run with --yes to apply.")
+            print("Dry run only - re-run with --yes to apply.")
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ has collected. Existing rows (and their evidence) are left untouched.
 Assigned frameworks per client = frameworks the client already has any
 org-control in  ∪  frameworks listed in their billing settings.
 
-DRY RUN by default — prints the diagnosis and exits. Add --yes to provision.
+DRY RUN by default - prints the diagnosis and exits. Add --yes to provision.
 
 USAGE (inside the api container):
     docker compose exec api python -m app.sync_orgcontrols            # dry run
@@ -22,7 +22,7 @@ import asyncio
 from sqlalchemy import select, func
 
 from app.core.database import AsyncSessionLocal
-from app.models import framework, evidence  # noqa: F401 — register mappers
+from app.models import framework, evidence  # noqa: F401 - register mappers
 from app.models.framework import Framework, Control
 from app.models.evidence import OrgControl
 from app.models.tenant import Tenant
@@ -87,7 +87,7 @@ async def run(commit: bool):
             await db.commit()
             print(f"\nCommitted. Total rows created: {grand_created}. Nothing was deleted.")
         else:
-            print("\nDry run only — re-run with --yes to provision the missing rows. (Additive only — nothing is deleted.)")
+            print("\nDry run only - re-run with --yes to provision the missing rows. (Additive only - nothing is deleted.)")
 
 
 if __name__ == "__main__":

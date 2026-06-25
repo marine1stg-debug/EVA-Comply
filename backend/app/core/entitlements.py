@@ -1,5 +1,5 @@
 """
-Entitlements — resolves a tenant's plan inclusions into enforceable limits.
+Entitlements - resolves a tenant's plan inclusions into enforceable limits.
 
 Tenants with no plan (e.g. EVA internal / Super Admin) are treated as
 unlimited so platform staff are never gated.
@@ -22,7 +22,7 @@ def trial_state(tenant: Tenant, trial_days: int = 14, billing_mode: str = "no_ca
         return {"status": status, "trialing": False, "days_left": 0, "locked": True}
     if status == "trialing":
         if billing_mode == "charge_immediately":
-            # No trial in this mode — access requires completed payment.
+            # No trial in this mode - access requires completed payment.
             return {"status": status, "trialing": False, "days_left": 0, "locked": True}
         created = tenant.created_at or datetime.now(timezone.utc)
         elapsed = (datetime.now(timezone.utc) - created).days
@@ -43,7 +43,7 @@ async def ensure_active(db: AsyncSession, current_user):
     t = (await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))).scalar_one()
     s = await get_settings(db)
     if trial_state(t, s.trial_days, effective_mode(t, s))["locked"]:
-        raise HTTPException(status_code=402, detail="Your trial has ended — subscribe to continue.")
+        raise HTTPException(status_code=402, detail="Your trial has ended - subscribe to continue.")
 
 FEATURE_LABEL = {
     "reports": "report export", "import": "custom framework import",

@@ -16,9 +16,9 @@ export const CHANGELOG: Release[] = [
     date: '2026-06-25',
     changes: [
       'French is now the default language, with an EN/FR toggle on the sign-in and other public pages.',
-      'Cleaner public landing page — logo, headline and notes are now in readable cards.',
+      'Cleaner public landing page - logo, headline and notes are now in readable cards.',
       'Help Center revamped: covers every feature, has a searchable FAQ, and lets EVA staff preview help "as" any user.',
-      'MSP pre-review is now configurable — an MSP-wide default plus a per-client on/off toggle; managed clients see a note in their Help Center.',
+      'MSP pre-review is now configurable - an MSP-wide default plus a per-client on/off toggle; managed clients see a note in their Help Center.',
       'Plan landing-page highlights are now editable in Plans & Pricing.',
       'Evidence list now displays in French; a billing info banner clarifies the EVA internal organization.',
       'Faster app load (the Word policy viewer now loads only when you open a preview).',
@@ -40,7 +40,7 @@ export const CHANGELOG: Release[] = [
     version: '1.3.0',
     date: '2026-06-23',
     changes: [
-      'Security hardening from the OWASP review — no changes to how you sign in or use the app.',
+      'Security hardening from the OWASP review - no changes to how you sign in or use the app.',
       'Stored secrets (AI connector key, MFA secrets) are now encrypted at rest.',
       'The AI connector is protected against requests to internal/private addresses (SSRF).',
       'Backup restore now only accepts backups created by this system, and every restore is logged.',
@@ -52,7 +52,7 @@ export const CHANGELOG: Release[] = [
     date: '2026-06-23',
     changes: [
       'New Policy Library: browse, search by topic, filter by category, and download policy templates in your language.',
-      'Super Admins can manage policies — add, edit metadata, replace the document, toggle availability, and set which control family a policy covers.',
+      'Super Admins can manage policies - add, edit metadata, replace the document, toggle availability, and set which control family a policy covers.',
       'The Controls view now shows policies from the managed library (only those marked Available).',
       'Added an app version badge in the sidebar, with a "What\'s new" changelog for Super Admins.',
     ],
@@ -61,9 +61,9 @@ export const CHANGELOG: Release[] = [
     version: '1.1.0',
     date: '2026-06-23',
     changes: [
-      'Bilingual policy library — all 18 policy templates rebuilt to a complete, best-practice standard and available in French.',
+      'Bilingual policy library - all 18 policy templates rebuilt to a complete, best-practice standard and available in French.',
       'Recommendations from the library now display in French.',
-      'Review queue (File de revue) fully localized in French — control titles, evidence requirements, and decision buttons.',
+      'Review queue (File de revue) fully localized in French - control titles, evidence requirements, and decision buttons.',
       'Auditor decision buttons (Accept / Reject / Needs more / Not applicable) are now functional and record the decision with a note.',
       'Control status dropdown labels now show in French.',
       'Collecting evidence refreshes the status live, without a page reload.',

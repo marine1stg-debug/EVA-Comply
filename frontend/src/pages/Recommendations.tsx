@@ -124,7 +124,7 @@ export default function RecommendationsPage() {
       <div className="page-hdr fi">
         <div>
           <div className="page-title">{t('Recommendations')}</div>
-          <div className="page-sub">{t('Remediation actions to close maturity gaps — prioritized, with Top 10 and quick wins.')}</div>
+          <div className="page-sub">{t('Remediation actions to close maturity gaps - prioritized, with Top 10 and quick wins.')}</div>
         </div>
         {data.can_generate && (
           <div className="page-actions">
@@ -170,7 +170,7 @@ export default function RecommendationsPage() {
             <div className="detail-section fi" style={{ marginBottom: 16 }}>
               <div className="card-hdr"><span className="card-title">{t('★ Top 10 priorities')}</span>
                 <span className="page-sub" style={{ fontSize: 10.5 }}>
-                  {data.top10_pinned ? t('curated — pinned or AI-selected') : t('ranked by impact × gap × risk (use ★ Auto-pick or pin to curate)')}
+                  {data.top10_pinned ? t('curated - pinned or AI-selected') : t('ranked by impact × gap × risk (use ★ Auto-pick or pin to curate)')}
                 </span></div>
               {data.top10.map((r, i) => <RecRow key={r.id} r={r} rank={i + 1} />)}
             </div>
@@ -179,7 +179,7 @@ export default function RecommendationsPage() {
           {data.quick_wins.length > 0 && (
             <div className="detail-section fi" style={{ marginBottom: 16 }}>
               <div className="card-hdr"><span className="card-title">{t('⚡ Quick wins')}</span>
-                <span className="page-sub" style={{ fontSize: 10.5 }}>{t('low effort, high impact — do these first')}</span></div>
+                <span className="page-sub" style={{ fontSize: 10.5 }}>{t('low effort, high impact - do these first')}</span></div>
               {data.quick_wins.map(r => <RecRow key={r.id} r={r} />)}
             </div>
           )}

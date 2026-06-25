@@ -1,4 +1,4 @@
-"""Platform settings API — Super Admin controls monetization behavior."""
+"""Platform settings API - Super Admin controls monetization behavior."""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,7 +16,7 @@ router = APIRouter()
 MODES = [
     {"key": "no_card_trial", "name": "No-card free trial", "desc": "Sign up free, full access during the trial, then lock to read-only until they subscribe."},
     {"key": "card_trial", "name": "Card-required trial (Stripe)", "desc": "Collect a card at signup; Stripe runs the trial then auto-charges."},
-    {"key": "charge_immediately", "name": "Charge immediately", "desc": "Must complete Stripe checkout at signup — no trial."},
+    {"key": "charge_immediately", "name": "Charge immediately", "desc": "Must complete Stripe checkout at signup - no trial."},
 ]
 
 
@@ -79,7 +79,7 @@ async def email_test(body: EmailTestBody, current_user: User = Depends(get_curre
     if not body.to.strip():
         raise HTTPException(status_code=400, detail="A recipient is required")
     sender = body.sender if body.sender in ("invoicing", "cases", "noreply") else "noreply"
-    ok = send_email(body.to.strip(), "EVA Comply — test email",
+    ok = send_email(body.to.strip(), "EVA Comply - test email",
                     f"This is a test from the '{sender}' sender via the '{cfg.EMAIL_BACKEND}' backend.",
                     sender=sender)
     return {"ok": ok, "backend": cfg.EMAIL_BACKEND, "from": sender_address(sender)}

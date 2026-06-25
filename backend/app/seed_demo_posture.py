@@ -29,8 +29,8 @@ from app.models.maturity import MaturityAssessment
 
 ORG_NAME = "NovLogix Inc."
 FRAMEWORKS = [
-    "CMMC 2.0 — Level 1",
-    "CMMC 2.0 — Level 2",
+    "CMMC 2.0 - Level 1",
+    "CMMC 2.0 - Level 2",
     "NIST SP 800-171 Rev. 3",
     "CyberSecure Canada",
 ]
@@ -43,7 +43,7 @@ def _write_seed_file(org_id, ref):
         os.makedirs(os.path.join(base, str(org_id)), exist_ok=True)
         key = f"{org_id}/seed_{ref}.txt"
         content = (
-            "EVA Cybersecurity Audit Portal — demo evidence\n"
+            "EVA Cybersecurity Audit Portal - demo evidence\n"
             f"Control: {ref}\n"
             "Placeholder evidence generated for evaluation.\n"
         ).encode()
@@ -74,7 +74,7 @@ async def run(commit: bool):
             select(Tenant).where(Tenant.name == ORG_NAME)
         )).scalar_one_or_none()
         if not org:
-            print(f"!! Org '{ORG_NAME}' not found — is the DB seeded?")
+            print(f"!! Org '{ORG_NAME}' not found - is the DB seeded?")
             return
 
         user = (await db.execute(
@@ -135,7 +135,7 @@ async def run(commit: bool):
                         key, name, size = _write_seed_file(org.id, c.ref)
                         db.add(EvidenceItem(
                             org_control_id=oc.id, org_id=org.id,
-                            title=f"{c.ref} — evidence",
+                            title=f"{c.ref} - evidence",
                             description="Demo evidence for evaluation.",
                             file_key=key, file_name=name, file_size=size,
                             file_type="text/plain",
@@ -183,7 +183,7 @@ async def run(commit: bool):
             await db.commit()
             print("\nCommitted. Log in and open NovLogix Inc. to evaluate.")
         else:
-            print("\nDry run — re-run with --yes to write.")
+            print("\nDry run - re-run with --yes to write.")
 
 
 if __name__ == "__main__":

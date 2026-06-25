@@ -5,7 +5,7 @@ from typing import Literal
 class Settings(BaseSettings):
     # App
     ENVIRONMENT: Literal["development", "production"] = "development"
-    # Public base URL of the frontend — used to build invite/reset/unlock links.
+    # Public base URL of the frontend - used to build invite/reset/unlock links.
     FRONTEND_URL: str = "http://localhost:3000"
     SECRET_KEY: str = "dev_secret_key_change_in_production_min_32_chars"
     ALGORITHM: str = "HS256"

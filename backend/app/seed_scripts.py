@@ -40,7 +40,7 @@ SCRIPTS = {
     "AC.1.001": {
         "en": (
             "Let's talk about limiting system access to authorized users. Think of your company's systems like an office "
-            "building — you wouldn't hand a key to just anyone. Only people who work there get in, and only to the rooms "
+            "building - you wouldn't hand a key to just anyone. Only people who work there get in, and only to the rooms "
             "they actually need. This control does the same thing digitally: it makes sure only approved users, and the "
             "devices and programs acting for them, can reach your systems. Why does it matter? Because a huge share of "
             "incidents start with access that should never have been granted, or was never removed when someone left. To "
@@ -66,46 +66,46 @@ SCRIPTS = {
     },
     "AC.1.002": {
         "en": (
-            "This control is about limiting what people can do once they're inside — not just whether they can get in. "
+            "This control is about limiting what people can do once they're inside - not just whether they can get in. "
             "Think of a hotel: your keycard opens your room and the gym, but not the manager's office or the cash drawer. "
             "In your systems, each person should only be able to perform the transactions and functions their job actually "
             "requires. This matters because even trusted users can cause harm by accident, and an attacker who steals one "
             "account should be boxed into a small space, not handed the keys to everything. To comply, define what each "
             "role is allowed to do, give people the least access they need, and review those permissions regularly. An "
             "auditor will look for documented roles and permissions and proof they match what people can actually do.\n"
-            "Key takeaway: Limit each user to only the actions their role requires — nothing more."
+            "Key takeaway: Limit each user to only the actions their role requires - nothing more."
         ),
         "fr": (
-            "Ce contrôle vise à limiter ce que les gens peuvent faire une fois à l'intérieur — pas seulement s'ils peuvent "
+            "Ce contrôle vise à limiter ce que les gens peuvent faire une fois à l'intérieur - pas seulement s'ils peuvent "
             "entrer. Pensez à un hôtel : votre carte ouvre votre chambre et la salle de sport, mais pas le bureau du "
             "gérant ni la caisse. Dans vos systèmes, chaque personne ne devrait pouvoir effectuer que les transactions et "
             "fonctions que son poste exige. C'est important car même un utilisateur de confiance peut nuire par accident, "
             "et un pirate qui vole un compte doit rester confiné à un petit espace. Pour vous conformer, définissez ce que "
             "chaque rôle peut faire, accordez le minimum d'accès nécessaire et révisez régulièrement ces droits. "
             "L'auditeur cherchera des rôles et permissions documentés, et la preuve qu'ils correspondent à la réalité.\n"
-            "Point clé : Limitez chaque utilisateur aux seules actions exigées par son rôle — rien de plus."
+            "Point clé : Limitez chaque utilisateur aux seules actions exigées par son rôle - rien de plus."
         ),
     },
     "IA.1.076": {
         "en": (
-            "Let's look at identifying users and processes. Before you can control access, you need to know exactly who — "
-            "or what — is asking. This control requires that every user, and every automated process acting for them, has "
+            "Let's look at identifying users and processes. Before you can control access, you need to know exactly who - "
+            "or what - is asking. This control requires that every user, and every automated process acting for them, has "
             "its own unique identity. Shared logins are the enemy here: if five people use one account, you can't tell who "
-            "did what, and you can't hold anyone accountable. It's like a building where everyone signs in as \"staff\" — "
+            "did what, and you can't hold anyone accountable. It's like a building where everyone signs in as \"staff\" - "
             "useless if something goes wrong. To comply, give each person their own account, give services their own "
             "identities too, and ban shared or generic logins. An auditor will look for a list of accounts tied to real "
             "individuals and evidence that shared accounts aren't in use.\n"
-            "Key takeaway: Every user and process must have its own unique identity — no shared accounts."
+            "Key takeaway: Every user and process must have its own unique identity - no shared accounts."
         ),
         "fr": (
             "Parlons de l'identification des utilisateurs et des processus. Avant de contrôler l'accès, il faut savoir "
-            "exactement qui — ou quoi — fait la demande. Ce contrôle exige que chaque utilisateur, et chaque processus "
+            "exactement qui - ou quoi - fait la demande. Ce contrôle exige que chaque utilisateur, et chaque processus "
             "automatisé agissant pour lui, ait une identité unique. Les comptes partagés sont l'ennemi : si cinq personnes "
             "utilisent un même compte, impossible de savoir qui a fait quoi, ni de tenir quiconque responsable. C'est comme "
-            "un immeuble où tout le monde signe « personnel » — inutile en cas de problème. Pour vous conformer, donnez à "
+            "un immeuble où tout le monde signe « personnel » - inutile en cas de problème. Pour vous conformer, donnez à "
             "chaque personne son propre compte, attribuez aussi une identité aux services, et interdisez les comptes "
             "partagés ou génériques. L'auditeur cherchera une liste de comptes liés à des personnes réelles.\n"
-            "Point clé : Chaque utilisateur et processus doit avoir une identité unique — aucun compte partagé."
+            "Point clé : Chaque utilisateur et processus doit avoir une identité unique - aucun compte partagé."
         ),
     },
     "IA.2.078": {
@@ -115,7 +115,7 @@ SCRIPTS = {
             "Attackers run automated tools that try millions of common passwords a second, so \"summer2024\" won't survive "
             "long. To comply, require a minimum length and a mix of character types when passwords are created, and require "
             "real change when they're updated. Even better, pair this with multi-factor authentication so a stolen password "
-            "alone isn't enough. An auditor will look for your password policy and proof that systems actually enforce it — "
+            "alone isn't enough. An auditor will look for your password policy and proof that systems actually enforce it - "
             "not just a document that says so.\n"
             "Key takeaway: Require strong, hard-to-guess passwords and make sure your systems actually enforce the rule."
         ),
@@ -123,7 +123,7 @@ SCRIPTS = {
             "Ce contrôle porte sur la robustesse des mots de passe. Le mot de passe reste la serrure de la porte d'entrée, "
             "et un mot de passe faible se crochète en un instant. L'objectif est simple : des mots de passe difficiles à "
             "deviner et à réutiliser. Les pirates utilisent des outils qui testent des millions de combinaisons par "
-            "seconde — « ete2024 » ne tiendra pas. Pour vous conformer, exigez une longueur minimale et un mélange de types "
+            "seconde - « ete2024 » ne tiendra pas. Pour vous conformer, exigez une longueur minimale et un mélange de types "
             "de caractères à la création, et un vrai changement à la mise à jour. Mieux encore, ajoutez l'authentification "
             "multifacteur pour qu'un mot de passe volé ne suffise pas. L'auditeur cherchera votre politique de mots de "
             "passe et la preuve que les systèmes l'appliquent réellement.\n"
@@ -133,7 +133,7 @@ SCRIPTS = {
     "CM.2.061": {
         "en": (
             "Let's talk about baseline configurations. A baseline is simply a known-good, secure setup for a type of system "
-            "— like a recipe you follow every time so every dish comes out the same. Without one, every laptop and server "
+            "- like a recipe you follow every time so every dish comes out the same. Without one, every laptop and server "
             "is configured a little differently, security settings drift, and weaknesses creep in unnoticed. This control "
             "asks you to define that secure standard for each type of system, keep an inventory of what you have, and build "
             "new systems from the baseline. It matters because consistent, documented configurations are far easier to "
@@ -143,7 +143,7 @@ SCRIPTS = {
         ),
         "fr": (
             "Parlons des configurations de référence. Une configuration de référence, c'est tout simplement un réglage "
-            "sécurisé et reconnu pour un type de système — comme une recette qu'on suit à chaque fois pour un résultat "
+            "sécurisé et reconnu pour un type de système - comme une recette qu'on suit à chaque fois pour un résultat "
             "constant. Sans elle, chaque poste et serveur est réglé un peu différemment, les paramètres de sécurité "
             "dérivent et des failles s'installent sans qu'on le voie. Ce contrôle demande de définir ce standard sécurisé "
             "pour chaque type de système, de tenir un inventaire de votre parc, et de déployer les nouveaux systèmes à "
@@ -156,7 +156,7 @@ SCRIPTS = {
     "IR.2.092": {
         "en": (
             "This control is about handling security incidents properly. An incident is any event that could harm your "
-            "systems or data — malware, a lost laptop, a suspicious login. Things will go wrong eventually; what matters is "
+            "systems or data - malware, a lost laptop, a suspicious login. Things will go wrong eventually; what matters is "
             "that you notice, write it down, and tell the right people. Think of a fire: detecting it early and calling for "
             "help makes all the difference. This control asks you to track incidents, document what happened and what you "
             "did, and report them to the designated people or authorities. It matters because a quick, organized response "
@@ -166,7 +166,7 @@ SCRIPTS = {
         ),
         "fr": (
             "Ce contrôle porte sur la bonne gestion des incidents de sécurité. Un incident, c'est tout événement pouvant "
-            "nuire à vos systèmes ou données — un logiciel malveillant, un portable perdu, une connexion suspecte. Des "
+            "nuire à vos systèmes ou données - un logiciel malveillant, un portable perdu, une connexion suspecte. Des "
             "problèmes surviendront tôt ou tard ; l'important est de les remarquer, de les consigner et d'avertir les "
             "bonnes personnes. Comme pour un incendie : détecter tôt et appeler à l'aide change tout. Ce contrôle demande "
             "de suivre les incidents, de documenter ce qui s'est passé et ce que vous avez fait, et de les signaler aux "
@@ -178,21 +178,21 @@ SCRIPTS = {
     },
     "AU.2.041": {
         "en": (
-            "Let's look at traceability — being able to tie actions on your systems back to the person who did them. Think "
+            "Let's look at traceability - being able to tie actions on your systems back to the person who did them. Think "
             "of security-camera footage: if something goes missing, you can review who was there and when. In your systems, "
             "that footage is your logs. This control requires that individual users' actions can be uniquely traced, so you "
             "have accountability and can investigate problems. It matters because without good logs, a breach is invisible "
-            "and you can't prove what happened — to yourself or an auditor. To comply, turn on logging across important "
+            "and you can't prove what happened - to yourself or an auditor. To comply, turn on logging across important "
             "systems, make sure each entry records who did what and when, and protect those logs from tampering. An auditor "
             "will look for log settings and sample logs that clearly attribute actions to individuals.\n"
             "Key takeaway: Log who did what and when, so every action can be traced to a specific person."
         ),
         "fr": (
-            "Parlons de traçabilité — pouvoir relier les actions sur vos systèmes à la personne qui les a faites. Pensez "
+            "Parlons de traçabilité - pouvoir relier les actions sur vos systèmes à la personne qui les a faites. Pensez "
             "aux images de vidéosurveillance : si quelque chose disparaît, vous pouvez revoir qui était là et quand. Dans "
             "vos systèmes, ces images, ce sont vos journaux. Ce contrôle exige que les actions de chaque utilisateur "
             "puissent être tracées individuellement, pour assurer la responsabilité et permettre les enquêtes. C'est "
-            "important car sans bons journaux, une intrusion est invisible et vous ne pouvez rien prouver — ni à vous, ni à "
+            "important car sans bons journaux, une intrusion est invisible et vous ne pouvez rien prouver - ni à vous, ni à "
             "un auditeur. Pour vous conformer, activez la journalisation sur les systèmes importants, veillez à ce que "
             "chaque entrée indique qui a fait quoi et quand, et protégez ces journaux contre toute altération. L'auditeur "
             "cherchera les réglages de journalisation et des exemples attribuant clairement les actions.\n"
@@ -201,17 +201,17 @@ SCRIPTS = {
     },
     "SI.1.210": {
         "en": (
-            "This control is about fixing flaws — finding and patching weaknesses before attackers use them. Software has "
+            "This control is about fixing flaws - finding and patching weaknesses before attackers use them. Software has "
             "bugs, and some are security holes. Vendors release fixes, but a fix only protects you once you install it. "
             "Leaving systems unpatched is like knowing a window lock is broken and never repairing it. This control asks you "
             "to identify flaws, report them, and correct them in a timely way. It matters because most real-world attacks "
             "exploit known vulnerabilities that already had a patch available. To comply, keep systems and software "
             "updated, scan for vulnerabilities regularly, and have a process to apply important fixes quickly. An auditor "
             "will look for patch records, scan results, and a defined timeline for fixing serious issues.\n"
-            "Key takeaway: Find and fix security flaws promptly — keep your systems patched and up to date."
+            "Key takeaway: Find and fix security flaws promptly - keep your systems patched and up to date."
         ),
         "fr": (
-            "Ce contrôle porte sur la correction des failles — trouver et corriger les vulnérabilités avant que les pirates "
+            "Ce contrôle porte sur la correction des failles - trouver et corriger les vulnérabilités avant que les pirates "
             "ne les exploitent. Les logiciels ont des bogues, et certains sont des failles de sécurité. Les éditeurs "
             "publient des correctifs, mais un correctif ne protège qu'une fois installé. Laisser des systèmes non corrigés, "
             "c'est comme savoir qu'un loquet de fenêtre est cassé sans jamais le réparer. Ce contrôle demande d'identifier "
@@ -220,7 +220,7 @@ SCRIPTS = {
             "vos systèmes et logiciels à jour, recherchez régulièrement les vulnérabilités, et disposez d'un processus pour "
             "appliquer vite les correctifs importants. L'auditeur cherchera les enregistrements de correctifs et les "
             "résultats d'analyses.\n"
-            "Point clé : Trouvez et corrigez rapidement les failles — gardez vos systèmes à jour."
+            "Point clé : Trouvez et corrigez rapidement les failles - gardez vos systèmes à jour."
         ),
     },
 }
@@ -230,7 +230,7 @@ async def run():
     async with AsyncSessionLocal() as db:
         fw = (await db.execute(select(Framework).where(Framework.name == FRAMEWORK))).scalar_one_or_none()
         if not fw:
-            print(f"Framework '{FRAMEWORK}' not found — nothing to do.")
+            print(f"Framework '{FRAMEWORK}' not found - nothing to do.")
             return
         updated = 0
         for ref, s in SCRIPTS.items():

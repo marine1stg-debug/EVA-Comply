@@ -1,5 +1,5 @@
 """
-Evidence API — functional: list, multipart upload to local storage,
+Evidence API - functional: list, multipart upload to local storage,
 submit-for-review, delete (drafts), and download.
 """
 import os
@@ -70,7 +70,7 @@ EXT_ICON = {
 
 def _humanize(n) -> str:
     if not n:
-        return "—"
+        return "-"
     if n < 1024:
         return f"{n} B"
     if n < 1024 * 1024:
@@ -79,7 +79,7 @@ def _humanize(n) -> str:
 
 
 async def _target_org(db: AsyncSession, user: User):
-    """Org this request acts on — the selected client for reviewers, own tenant for clients."""
+    """Org this request acts on - the selected client for reviewers, own tenant for clients."""
     from app.core.client_context import resolve_org
     return await resolve_org(db, user)
 
@@ -101,7 +101,7 @@ def _serialize(ev: EvidenceItem, ctrl_ref: str, who: str, lang: str = "en", ee_t
         "statusLabel": labels.get(ev.status.value, ev.status.value),
         "ctrl_ref": ctrl_ref,
         "by": who,
-        "date": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "—",
+        "date": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "-",
         "size": _humanize(ev.file_size),
         "freq": ev.frequency.value,
         "note": ev.description or None,
@@ -237,7 +237,7 @@ async def upload_evidence(
     if submit:
         tenant = (await db.execute(select(Tenant).where(Tenant.id == org_id))).scalar_one_or_none()
         if tenant and (tenant.audit_level or "self") == "self":
-            # Self-audit engagement: no reviewer step — evidence is accepted on submit.
+            # Self-audit engagement: no reviewer step - evidence is accepted on submit.
             status = EvidenceStatus.accepted
         elif tenant and tenant.msp_review_enabled:
             status = EvidenceStatus.msp_pending

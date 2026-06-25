@@ -9,7 +9,7 @@ export interface SupportCommentT {
 }
 
 /** Read-only comment thread + an append-only reply box. Nobody can edit
- *  existing comments (including EVA's) — replies are added, never overwritten. */
+ *  existing comments (including EVA's) - replies are added, never overwritten. */
 export default function SupportThread({ caseId, comments, invalidateKey }: {
   caseId: string; comments: SupportCommentT[]; invalidateKey: (string | undefined)[]
 }) {

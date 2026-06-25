@@ -1,5 +1,5 @@
 """
-Dashboard summary endpoint — real, DB-backed aggregates scoped to the
+Dashboard summary endpoint - real, DB-backed aggregates scoped to the
 current user's role:
   • client roles  → their own tenant
   • MSP roles      → all client tenants under their MSP
@@ -109,7 +109,7 @@ async def dashboard_summary(
     }
 
     # ── Framework cards ───────────────────────────────────────────────
-    # Only show frameworks the in-scope client(s) actually have assigned — never
+    # Only show frameworks the in-scope client(s) actually have assigned - never
     # the whole library. No client in scope → no cards.
     fw_q = select(Framework).where(Framework.is_active == True)  # noqa: E712
     if org_ids:
@@ -153,7 +153,7 @@ async def dashboard_summary(
             "key": fw.name.lower().replace(" ", "_"),
             "name": fw.name,
             "desc": fw.description or "",
-            "tier": (fw.levels[0] if fw.levels else "—"),
+            "tier": (fw.levels[0] if fw.levels else "-"),
             "controls": ctrl_count,
             "domains": domain_count,
             "pct": fw_pct,
@@ -179,7 +179,7 @@ async def dashboard_summary(
             priority.append({
                 "ref": ref,
                 "name": title,
-                "domain": domain or "—",
+                "domain": domain or "-",
                 "risk": "b-red" if high else "b-amber",
                 "riskLabel": "High" if high else "Med",
             })
@@ -219,7 +219,7 @@ async def dashboard_summary(
             activity.append({
                 "dot": dot_for.get(status, "#7C3AED"),
                 # Structured (not HTML) so the client renders user-controlled
-                # values as text — avoids stored XSS via evidence title / name.
+                # values as text - avoids stored XSS via evidence title / name.
                 "who": who,
                 "title": title,
                 "ref": ref,

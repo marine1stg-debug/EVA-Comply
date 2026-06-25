@@ -119,10 +119,10 @@ function RecordModal({ uploadPath, onClose, onSaved, briefId }: { uploadPath: st
   )
   const ScriptPanel = () => (
     <div style={{ width: '100%', maxHeight: '38vh', overflow: 'auto', borderTop: '1px solid var(--border-l)', paddingTop: 12, marginTop: 4 }}>
-      <div className="plain-hdr">{t('🎬 What to say — Suggestion (Script)')}</div>
+      <div className="plain-hdr">{t('🎬 What to say - Suggestion (Script)')}</div>
       {script
         ? <div style={{ fontSize: 16, color: 'var(--text)', lineHeight: 1.95, whiteSpace: 'pre-wrap', marginTop: 6 }}>{script}</div>
-        : <div className="page-sub" style={{ marginTop: 4 }}>{t('No script yet — generate it from the Control preview.')}</div>}
+        : <div className="page-sub" style={{ marginTop: 4 }}>{t('No script yet - generate it from the Control preview.')}</div>}
     </div>
   )
 
@@ -155,7 +155,7 @@ function RecordModal({ uploadPath, onClose, onSaved, briefId }: { uploadPath: st
   )
 }
 
-/* ── Recording brief — shows the control so the recorder knows what to cover ── */
+/* ── Recording brief - shows the control so the recorder knows what to cover ── */
 function BriefModal({ controlId, onClose }: { controlId: string; onClose: () => void }) {
   const t = useT()
   const { lang } = useI18n()
@@ -200,7 +200,7 @@ function BriefModal({ controlId, onClose }: { controlId: string; onClose: () => 
     } catch { toast.error(t('Delete failed')) }
   }
   return (
-    <Modal title={t('Recording brief') + (data ? ` — ${data.ref}` : '')} onClose={onClose} maxWidth={980}>
+    <Modal title={t('Recording brief') + (data ? ` - ${data.ref}` : '')} onClose={onClose} maxWidth={980}>
       {!data ? <div className="page-sub">{t('Loading…')}</div> : (
         <>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
@@ -220,7 +220,7 @@ function BriefModal({ controlId, onClose }: { controlId: string; onClose: () => 
 
             {/* Right: the editable script (wider) */}
             <div style={{ flex: '1 1 480px', minWidth: 300, borderLeft: '1px solid var(--border-l)', paddingLeft: 16 }}>
-              <div className="plain-hdr">{t('🎬 What to say — Suggestion (Script)')} · {lang.toUpperCase()}</div>
+              <div className="plain-hdr">{t('🎬 What to say - Suggestion (Script)')} · {lang.toUpperCase()}</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6 }}>
                 <button className="ev-action-btn" disabled={!draft} onClick={() => { navigator.clipboard?.writeText(draft); toast.success(t('Copied')) }}>{t('Copy')}</button>
                 <button className="tb-btn" onClick={() => setShowPrompt(s => !s)}>✦ {draft ? t('Regenerate') : t('Generate script')}</button>
@@ -240,7 +240,7 @@ function BriefModal({ controlId, onClose }: { controlId: string; onClose: () => 
               )}
 
               <textarea className="form-textarea" rows={14} style={{ marginTop: 8, lineHeight: 1.6, width: '100%' }}
-                placeholder={t('No script yet — generate or write it here.')}
+                placeholder={t('No script yet - generate or write it here.')}
                 value={draft} onChange={e => { setDraft(e.target.value); setDirty(true) }} />
             </div>
           </div>
@@ -336,7 +336,7 @@ function ReuseView() {
                     <td><input type="checkbox" checked={!!sel[k(s)]} onChange={e => setSel(m => ({ ...m, [k(s)]: e.target.checked }))} /></td>
                     <td><div style={{ fontWeight: 600, fontSize: 12 }}>{s.source.ref}</div>
                       <div style={{ fontSize: 10.5, color: 'var(--text3)' }}>{s.source.framework} · {s.source.video.kind === 'file' ? t('🎥 recorded') : t('🔗 link')}</div></td>
-                    <td><div style={{ fontWeight: 600, fontSize: 12 }}>{s.target.ref} — {s.target.title}</div>
+                    <td><div style={{ fontWeight: 600, fontSize: 12 }}>{s.target.ref} - {s.target.title}</div>
                       <div style={{ fontSize: 10.5, color: 'var(--text3)' }}>{s.target.framework}</div></td>
                     <td><span className="badge b-gray" style={{ fontSize: 9 }}>{s.reason === 'mapping' ? t('mapping') : t('same title')}</span></td>
                   </tr>
@@ -433,7 +433,7 @@ export default function TrainingPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {controls.map(c => (
                 <div key={c.id} style={{ borderTop: '1px solid var(--border-l)', paddingTop: 12 }}>
-                  <VideoEditor label={`${c.ref} — ${c.title}`} sub={c.domain} video={c.video}
+                  <VideoEditor label={`${c.ref} - ${c.title}`} sub={c.domain} video={c.video}
                     linkPath={`/videos/control/${c.id}/link`}
                     uploadPath={`/videos/control/${c.id}/upload`}
                     deletePath={`/videos/control/${c.id}/video`}

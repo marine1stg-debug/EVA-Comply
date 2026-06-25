@@ -56,7 +56,7 @@ export default function WelcomePage() {
     <div style={{ minHeight: '100vh', ...PUBLIC_BG }}>
       <div style={{ maxWidth: 980, margin: '0 auto', padding: '24px 20px 60px' }}>
 
-        {/* Header card — logo + language + sign in, on a panel so the logo reads clearly */}
+        {/* Header card - logo + language + sign in, on a panel so the logo reads clearly */}
         <div style={{ ...CARD, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '14px 20px', flexWrap: 'wrap' }}>
           <img src={LOGO_LG} alt="EVA Technologies" style={{ width: 168, height: 'auto' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -69,13 +69,13 @@ export default function WelcomePage() {
           </div>
         </div>
 
-        {/* Hero card — headline + subtitle + CTA inside a panel for readability */}
+        {/* Hero card - headline + subtitle + CTA inside a panel for readability */}
         <div style={{ ...CARD, textAlign: 'center', padding: '44px 28px', marginTop: 16 }}>
           <div style={{ fontSize: 38, fontWeight: 700, color: '#fff', letterSpacing: '-.02em', lineHeight: 1.15 }}>
             {t('Cybersecurity compliance, audited by experts.')}
           </div>
           <div style={{ fontSize: 15, color: '#A9C4DD', marginTop: 14, maxWidth: 620, margin: '14px auto 0' }}>
-            {t('Manage CMMC, NIST CSF and Cyber Canada in one place — collect evidence, get a three-tier review, and reach audit readiness faster.')}
+            {t('Manage CMMC, NIST CSF and Cyber Canada in one place - collect evidence, get a three-tier review, and reach audit readiness faster.')}
           </div>
           <button onClick={() => navigate('/signup')} className="font-semibold text-white" style={{ marginTop: 24, padding: '12px 28px', borderRadius: 10, background: 'linear-gradient(135deg,#1A8FD1,#3A2F8F)', border: 'none', cursor: 'pointer', fontSize: 15 }}>
             {t('Start your compliance journey →')}
@@ -88,7 +88,7 @@ export default function WelcomePage() {
           {plans.map((p, i) => card(p, p.tenant_type === 'single_client' && i === 0))}
         </div>
 
-        {/* Footer note — boxed pill instead of bare text over the grid */}
+        {/* Footer note - boxed pill instead of bare text over the grid */}
         <div style={{ textAlign: 'center', marginTop: 22 }}>
           <span style={{ display: 'inline-block', ...CARD, borderRadius: 999, padding: '9px 18px', color: '#94B3CE', fontSize: 12 }}>
             {t('Managed Service Provider? Pick the MSP plan to onboard and bill your own clients.')}

@@ -34,7 +34,7 @@ async def run(force: bool = False):
             total += len(ctrls); filled += n
             print(f"  {fw.name}: {len(ctrls)} controls ({n} scripted)")
         await db.commit()
-        print(f"Done — {filled} controls scripted across {len(fws)} frameworks "
+        print(f"Done - {filled} controls scripted across {len(fws)} frameworks "
               f"({'forced' if force else 'gaps only'}).")
 
 

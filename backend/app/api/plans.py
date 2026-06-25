@@ -1,5 +1,5 @@
 """
-Plans & Pricing API — Super Admin CRUD over configurable packages.
+Plans & Pricing API - Super Admin CRUD over configurable packages.
 Inclusions drive entitlements (frameworks, feature modules, seat/client limits).
 """
 from fastapi import APIRouter, Depends, HTTPException

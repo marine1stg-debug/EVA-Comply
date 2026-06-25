@@ -1,5 +1,5 @@
 """
-Audit log API — a chronological activity feed.
+Audit log API - a chronological activity feed.
 
 Sources merged here: (1) the real append-only `audit_logs` table (logins,
 role/plan/archive changes, unlocks, resets, deletes), and (2) evidence activity
@@ -77,8 +77,8 @@ async def audit_logs(
                 "type": "evidence",
                 "actor": who,
                 "tenant": tenant,
-                "text": f"Evidence “{ev.title}” for {ref} — {st.replace('_', ' ')}",
-                "time": ev.created_at.strftime("%b %d, %Y %H:%M") if ev.created_at else "—",
+                "text": f"Evidence “{ev.title}” for {ref} - {st.replace('_', ' ')}",
+                "time": ev.created_at.strftime("%b %d, %Y %H:%M") if ev.created_at else "-",
                 "ts": ev.created_at.isoformat() if ev.created_at else "",
             })
     # ── Real audit-log rows (logins, admin actions) ──
@@ -100,14 +100,14 @@ async def audit_logs(
         names = {tid: nm for tid, nm in nrows.all()}
     for r in arows:
         label = ACTION_TEXT.get(r.action, r.action)
-        text = label + (f" — {r.target}" if r.target else "") + (f" ({r.detail})" if r.detail else "")
+        text = label + (f" - {r.target}" if r.target else "") + (f" ({r.detail})" if r.detail else "")
         entries.append({
             "icon": ACTION_ICON.get(r.action, "📋"),
             "type": "audit",
-            "actor": r.actor_name or "—",
+            "actor": r.actor_name or "-",
             "tenant": names.get(r.org_id, ""),
             "text": text,
-            "time": r.created_at.strftime("%b %d, %Y %H:%M") if r.created_at else "—",
+            "time": r.created_at.strftime("%b %d, %Y %H:%M") if r.created_at else "-",
             "ts": r.created_at.isoformat() if r.created_at else "",
         })
 

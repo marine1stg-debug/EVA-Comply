@@ -1,5 +1,5 @@
 """
-Tenant management API — list + suspend/reactivate.
+Tenant management API - list + suspend/reactivate.
 Scope: super_admin → all tenants; MSP → own MSP + its client tenants.
 """
 from fastapi import APIRouter, Depends, HTTPException
@@ -48,7 +48,7 @@ async def list_tenants(
     db: AsyncSession = Depends(get_db),
 ):
     if current_user.role == UserRole.super_admin:
-        # Exclude the platform tenant itself (EVA Technologies / eva_internal) —
+        # Exclude the platform tenant itself (EVA Technologies / eva_internal) -
         # it's the operator org, not a managed MSP or client.
         rows = (await db.execute(
             select(Tenant).where(Tenant.tenant_type != TenantType.eva_internal)
@@ -93,7 +93,7 @@ async def list_tenants(
             "short": _initials(t.name),
             "color": PALETTE[i % len(PALETTE)],
             "type": _type_label(t.tenant_type),
-            "plan": t.plan_name or "—",
+            "plan": t.plan_name or "-",
             "mrr": t.monthly_price or PLAN_MRR.get(t.plan_name or "", 0),
             "msp": parent.name if parent else None,
             "compliance": compliance,
@@ -103,7 +103,7 @@ async def list_tenants(
             "archived": t.archived,
             "activation_pending": t.activation_pending,
             "audit_level": t.audit_level or "self",
-            "created": t.created_at.strftime("%b %Y") if t.created_at else "—",
+            "created": t.created_at.strftime("%b %Y") if t.created_at else "-",
             "last_login": last_login.strftime("%b %d, %Y") if last_login else "Never",
         })
     out.sort(key=lambda x: (x["type"] != "msp", x["name"]))
@@ -201,7 +201,7 @@ async def set_tenant_plan(
     want = PlanTier.msp if t.tenant_type == TenantType.msp else PlanTier.single_client
     if plan.tier != want:
         raise HTTPException(status_code=400, detail=f"This tenant requires a '{want.value}' plan")
-    old_plan = t.plan_name or "—"
+    old_plan = t.plan_name or "-"
     t.plan_id = plan.id
     t.plan_name = plan.name
     t.monthly_price = plan.price_monthly
@@ -366,7 +366,7 @@ async def _frameworks_payload(db: AsyncSession, t: Tenant) -> dict:
     fw_by_id = {f.id: f for f in fw_rows}
 
     # A framework is "assigned" if it has provisioned controls OR it was
-    # explicitly added (billed) — so a framework with no/zero provisioned
+    # explicitly added (billed) - so a framework with no/zero provisioned
     # controls still appears in the list instead of silently vanishing.
     for key in billing.keys():
         try:

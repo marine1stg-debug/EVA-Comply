@@ -7,7 +7,7 @@ Bilingual (FR then EN), modular by account type:
   - msp_client  : client that uses EVA through an MSP
 
 Single source of truth for both the in-app acceptance gate and the exported
-Word document. NOT legal advice — bracketed [À COMPLÉTER] markers must be filled
+Word document. NOT legal advice - bracketed [À COMPLÉTER] markers must be filled
 and the text reviewed by counsel before production use.
 """
 
@@ -35,7 +35,7 @@ def account_type_for(user, tenant) -> str:
 
 
 def account_type_for_tenant(tenant) -> str:
-    """Variant from a tenant alone (no user) — used for billing/email."""
+    """Variant from a tenant alone (no user) - used for billing/email."""
     ttype = getattr(getattr(tenant, "tenant_type", None), "value", None)
     if ttype == "msp":
         return "msp"
@@ -290,11 +290,11 @@ def build_html(account_type: str) -> dict:
     body = (
         f"<div class='agreement'>"
         f"<h2>VERSION FRANÇAISE</h2>"
-        f"<p><strong>Contrat d’abonnement et conditions d’utilisation — EVA Comply</strong><br>"
+        f"<p><strong>Contrat d’abonnement et conditions d’utilisation - EVA Comply</strong><br>"
         f"Type de compte : {fr_label} · Version : {AGREEMENT_VERSION}</p>"
         f"{_DISCLAIMER_FR}{fr}"
         f"<hr><h2>ENGLISH VERSION</h2>"
-        f"<p><strong>Subscription Agreement & Terms of Use — EVA Comply</strong><br>"
+        f"<p><strong>Subscription Agreement & Terms of Use - EVA Comply</strong><br>"
         f"Account type: {en_label} · Version: {AGREEMENT_VERSION}</p>"
         f"{_DISCLAIMER_EN}{en}"
         f"</div>"
@@ -304,6 +304,6 @@ def build_html(account_type: str) -> dict:
         "account_type": at,
         "label_fr": fr_label,
         "label_en": en_label,
-        "title": "Contrat d’abonnement et conditions d’utilisation — EVA Comply",
+        "title": "Contrat d’abonnement et conditions d’utilisation - EVA Comply",
         "body_html": body,
     }

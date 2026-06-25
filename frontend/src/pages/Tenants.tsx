@@ -47,7 +47,7 @@ function ConvertModal({ tenant, onClose }: { tenant: Tenant; onClose: () => void
               </div>
             </div>
           ))}
-          {single.length === 0 && <div className="page-sub">{t('No active single-client plans — create one in Plans & Pricing first.')}</div>}
+          {single.length === 0 && <div className="page-sub">{t('No active single-client plans - create one in Plans & Pricing first.')}</div>}
           <button className="submit-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 14 }} disabled={!planId || convert.isPending} onClick={() => convert.mutate()}>
             {convert.isPending ? t('Converting…') : t('Convert to direct client')}
           </button>
@@ -72,7 +72,7 @@ function EditPlanModal({ tenant, onClose }: { tenant: Tenant; onClose: () => voi
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" style={{ maxWidth: 460 }} onClick={e => e.stopPropagation()}>
-        <div className="modal-hdr"><span className="card-title">{t('Edit plan — {name}', { name: tenant.name })}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
+        <div className="modal-hdr"><span className="card-title">{t('Edit plan - {name}', { name: tenant.name })}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
         <div className="modal-body">
           <div className="page-sub" style={{ marginBottom: 12 }}>{t('Current plan: {plan} (${mrr}/mo). Choose a new plan below.', { plan: tenant.plan, mrr: tenant.mrr })}</div>
           <label className="form-label">{t('Choose a plan')}</label>
@@ -87,7 +87,7 @@ function EditPlanModal({ tenant, onClose }: { tenant: Tenant; onClose: () => voi
               </div>
             </div>
           ))}
-          {options.length === 0 && <div className="page-sub">{t('No active {tier} plans — create one in Plans & Pricing first.', { tier: wantTier })}</div>}
+          {options.length === 0 && <div className="page-sub">{t('No active {tier} plans - create one in Plans & Pricing first.', { tier: wantTier })}</div>}
           <button className="submit-btn" style={{ width: '100%', justifyContent: 'center', marginTop: 14 }} disabled={!planId || save.isPending} onClick={() => save.mutate()}>
             {save.isPending ? t('Saving…') : t('Save plan')}
           </button>
@@ -149,7 +149,7 @@ function PartnerModal({ tenant, onClose }: { tenant: Tenant; onClose: () => void
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" style={{ maxWidth: 640 }} onClick={e => e.stopPropagation()}>
-        <div className="modal-hdr"><span className="card-title">{t('Partner terms — {name}', { name: tenant.name })}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
+        <div className="modal-hdr"><span className="card-title">{t('Partner terms - {name}', { name: tenant.name })}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
         <div className="modal-body">
           {tt && (
             <div style={{ display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
@@ -300,7 +300,7 @@ function FrameworksModal({ tenant, onClose }: { tenant: Tenant; onClose: () => v
   })
   const sync = useMutation({
     mutationFn: async () => (await api.post(`/tenants/${tenant.id}/frameworks/sync`, {})).data,
-    onSuccess: (d: FwResp) => { after(d); toast.success(d.synced ? t('Added {n} missing controls', { n: d.synced }) : t('Already up to date — nothing to add')) },
+    onSuccess: (d: FwResp) => { after(d); toast.success(d.synced ? t('Added {n} missing controls', { n: d.synced }) : t('Already up to date - nothing to add')) },
     onError: (e: any) => toast.error(e?.response?.data?.detail || t('Could not sync controls')),
   })
 
@@ -310,7 +310,7 @@ function FrameworksModal({ tenant, onClose }: { tenant: Tenant; onClose: () => v
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" style={{ maxWidth: 560 }} onClick={e => e.stopPropagation()}>
         <div className="modal-hdr">
-          <span className="card-title">{t('Frameworks — {name}', { name: tenant.name })}</span>
+          <span className="card-title">{t('Frameworks - {name}', { name: tenant.name })}</span>
           <button className="ev-action-btn" onClick={onClose}>✕</button>
         </div>
         <div className="modal-body">
@@ -326,7 +326,7 @@ function FrameworksModal({ tenant, onClose }: { tenant: Tenant; onClose: () => v
                 {data.assigned.length > 0 && (
                   <button className="ev-action-btn" disabled={sync.isPending}
                     style={{ fontSize: 10, padding: '3px 8px' }}
-                    title="Provision any missing controls for the assigned frameworks. Additive only — never deletes evidence."
+                    title="Provision any missing controls for the assigned frameworks. Additive only - never deletes evidence."
                     onClick={() => sync.mutate()}>{t('↺ Sync controls')}</button>
                 )}
               </div>

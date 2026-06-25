@@ -2,7 +2,7 @@ import { useI18n } from '../lib/i18n'
 import { useAuthStore } from '../store/auth'
 
 /**
- * Quick Tour — a role-aware, bilingual onboarding guide rendered in-app.
+ * Quick Tour - a role-aware, bilingual onboarding guide rendered in-app.
  * Content is self-contained (EN/FR) and adapts to the signed-in user's role.
  * Each step is an expandable <details> box for progressive, granular detail.
  */
@@ -64,8 +64,8 @@ export default function QuickTourPage() {
         details: [
           L('Invited by your admin: click the invite link and set a password (minimum 12 characters).',
             'Invité par votre admin : cliquez sur le lien d’invitation et définissez un mot de passe (12 caractères minimum).'),
-          L('New organization: use Sign up — you become the Client Admin of a new trial account.',
-            'Nouvelle organisation : utilisez Inscription — vous devenez l’Administrateur client d’un compte d’essai.'),
+          L('New organization: use Sign up - you become the Client Admin of a new trial account.',
+            'Nouvelle organisation : utilisez Inscription - vous devenez l’Administrateur client d’un compte d’essai.'),
           L('Returning: log in with email + password.',
             'Retour : connectez-vous avec courriel + mot de passe.'),
           L('Admin roles are prompted for a one-time MFA code when MFA is enabled.',
@@ -106,16 +106,16 @@ export default function QuickTourPage() {
   // ── Section 2: daily compliance (everyone) ─────────────────────────────────
   const evidenceDetails = isViewer
     ? [
-        L('As a Viewer you have read-only access — you can see evidence and status but not upload or submit.',
-          'En tant que Lecteur, votre accès est en lecture seule — vous voyez les preuves et leur statut, sans pouvoir téléverser ni soumettre.'),
+        L('As a Viewer you have read-only access - you can see evidence and status but not upload or submit.',
+          'En tant que Lecteur, votre accès est en lecture seule - vous voyez les preuves et leur statut, sans pouvoir téléverser ni soumettre.'),
         L('Ask a Contributor or your admin to upload or submit evidence.',
           'Demandez à un Contributeur ou à votre admin de téléverser ou soumettre des preuves.'),
       ]
     : [
         L('Open a control and upload a document against each expected-evidence item.',
           'Ouvrez un contrôle et téléversez un document pour chaque preuve attendue.'),
-        L('Submit for review — status moves draft → submitted → accepted (or needs-more).',
-          'Soumettez pour revue — le statut passe de brouillon → soumis → accepté (ou complément requis).'),
+        L('Submit for review - status moves draft → submitted → accepted (or needs-more).',
+          'Soumettez pour revue - le statut passe de brouillon → soumis → accepté (ou complément requis).'),
         L('Allowed file types are validated; max 50 MB per file.',
           'Les types de fichiers sont validés ; 50 Mo maximum par fichier.'),
       ]

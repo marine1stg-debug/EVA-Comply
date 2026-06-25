@@ -13,7 +13,7 @@ import argparse
 import asyncio
 from sqlalchemy import select
 from app.core.database import AsyncSessionLocal
-from app.models import framework, evidence  # noqa: F401 — register mappers
+from app.models import framework, evidence  # noqa: F401 - register mappers
 from app.models.framework import Control
 
 # ref -> all the EN/FR fields to set
@@ -31,7 +31,7 @@ DATA = {
    "title_fr": "Limiter l’accès aux types de transactions permises",
    "description_fr": "Limiter l’accès aux systèmes d’information aux types de transactions et de fonctions que les utilisateurs autorisés ont la permission d’exécuter.",
    "objective_fr": "Veiller à ce que les utilisateurs ne puissent effectuer que les actions autorisées pour leur rôle.",
-   "plain_language_fr": "Les utilisateurs ne devraient pouvoir faire que ce que leur travail exige — rien de plus.",
+   "plain_language_fr": "Les utilisateurs ne devraient pouvoir faire que ce que leur travail exige - rien de plus.",
    "best_practices": "Define roles and what each can do\nGrant the lowest access that still lets people work\nAvoid giving everyone administrator rights",
    "best_practices_fr": "Définir les rôles et ce que chacun peut faire\nAccorder le plus bas niveau d’accès permettant quand même de travailler\nÉviter d’accorder les droits d’administrateur à tout le monde",
    "evidence_best_practices_fr": "Politique de contrôle d’accès basé sur les rôles\nMatrice des rôles montrant les permissions par type d’utilisateur\nPreuve que les comptes surprivilégiés ont été révoqués",

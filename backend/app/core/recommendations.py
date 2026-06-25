@@ -1,4 +1,4 @@
-"""Recommendations engine — turn maturity gaps into remediation actions.
+"""Recommendations engine - turn maturity gaps into remediation actions.
 
 A control is "gapped" when its current maturity (the client's self-assessment
 level, else a status-derived proxy) sits below its target. For each gapped

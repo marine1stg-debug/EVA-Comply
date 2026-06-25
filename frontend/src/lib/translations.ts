@@ -1,10 +1,10 @@
 /**
  * French translations. Key = the exact English string used in the UI.
  * Missing keys fall back to English automatically (see lib/i18n.ts), so the app
- * is always functional — add entries here to translate more strings over time.
+ * is always functional - add entries here to translate more strings over time.
  *
  * ⚠️ CONVENTION (do not break): every new or changed user-facing string MUST be
- * added in BOTH languages — wrap it with t('English text') in the component AND
+ * added in BOTH languages - wrap it with t('English text') in the component AND
  * add the matching French entry here. New features ship bilingual by default.
  */
 export const FR: Record<string, string> = {
@@ -49,10 +49,10 @@ export const FR: Record<string, string> = {
   'Sign out': 'Déconnexion',
   'Search controls, evidence, clients…': 'Rechercher contrôles, preuves, clients…',
   'Viewing client': 'Client affiché',
-  '— Select a client —': '— Sélectionner un client —',
+  '- Select a client -': '- Sélectionner un client -',
   '{n} to review': '{n} à revoir',
-  'Trial — {days} day left · Subscribe': "Essai — {days} jour restant · S'abonner",
-  'Trial — {days} days left · Subscribe': "Essai — {days} jours restants · S'abonner",
+  'Trial - {days} day left · Subscribe': "Essai - {days} jour restant · S'abonner",
+  'Trial - {days} days left · Subscribe': "Essai - {days} jours restants · S'abonner",
   'Notifications': 'Notifications',
   'Switch to dark mode': 'Passer au thème sombre',
   'Switch to light mode': 'Passer au thème clair',
@@ -103,7 +103,7 @@ export const FR: Record<string, string> = {
   'Level: {tier}': 'Niveau : {tier}',
   'Priority controls to action': 'Contrôles prioritaires à traiter',
   'View all': 'Voir tout',
-  'Nothing outstanding — nice work.': 'Rien en attente — beau travail.',
+  'Nothing outstanding - nice work.': 'Rien en attente - beau travail.',
   'Audit Readiness': 'Préparation à l’audit',
   'Evidence alerts': 'Alertes de preuves',
   'Evidence expiring soon': 'Preuves bientôt expirées',
@@ -248,7 +248,7 @@ export const FR: Record<string, string> = {
   'Show ({n})': 'Afficher ({n})',
   'Hide': 'Masquer',
   'Read': 'Lire',
-  'Discussion — standard guidance': 'Discussion — directives standard',
+  'Discussion - standard guidance': 'Discussion - directives standard',
   'Self-assessment': 'Auto-évaluation',
   'Perceived {n}/{max}': 'Perçu {n}/{max}',
   'Based on the requirement and objective above, rate your organisation’s maturity for this control. This feeds the':
@@ -258,8 +258,8 @@ export const FR: Record<string, string> = {
   'rating is derived from evidence separately.':
     'de l’auditeur est déduite des preuves séparément.',
   'Comments / Additional info': 'Commentaires / Informations complémentaires',
-  'Add context for your answers — scope, exceptions, planned improvements…':
-    'Ajoutez du contexte à vos réponses — portée, exceptions, améliorations prévues…',
+  'Add context for your answers - scope, exceptions, planned improvements…':
+    'Ajoutez du contexte à vos réponses - portée, exceptions, améliorations prévues…',
   'Save assessment': 'Enregistrer l’évaluation',
   'Perceived maturity:': 'Maturité perçue :',
   '💡 In plain language': '💡 En langage clair',
@@ -267,7 +267,7 @@ export const FR: Record<string, string> = {
   'Uploaded {date} by {by}': 'Téléversé le {date} par {by}',
   'No evidence uploaded yet.': 'Aucune preuve téléversée pour le moment.',
   'Drag & drop evidence, or click to browse': 'Glissez-déposez une preuve, ou cliquez pour parcourir',
-  'PDF, images, spreadsheets — up to 50 MB': 'PDF, images, feuilles de calcul — jusqu’à 50 Mo',
+  'PDF, images, spreadsheets - up to 50 MB': 'PDF, images, feuilles de calcul - jusqu’à 50 Mo',
   '⚑ Flag issue': '⚑ Signaler un problème',
   '🛡 Approve': '🛡 Approuver',
   'Comment (required when flagging an issue)': 'Commentaire (requis pour signaler un problème)',
@@ -282,8 +282,8 @@ export const FR: Record<string, string> = {
   '↻ Replace': '↻ Remplacer',
   '+ Collect': '+ Collecter',
   'custom': 'personnalisé',
-  'No expected evidence defined yet — add the first item below.':
-    'Aucune preuve attendue définie — ajoutez le premier élément ci-dessous.',
+  'No expected evidence defined yet - add the first item below.':
+    'Aucune preuve attendue définie - ajoutez le premier élément ci-dessous.',
   'Add an expected evidence item for this client…':
     'Ajouter une preuve attendue pour ce client…',
   '+ Add': '+ Ajouter',
@@ -310,7 +310,7 @@ export const FR: Record<string, string> = {
   '✓ Accept': '✓ Accepter',
   '✗ Reject': '✗ Rejeter',
   '⏳ Needs more': '⏳ Complément requis',
-  '— Not applicable': '— Non applicable',
+  '- Not applicable': '- Non applicable',
   'Auditor notes…': 'Notes de l’auditeur…',
   'MSP Pre-review': 'Pré-revue MSP',
   '✓ Approve': '✓ Approuver',
@@ -318,7 +318,7 @@ export const FR: Record<string, string> = {
   '↩ Return to client': '↩ Retourner au client',
   'MSP review note…': 'Note de revue MSP…',
   'Training video': 'Vidéo de formation',
-  '{domain} basics — 4 min': 'Bases de {domain} — 4 min',
+  '{domain} basics - 4 min': 'Bases de {domain} - 4 min',
   'Framework mappings': 'Correspondances de référentiels',
   'Template': 'Modèle',
 
@@ -336,8 +336,8 @@ export const FR: Record<string, string> = {
   'Could not delete': 'Suppression impossible',
   'Loading recommendations…': 'Chargement des recommandations…',
   'Select a client to view recommendations.': 'Sélectionnez un client pour voir les recommandations.',
-  'Remediation actions to close maturity gaps — prioritized, with Top 10 and quick wins.':
-    'Actions de remédiation pour combler les écarts de maturité — priorisées, avec Top 10 et gains rapides.',
+  'Remediation actions to close maturity gaps - prioritized, with Top 10 and quick wins.':
+    'Actions de remédiation pour combler les écarts de maturité - priorisées, avec Top 10 et gains rapides.',
   'Working…': 'En cours…',
   '📋 Generate from library': '📋 Générer depuis la bibliothèque',
   'Analyzing…': 'Analyse…',
@@ -356,11 +356,11 @@ export const FR: Record<string, string> = {
   '{n} in progress': '{n} en cours',
   'resolved': 'résolues',
   '★ Top 10 priorities': '★ Top 10 des priorités',
-  'curated — pinned or AI-selected': 'sélectionné — épinglé ou choisi par l’IA',
+  'curated - pinned or AI-selected': 'sélectionné - épinglé ou choisi par l’IA',
   'ranked by impact × gap × risk (use ★ Auto-pick or pin to curate)':
     'classé par impact × écart × risque (utilisez ★ Sélection auto ou épinglez)',
   '⚡ Quick wins': '⚡ Gains rapides',
-  'low effort, high impact — do these first': 'faible effort, fort impact — à faire en premier',
+  'low effort, high impact - do these first': 'faible effort, fort impact - à faire en premier',
   'All recommendations': 'Toutes les recommandations',
   'In progress': 'En cours',
   'Dismissed': 'Rejetées',
@@ -381,8 +381,8 @@ export const FR: Record<string, string> = {
   'Delete failed': 'Échec de la suppression',
   'Use the “Viewing client” selector in the top bar to load a client’s evidence.':
     'Utilisez le sélecteur « Client affiché » dans la barre du haut pour charger les preuves d’un client.',
-  'All evidence items across your assigned controls — {n} total':
-    'Tous les éléments de preuve de vos contrôles assignés — {n} au total',
+  'All evidence items across your assigned controls - {n} total':
+    'Tous les éléments de preuve de vos contrôles assignés - {n} au total',
   'Loading evidence…': 'Chargement des preuves…',
   'No evidence items match this filter': 'Aucun élément de preuve ne correspond à ce filtre',
   'Upload new evidence': 'Téléverser une nouvelle preuve',
@@ -411,7 +411,7 @@ export const FR: Record<string, string> = {
   // Expected-evidence item states (badges on the Controls detail page)
   'missing': 'manquante',
   'submitted': 'soumise',
-  'returned — action needed': 'retournée — action requise',
+  'returned - action needed': 'retournée - action requise',
   // Auto-derived control status labels (frontend STATUS_LABEL map)
   'Not started': 'Non démarré',
   'Implemented': 'Implémenté',
@@ -458,7 +458,7 @@ export const FR: Record<string, string> = {
   // ── Auth: Login ──
   'Invalid email or password': 'Courriel ou mot de passe invalide',
   'Invalid MFA code': 'Code MFA invalide',
-  'Demo login failed — is the API running?': 'Échec de la connexion démo — l’API est-elle démarrée ?',
+  'Demo login failed - is the API running?': 'Échec de la connexion démo - l’API est-elle démarrée ?',
   'Cybersecurity Audit Portal': 'Portail d’audit en cybersécurité',
   'Email': 'Courriel',
   'Password': 'Mot de passe',
@@ -467,7 +467,7 @@ export const FR: Record<string, string> = {
   'New organization?': 'Nouvelle organisation ?',
   'Create an account': 'Créer un compte',
   'See plans': 'Voir les forfaits',
-  'Demo — pick a role': 'Démo — choisissez un rôle',
+  'Demo - pick a role': 'Démo - choisissez un rôle',
   'Two-Factor Auth': 'Authentification à deux facteurs',
   'Enter the 6-digit code from your authenticator app': 'Entrez le code à 6 chiffres de votre application d’authentification',
   'Verifying…': 'Vérification…',
@@ -491,8 +491,8 @@ export const FR: Record<string, string> = {
   '✓ Multi-client portfolio + resale': '✓ Portefeuille multi-clients + revente',
   'Get started': 'Commencer',
   'Cybersecurity compliance, audited by experts.': 'Conformité en cybersécurité, auditée par des experts.',
-  'Manage CMMC, NIST CSF and Cyber Canada in one place — collect evidence, get a three-tier review, and reach audit readiness faster.':
-    'Gérez CMMC, NIST CSF et Cyber Canada au même endroit — collectez les preuves, obtenez une revue à trois niveaux et atteignez la préparation à l’audit plus vite.',
+  'Manage CMMC, NIST CSF and Cyber Canada in one place - collect evidence, get a three-tier review, and reach audit readiness faster.':
+    'Gérez CMMC, NIST CSF et Cyber Canada au même endroit - collectez les preuves, obtenez une revue à trois niveaux et atteignez la préparation à l’audit plus vite.',
   'Start your compliance journey →': 'Démarrez votre parcours de conformité →',
   'Loading plans…': 'Chargement des forfaits…',
   'Managed Service Provider? Pick the MSP plan to onboard and bill your own clients.':
@@ -517,7 +517,7 @@ export const FR: Record<string, string> = {
 
   // ── Auth: Signup ──
   'Could not send code': 'Impossible d’envoyer le code',
-  'Welcome to EVA — your trial has started': 'Bienvenue chez EVA — votre essai a commencé',
+  'Welcome to EVA - your trial has started': 'Bienvenue chez EVA - votre essai a commencé',
   'Sign up failed': 'Échec de l’inscription',
   'Create your account · Step {step} of 4': 'Créez votre compte · Étape {step} sur 4',
   'Organization name': 'Nom de l’organisation',
@@ -534,11 +534,11 @@ export const FR: Record<string, string> = {
   'Single client': 'Client unique',
   'Promo code (optional)': 'Code promo (optionnel)',
   'Enter a code if you have one': 'Entrez un code si vous en avez un',
-  'That code isn’t valid — you can continue without one.': 'Ce code n’est pas valide — vous pouvez continuer sans.',
-  'MSP plans manage multiple client orgs — you’ll add clients after signup.':
-    'Les forfaits MSP gèrent plusieurs organisations clientes — vous ajouterez des clients après l’inscription.',
+  'That code isn’t valid - you can continue without one.': 'Ce code n’est pas valide - vous pouvez continuer sans.',
+  'MSP plans manage multiple client orgs - you’ll add clients after signup.':
+    'Les forfaits MSP gèrent plusieurs organisations clientes - vous ajouterez des clients après l’inscription.',
   'Next step takes you to secure Stripe checkout.': 'L’étape suivante vous mène au paiement sécurisé Stripe.',
-  'Payment is simulated in this build — no card required.': 'Le paiement est simulé dans cette version — aucune carte requise.',
+  'Payment is simulated in this build - no card required.': 'Le paiement est simulé dans cette version - aucune carte requise.',
   'Creating…': 'Création…',
   'Continue to payment': 'Continuer vers le paiement',
   'Create MSP account': 'Créer un compte MSP',
@@ -559,16 +559,16 @@ export const FR: Record<string, string> = {
   '{n}d overdue': '{n}j en retard',
   'Due today': 'Échéance aujourd’hui',
   '{n}d remaining': '{n}j restants',
-  'Periodic evidence that needs renewal — keep your audit package current.':
-    'Preuves périodiques à renouveler — gardez votre dossier d’audit à jour.',
+  'Periodic evidence that needs renewal - keep your audit package current.':
+    'Preuves périodiques à renouveler - gardez votre dossier d’audit à jour.',
   'Loading renewals…': 'Chargement des renouvellements…',
   'Failed to load renewals.': 'Échec du chargement des renouvellements.',
-  '⛔ Expired — renew now': '⛔ Expirées — renouveler maintenant',
+  '⛔ Expired - renew now': '⛔ Expirées - renouveler maintenant',
   '⚠️ Expiring within 30 days': '⚠️ Expirent sous 30 jours',
   '✅ Up to date': '✅ À jour',
-  'No periodic evidence yet — uploads with a recurring frequency appear here.':
-    'Aucune preuve périodique — les téléversements avec fréquence récurrente apparaissent ici.',
-  '⛔ Expired — immediate action required': '⛔ Expirées — action immédiate requise',
+  'No periodic evidence yet - uploads with a recurring frequency appear here.':
+    'Aucune preuve périodique - les téléversements avec fréquence récurrente apparaissent ici.',
+  '⛔ Expired - immediate action required': '⛔ Expirées - action immédiate requise',
   '⚠️ Expiring soon': '⚠️ Expirent bientôt',
   '📤 Renew': '📤 Renouveler',
 
@@ -607,7 +607,7 @@ export const FR: Record<string, string> = {
   'Enable': 'Activer',
 
   // ── Billing ──
-  'Payment complete — subscription active': 'Paiement effectué — abonnement actif',
+  'Payment complete - subscription active': 'Paiement effectué - abonnement actif',
   'Checkout cancelled': 'Paiement annulé',
   'Subscription activated': 'Abonnement activé',
   'Checkout failed': 'Échec du paiement',
@@ -618,12 +618,12 @@ export const FR: Record<string, string> = {
   '💳 Subscribe with Stripe': '💳 S’abonner avec Stripe',
   'Activate plan': 'Activer le forfait',
   'Plan': 'Forfait',
-  'Edit plan — {name}': 'Modifier le forfait — {name}',
+  'Edit plan - {name}': 'Modifier le forfait - {name}',
   'Current plan: {plan} (${mrr}/mo). Choose a new plan below.':
     'Forfait actuel : {plan} ({mrr} $/mois). Choisissez un nouveau forfait ci-dessous.',
   '(current)': '(actuel)',
-  'No active {tier} plans — create one in Plans & Pricing first.':
-    'Aucun forfait {tier} actif — créez-en un dans Forfaits et tarifs d’abord.',
+  'No active {tier} plans - create one in Plans & Pricing first.':
+    'Aucun forfait {tier} actif - créez-en un dans Forfaits et tarifs d’abord.',
   'Save plan': 'Enregistrer le forfait',
   '{name} is now on {plan}': '{name} est maintenant sur {plan}',
   'Could not update plan': 'Impossible de mettre à jour le forfait',
@@ -668,7 +668,7 @@ export const FR: Record<string, string> = {
   'Submit case': 'Soumettre le cas',
   'Could not submit': 'Échec de l’envoi',
   'Case submitted': 'Cas soumis',
-  'Incident declared — we’ll respond urgently': 'Incident déclaré — nous répondrons en urgence',
+  'Incident declared - we’ll respond urgently': 'Incident déclaré - nous répondrons en urgence',
   'Partner model': 'Modèle de partenaire',
   'Wholesale markup': 'Majoration sur prix de gros',
   'Commission / referral': 'Commission / référence',
@@ -685,7 +685,7 @@ export const FR: Record<string, string> = {
   'Commission / referral terms': 'Conditions de commission / référence',
   'Set by EVA': 'Défini par EVA',
   'Your referred clients receive a fixed {d}% discount. EVA bills them and pays you {c}% of what it collects as cumulative commission.': 'Vos clients référés reçoivent une remise fixe de {d}%. EVA les facture et vous verse {c}% de ce qu’elle perçoit en commission cumulative.',
-  'More annual revenue lowers your wholesale cost — set by EVA': 'Plus de revenu annuel réduit votre coût de gros — défini par EVA',
+  'More annual revenue lowers your wholesale cost - set by EVA': 'Plus de revenu annuel réduit votre coût de gros - défini par EVA',
   '${n}+/yr': '{n}$+/an',
   'Auto-renewal': 'Renouvellement automatique',
   'On': 'Activé',
@@ -695,10 +695,10 @@ export const FR: Record<string, string> = {
   'Re-enable auto-renewal': 'Réactiver le renouvellement automatique',
   'Turn off auto-renewal? Your plan stays active until the period ends.': 'Désactiver le renouvellement automatique ? Votre forfait reste actif jusqu’à la fin de la période.',
   'Auto-renewal re-enabled': 'Renouvellement automatique réactivé',
-  'Auto-renewal turned off — plan stays active until the period ends': 'Renouvellement automatique désactivé — le forfait reste actif jusqu’à la fin de la période',
+  'Auto-renewal turned off - plan stays active until the period ends': 'Renouvellement automatique désactivé - le forfait reste actif jusqu’à la fin de la période',
   'Could not update auto-renewal': 'Impossible de mettre à jour le renouvellement automatique',
   'Portfolio report': 'Rapport de portefeuille',
-  'Aggregate compliance across your whole client base (super admins: across all clients) — overall and per-client.': 'Conformité agrégée sur toute votre base de clients (super admins : tous les clients) — globale et par client.',
+  'Aggregate compliance across your whole client base (super admins: across all clients) - overall and per-client.': 'Conformité agrégée sur toute votre base de clients (super admins : tous les clients) - globale et par client.',
   'Verification: what is {q}?': 'Vérification : combien font {q} ?',
   'New challenge': 'Nouveau défi',
   'Download JSON': 'Télécharger JSON',
@@ -708,7 +708,7 @@ export const FR: Record<string, string> = {
   'Download failed': 'Échec du téléchargement',
   'Framework catalogs': 'Catalogues de référentiels',
   'Download catalogs (.zip)': 'Télécharger les catalogues (.zip)',
-  'Download all framework catalogs (English + French .xlsx) as a single zip — CMMC L1, CMMC L2, ITSP.10.171 and NIST SP 800-171 R3.': 'Téléchargez tous les catalogues de référentiels (anglais + français, .xlsx) dans un seul zip — CMMC N1, CMMC N2, ITSP.10.171 et NIST SP 800-171 R3.',
+  'Download all framework catalogs (English + French .xlsx) as a single zip - CMMC L1, CMMC L2, ITSP.10.171 and NIST SP 800-171 R3.': 'Téléchargez tous les catalogues de référentiels (anglais + français, .xlsx) dans un seul zip - CMMC N1, CMMC N2, ITSP.10.171 et NIST SP 800-171 R3.',
   'This page shows an MSP partner’s own margin and payouts. Your account is not an MSP partner, so there is nothing to display here. Super admins can review and edit each MSP’s partner terms from Tenant Management.': 'Cette page présente la marge et les versements d’un partenaire MSP. Votre compte n’est pas un partenaire MSP : il n’y a donc rien à afficher ici. Les super administrateurs peuvent consulter et modifier les conditions de partenariat de chaque MSP depuis la Gestion des locataires.',
   'Your clients are billed by EVA. We pay you the difference between the retail price you set and your wholesale cost.':
     'Vos clients sont facturés par EVA. Nous vous versons la différence entre le prix de détail que vous fixez et votre coût de gros.',
@@ -724,13 +724,13 @@ export const FR: Record<string, string> = {
   '+{d}% at {n} clients ({k} to go)': '+{d} % à {n} clients (encore {k})',
   'top tier reached': 'palier maximal atteint',
   'Volume tiers': 'Paliers de volume',
-  'More active clients lowers your wholesale cost — set by EVA': 'Plus de clients actifs réduit votre coût de gros — défini par EVA',
+  'More active clients lowers your wholesale cost - set by EVA': 'Plus de clients actifs réduit votre coût de gros - défini par EVA',
   '{n}+ clients': '{n}+ clients',
   'off wholesale': 'sur le gros',
   '● current': '● actuel',
   'Per-client margin': 'Marge par client',
   // ── Help Center ──
-  'Your owner’s manual for EVA Comply — guides tailored to your role.': 'Votre manuel du propriétaire pour EVA Comply — des guides adaptés à votre rôle.',
+  'Your owner’s manual for EVA Comply - guides tailored to your role.': 'Votre manuel du propriétaire pour EVA Comply - des guides adaptés à votre rôle.',
   'Search help…': 'Rechercher dans l’aide…',
   'Show all roles': 'Afficher tous les rôles',
   'Back to Help Center': 'Retour au centre d’aide',
@@ -752,8 +752,8 @@ export const FR: Record<string, string> = {
   'Self audit': 'Auto-audit',
   'Assisted': 'Assisté',
   'Audited': 'Audité',
-  'Account created — awaiting EVA authorization. You’ll be notified once approved.':
-    'Compte créé — en attente d’autorisation par EVA. Vous serez notifié une fois approuvé.',
+  'Account created - awaiting EVA authorization. You’ll be notified once approved.':
+    'Compte créé - en attente d’autorisation par EVA. Vous serez notifié une fois approuvé.',
   'Can coach (challenge controls & put them under review)':
     'Peut coacher (contester des contrôles et les remettre en revue)',
   'Updated': 'Mis à jour',
@@ -782,15 +782,15 @@ export const FR: Record<string, string> = {
   'Landing-page highlights (one per line)': 'Points forts de la page d’accueil (un par ligne)',
   'e.g. Framework compliance tracking\nEvidence collection & review\nExpert EVA audit decisions': 'p. ex. Suivi de conformité aux référentiels\nCollecte et revue des preuves\nDécisions d’audit par des experts EVA',
   'Shown as the ✓ bullets on the public landing page. Leave empty to use the default bullets.': 'Affichés comme les puces ✓ sur la page d’accueil publique. Laissez vide pour utiliser les puces par défaut.',
-  'Become an EVA partner: get listed in the marketplace and matched with clients who need help on specific controls — a steady stream of qualified leads. Showcase your skills, get found exactly when a client is stuck, and grow your compliance practice.': 'Devenez partenaire EVA : soyez référencé dans la place de marché et mis en relation avec des clients ayant besoin d’aide sur des contrôles précis — un flux régulier de prospects qualifiés. Mettez en avant vos compétences, soyez trouvé exactement quand un client bloque, et développez votre pratique de conformité.',
+  'Become an EVA partner: get listed in the marketplace and matched with clients who need help on specific controls - a steady stream of qualified leads. Showcase your skills, get found exactly when a client is stuck, and grow your compliance practice.': 'Devenez partenaire EVA : soyez référencé dans la place de marché et mis en relation avec des clients ayant besoin d’aide sur des contrôles précis - un flux régulier de prospects qualifiés. Mettez en avant vos compétences, soyez trouvé exactement quand un client bloque, et développez votre pratique de conformité.',
   'Turn on': 'Activer',
   'Turn off': 'Désactiver',
   'When ON, this client’s evidence goes to your MSP review queue before EVA. When OFF, it goes straight to EVA.': 'Quand ACTIVÉ, les preuves de ce client passent par votre file de revue MSP avant EVA. Quand DÉSACTIVÉ, elles vont directement à EVA.',
   'MSP pre-review on by default for new clients': 'Pré-revue MSP activée par défaut pour les nouveaux clients',
   'Pre-fills the MSP pre-review setting for clients you add': 'Pré-remplit le réglage de pré-revue MSP pour les clients que vous ajoutez',
   'Previewing the Help Center as this user would see it.': 'Aperçu du Centre d’aide tel que cet utilisateur le verrait.',
-  'Your organization is managed by an MSP, so your evidence is pre-reviewed by your MSP before it reaches EVA. After you submit, it goes to your MSP first — they approve and forward it, or return it to you with feedback.': 'Votre organisation est gérée par un MSP : vos preuves sont d’abord révisées par votre MSP avant d’atteindre EVA. Après soumission, elles passent par votre MSP — qui les approuve et les transmet, ou vous les retourne avec des commentaires.',
-  'This is the EVA internal organization — billing does not apply here. To manage a client’s subscription, use Tenants or Clients.': 'Ceci est l’organisation interne EVA — la facturation ne s’applique pas ici. Pour gérer l’abonnement d’un client, utilisez Organisations (Tenants) ou Clients.',
+  'Your organization is managed by an MSP, so your evidence is pre-reviewed by your MSP before it reaches EVA. After you submit, it goes to your MSP first - they approve and forward it, or return it to you with feedback.': 'Votre organisation est gérée par un MSP : vos preuves sont d’abord révisées par votre MSP avant d’atteindre EVA. Après soumission, elles passent par votre MSP - qui les approuve et les transmet, ou vous les retourne avec des commentaires.',
+  'This is the EVA internal organization - billing does not apply here. To manage a client’s subscription, use Tenants or Clients.': 'Ceci est l’organisation interne EVA - la facturation ne s’applique pas ici. Pour gérer l’abonnement d’un client, utilisez Organisations (Tenants) ou Clients.',
   'Start recording': 'Démarrer l’enregistrement',
   'Stop': 'Arrêter',
   'Re-record': 'Réenregistrer',
@@ -811,14 +811,14 @@ export const FR: Record<string, string> = {
   'Control preview': 'Aperçu du contrôle',
   'See the control & key points to cover': 'Voir le contrôle et les points clés à couvrir',
   'Recording brief': 'Fiche d’enregistrement',
-  'Keep it short — focus on the key points below.': 'Restez bref — concentrez-vous sur les points clés ci-dessous.',
+  'Keep it short - focus on the key points below.': 'Restez bref - concentrez-vous sur les points clés ci-dessous.',
   '🎯 Objective': '🎯 Objectif',
   '✅ Key points to cover': '✅ Points clés à couvrir',
   '📎 Expected evidence': '📎 Preuves attendues',
   'No extra guidance recorded for this control yet.': 'Aucune note supplémentaire enregistrée pour ce contrôle.',
   '🎬 What to say (script)': '🎬 Quoi dire (script)',
-  '🎬 What to say — Suggestion (Script)': '🎬 Quoi dire — Suggestion (script)',
-  'No script yet — generate or write it here.': 'Pas encore de script — générez-le ou écrivez-le ici.',
+  '🎬 What to say - Suggestion (Script)': '🎬 Quoi dire - Suggestion (script)',
+  'No script yet - generate or write it here.': 'Pas encore de script - générez-le ou écrivez-le ici.',
   '📋 Requirement': '📋 Exigence',
   // ── Service provider marketplace ──
   'Service Providers': 'Fournisseurs de services',
@@ -881,9 +881,9 @@ export const FR: Record<string, string> = {
   'Get help': 'Obtenir de l’aide',
   'A service provider?': 'Vous êtes un fournisseur de services ?',
   'Apply to the marketplace': 'Soumettre une candidature',
-  'No matching providers yet — check back soon.': 'Aucun fournisseur correspondant pour le moment — revenez bientôt.',
+  'No matching providers yet - check back soon.': 'Aucun fournisseur correspondant pour le moment - revenez bientôt.',
   'Providers who can help, best match first:': 'Fournisseurs qui peuvent aider, meilleure correspondance d’abord :',
-  'No exact match — here are available providers:': 'Pas de correspondance exacte — voici les fournisseurs disponibles :',
+  'No exact match - here are available providers:': 'Pas de correspondance exacte - voici les fournisseurs disponibles :',
   'Contact': 'Contacter',
   'Delete video': 'Supprimer la vidéo',
   'Video deleted': 'Vidéo supprimée',
@@ -892,9 +892,9 @@ export const FR: Record<string, string> = {
   'e.g. make it shorter, add an analogy about keys, mention multi-factor authentication…':
     'ex. raccourcir, ajouter une analogie sur les clés, mentionner l’authentification multifacteur…',
   'Generate': 'Générer',
-  'No script yet — generate it from the Control preview.': 'Pas encore de script — générez-le depuis l’aperçu du contrôle.',
-  'No script yet — click Generate, or write what the presenter should say.': 'Pas encore de script — cliquez sur Générer, ou écrivez ce que le présentateur doit dire.',
-  'No script yet — click Generate to draft what the presenter could say.': 'Pas encore de script — cliquez sur Générer pour rédiger ce que le présentateur pourrait dire.',
+  'No script yet - generate it from the Control preview.': 'Pas encore de script - générez-le depuis l’aperçu du contrôle.',
+  'No script yet - click Generate, or write what the presenter should say.': 'Pas encore de script - cliquez sur Générer, ou écrivez ce que le présentateur doit dire.',
+  'No script yet - click Generate to draft what the presenter could say.': 'Pas encore de script - cliquez sur Générer pour rédiger ce que le présentateur pourrait dire.',
   'Script generated': 'Script généré',
   'Generate script': 'Générer le script',
   'Regenerate': 'Régénérer',
@@ -913,7 +913,7 @@ export const FR: Record<string, string> = {
   'Script (EN)': 'Script (EN)',
   'Script (FR)': 'Script (FR)',
   'Draft generated': 'Brouillon généré',
-  'Draft generated (template — AI is off)': 'Brouillon généré (modèle — l’IA est désactivée)',
+  'Draft generated (template - AI is off)': 'Brouillon généré (modèle - l’IA est désactivée)',
   '{n} of {total} controls have a script': '{n} contrôles sur {total} ont un script',
   'Reuse videos across frameworks': 'Réutiliser les vidéos entre référentiels',
   '{n} suggested matches': '{n} correspondances suggérées',
@@ -973,7 +973,7 @@ export const FR: Record<string, string> = {
   'MSP margin before volume discount: ${m}/mo': 'Marge MSP avant remise de volume : {m} $/mois',
   'wholesale': 'gros',
   'Partner': 'Partenaire',
-  'Partner terms — {name}': 'Conditions partenaire — {name}',
+  'Partner terms - {name}': 'Conditions partenaire - {name}',
   'Partner terms saved': 'Conditions partenaire enregistrées',
   'Save partner terms': 'Enregistrer les conditions',
   'Client MRR': 'MRR client',
@@ -1043,8 +1043,8 @@ export const FR: Record<string, string> = {
     '{n} preuves en attente d’une décision d’audit EVA.',
   '🔒 Privacy ON': '🔒 Confidentialité ON',
   '🔓 Privacy OFF': '🔓 Confidentialité OFF',
-  'All clients — {n} pending': 'Tous les clients — {n} en attente',
-  '{name} — {n} pending': '{name} — {n} en attente',
+  'All clients - {n} pending': 'Tous les clients - {n} en attente',
+  '{name} - {n} pending': '{name} - {n} en attente',
   '{n} items showing': '{n} éléments affichés',
   'Pending MSP Review': 'En attente de revue MSP',
   'Pending EVA Review': 'En attente de revue EVA',
@@ -1100,10 +1100,10 @@ export const FR: Record<string, string> = {
   'Reading…': 'Lecture…',
   'Next → Map columns': 'Suivant → Mapper les colonnes',
   'Map your columns ({n} rows)': 'Mappez vos colonnes ({n} lignes)',
-  '— not mapped —': '— non mappé —',
+  '- not mapped -': '- non mappé -',
   'Ref and Title are required.': 'Réf. et Titre sont requis.',
   'Next → Review': 'Suivant → Vérifier',
-  'Review — {n} controls into “{name}” v{version}': 'Vérification — {n} contrôles vers « {name} » v{version}',
+  'Review - {n} controls into “{name}” v{version}': 'Vérification - {n} contrôles vers « {name} » v{version}',
   'Showing first {n} of {total} rows.': 'Affichage des {n} premières lignes sur {total}.',
   'Importing…': 'Import…',
   '✓ Publish framework': '✓ Publier le référentiel',
@@ -1161,12 +1161,12 @@ export const FR: Record<string, string> = {
   'API key': 'Clé API',
   '(optional for {name})': '(optionnel pour {name})',
   'Replace key': 'Remplacer la clé',
-  'Paste key — stored encrypted server-side, never shown again': 'Collez la clé — stockée chiffrée côté serveur, jamais réaffichée',
+  'Paste key - stored encrypted server-side, never shown again': 'Collez la clé - stockée chiffrée côté serveur, jamais réaffichée',
   'The key is held server-side only and is never returned to the browser or exposed to client tenants.':
     'La clé est conservée uniquement côté serveur et n’est jamais renvoyée au navigateur ni exposée aux clients.',
   'Timeout (s)': 'Délai (s)',
   'Enable connector': 'Activer le connecteur',
-  'Advanced — custom auth header': 'Avancé — en-tête d’authentification personnalisé',
+  'Advanced - custom auth header': 'Avancé - en-tête d’authentification personnalisé',
   'Header name': 'Nom de l’en-tête',
   'Header value': 'Valeur de l’en-tête',
   'Last test': 'Dernier test',
@@ -1177,7 +1177,7 @@ export const FR: Record<string, string> = {
     'Ce connecteur alimente la revue de preuves assistée par IA et la génération de recommandations en un clic. Il est commun à toute la plateforme et visible uniquement par les Super administrateurs.',
 
   // ── Clients ──
-  'Client created — send them the invite': 'Client créé — envoyez-lui l’invitation',
+  'Client created - send them the invite': 'Client créé - envoyez-lui l’invitation',
   'Could not add client': 'Impossible d’ajouter le client',
   'Add Client': 'Ajouter un client',
   'Client created': 'Client créé',
@@ -1187,8 +1187,8 @@ export const FR: Record<string, string> = {
   'Price $/mo': 'Prix $/mois',
   'Enable MSP pre-review before evidence reaches EVA': 'Activer la pré-revue MSP avant que les preuves n’atteignent EVA',
   'Assign frameworks': 'Assigner des référentiels',
-  'The client admin gets an invite link to set their own password — you don’t set it.':
-    'L’administrateur du client reçoit un lien d’invitation pour définir son propre mot de passe — vous ne le définissez pas.',
+  'The client admin gets an invite link to set their own password - you don’t set it.':
+    'L’administrateur du client reçoit un lien d’invitation pour définir son propre mot de passe - vous ne le définissez pas.',
   'Create client & generate invite': 'Créer le client et générer l’invitation',
   'Loading clients…': 'Chargement des clients…',
   'Client management requires MSP access.': 'La gestion des clients nécessite un accès MSP.',
@@ -1223,8 +1223,8 @@ export const FR: Record<string, string> = {
   'Convert {name} to direct': 'Convertir {name} en direct',
   'Detaches {name} from {msp}, moves it to direct EVA billing on a single-client plan, and turns off MSP pre-review. All controls, evidence and users are kept.':
     'Détache {name} de {msp}, le bascule en facturation EVA directe sur un forfait client unique et désactive la pré-revue MSP. Tous les contrôles, preuves et utilisateurs sont conservés.',
-  'No active single-client plans — create one in Plans & Pricing first.':
-    'Aucun forfait client unique actif — créez-en un dans Forfaits et tarifs d’abord.',
+  'No active single-client plans - create one in Plans & Pricing first.':
+    'Aucun forfait client unique actif - créez-en un dans Forfaits et tarifs d’abord.',
   'Converting…': 'Conversion…',
   'Convert to direct client': 'Convertir en client direct',
   '{a} one-time': '{a} unique',
@@ -1234,9 +1234,9 @@ export const FR: Record<string, string> = {
   'Framework removed': 'Référentiel retiré',
   'Could not remove framework': 'Impossible de retirer le référentiel',
   'Added {n} missing controls': '{n} contrôles manquants ajoutés',
-  'Already up to date — nothing to add': 'Déjà à jour — rien à ajouter',
+  'Already up to date - nothing to add': 'Déjà à jour - rien à ajouter',
   'Could not sync controls': 'Impossible de synchroniser les contrôles',
-  'Frameworks — {name}': 'Référentiels — {name}',
+  'Frameworks - {name}': 'Référentiels - {name}',
   'Current recurring price': 'Prix récurrent actuel',
   'Assigned frameworks': 'Référentiels assignés',
   '↺ Sync controls': '↺ Synchroniser les contrôles',
@@ -1311,7 +1311,7 @@ export const FR: Record<string, string> = {
   'Restore the selected data? It merges (adds and updates, never deletes).': 'Restaurer les données sélectionnées ? Cela fusionne (ajoute et met à jour, ne supprime jamais).',
   'Restore selected': 'Restaurer la sélection',
   'Restoring…': 'Restauration…',
-  'This backup lists no categories — everything in the file will be restored.': 'Cette sauvegarde ne liste aucune catégorie — tout le fichier sera restauré.',
+  'This backup lists no categories - everything in the file will be restored.': 'Cette sauvegarde ne liste aucune catégorie - tout le fichier sera restauré.',
   'Upload a backup file, then choose exactly which categories to restore. Restore merges data (adds and updates, never deletes).': 'Téléversez un fichier de sauvegarde, puis choisissez exactement les catégories à restaurer. La restauration fusionne les données (ajoute et met à jour, ne supprime jamais).',
   'Backup & Restore is Super Admin only': 'La sauvegarde et la restauration sont réservées au super admin',
   '✓ Clear': '✓ Aucune',
@@ -1336,7 +1336,7 @@ export const FR: Record<string, string> = {
   '{rows} rows · {cols} columns detected. Map your columns to fields below':
     '{rows} lignes · {cols} colonnes détectées. Mappez vos colonnes aux champs ci-dessous',
   'required):': 'requis) :',
-  '— none —': '— aucune —',
+  '- none -': '- aucune -',
   'Import {n} controls': 'Importer {n} contrôles',
   'Loading frameworks…': 'Chargement des référentiels…',
   'The framework library requires admin access.': 'La bibliothèque de référentiels nécessite un accès administrateur.',
@@ -1376,7 +1376,7 @@ export const FR: Record<string, string> = {
   'Plan created': 'Forfait créé',
   'Plan updated': 'Forfait mis à jour',
   'New plan': 'Nouveau forfait',
-  'Edit — {name}': 'Modifier — {name}',
+  'Edit - {name}': 'Modifier - {name}',
   'Plan name': 'Nom du forfait',
   'Tier': 'Palier',
   'Single Client': 'Client unique',
@@ -1452,7 +1452,7 @@ export const FR: Record<string, string> = {
   'Your requests': 'Vos demandes',
   'No requests yet.': 'Aucune demande pour le moment.',
   'EVA response': 'Réponse d’EVA',
-  'Request sent — the EVA team will review it': 'Demande envoyée — l’équipe EVA l’examinera',
+  'Request sent - the EVA team will review it': 'Demande envoyée - l’équipe EVA l’examinera',
   'Could not send request': 'Impossible d’envoyer la demande',
   'Resolved': 'Résolu',
   'Closed': 'Fermé',
@@ -1527,8 +1527,8 @@ export const FR: Record<string, string> = {
   'No file available for this policy yet': 'Aucun fichier disponible pour cette politique pour le moment',
   // ── Full backup ──
   'Full backup (everything)': 'Sauvegarde complète (tout)',
-  'Download one .zip with the entire database (all data) plus every uploaded file — evidence and policy documents.':
-    'Téléchargez un seul fichier .zip contenant toute la base de données (toutes les données) ainsi que tous les fichiers téléversés — preuves et documents de politiques.',
+  'Download one .zip with the entire database (all data) plus every uploaded file - evidence and policy documents.':
+    'Téléchargez un seul fichier .zip contenant toute la base de données (toutes les données) ainsi que tous les fichiers téléversés - preuves et documents de politiques.',
   'Download full backup': 'Télécharger la sauvegarde complète',
   'Preparing…': 'Préparation…',
   'Full backup downloaded': 'Sauvegarde complète téléchargée',

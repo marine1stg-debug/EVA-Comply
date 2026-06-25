@@ -1,6 +1,6 @@
 """Shared composer for conversational, teleprompter-friendly recording scripts.
 
-Builds a beginner-friendly narration from whatever a control exposes — plain
+Builds a beginner-friendly narration from whatever a control exposes - plain
 language, best practices and expected evidence when present, otherwise the
 control's own requirement text and discussion. Jargon and standards boilerplate
 (e.g. "[Assignment: organization-defined ...]", lettered a./b./c. lists) are
@@ -183,7 +183,7 @@ def _en(title, domain, kp, ev, plain, desc, disc):
         actions = [_humanize_en(a) for a in _split_requirement(desc)]
     actions = [a for a in actions if a][:5]
     if actions:
-        more = " — and a few related steps" if len(_split_requirement(desc)) > 5 and not kp else ""
+        more = " - and a few related steps" if len(_split_requirement(desc)) > 5 and not kp else ""
         p.append("So what do you actually do? In practice: " + _join_en(actions) + more + ".")
     else:
         p.append("So what do you actually do? Write the rule down, give someone clear "
@@ -200,10 +200,10 @@ def _en(title, domain, kp, ev, plain, desc, disc):
 
     # 5) Beginner tip
     p.append("New to this? Don’t overthink it. Get it written down, do the thing consistently, "
-             "and keep dated proof — that covers most of what an auditor checks.")
+             "and keep dated proof - that covers most of what an auditor checks.")
 
     # 6) Takeaway
-    p.append(f"Key takeaway: {title} — do it deliberately, apply it consistently, and keep the evidence.")
+    p.append(f"Key takeaway: {title} - do it deliberately, apply it consistently, and keep the evidence.")
     return "\n\n".join(p)
 
 
@@ -233,7 +233,7 @@ def _fr(title, domain_fr, kp, ev, plain, desc, disc):
         actions = [_humanize_fr(a) for a in _split_requirement(desc)]
     actions = [a for a in actions if a][:5]
     if actions:
-        more = " — et quelques étapes connexes" if len(_split_requirement(desc)) > 5 and not kp else ""
+        more = " - et quelques étapes connexes" if len(_split_requirement(desc)) > 5 and not kp else ""
         p.append("Concrètement, que faut-il faire ? En pratique : " + _join_fr(actions) + more + ".")
     else:
         p.append("Concrètement, que faut-il faire ? Mettez la règle par écrit, confiez-en la "
@@ -248,9 +248,9 @@ def _fr(title, domain_fr, kp, ev, plain, desc, disc):
                  "appliqué, et une date récente prouvant que c’est toujours à jour.")
 
     p.append("Vous débutez ? Ne vous compliquez pas la vie. Mettez-le par écrit, faites-le de façon "
-             "constante, et conservez une preuve datée — c’est l’essentiel de ce que vérifie un évaluateur.")
+             "constante, et conservez une preuve datée - c’est l’essentiel de ce que vérifie un évaluateur.")
 
-    p.append(f"À retenir : {title} — faites-le délibérément, appliquez-le de façon constante, "
+    p.append(f"À retenir : {title} - faites-le délibérément, appliquez-le de façon constante, "
              f"et conservez les preuves.")
     return "\n\n".join(p)
 

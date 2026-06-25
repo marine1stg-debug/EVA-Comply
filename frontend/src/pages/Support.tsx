@@ -56,7 +56,7 @@ export default function SupportPage() {
       return (await api.post('/support/cases', fd)).data
     },
     onSuccess: () => {
-      toast.success(t('Request sent — the EVA team will review it'))
+      toast.success(t('Request sent - the EVA team will review it'))
       setSubject(''); setMessage(''); setFile(null)
       if (fileInput.current) fileInput.current.value = ''
       qc.invalidateQueries({ queryKey: ['support-cases-mine'] })
@@ -144,7 +144,7 @@ export default function SupportPage() {
           )}
         </div>
 
-        {/* My requests — below the new-request form */}
+        {/* My requests - below the new-request form */}
         <div>
           <div className="card-hdr" style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 10 }}>
             <span className="card-title">{t('Your requests')} ({cases.length})</span>

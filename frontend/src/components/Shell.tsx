@@ -35,7 +35,7 @@ function ClientSelector() {
   }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
   const onChange = async (id: string) => {
     // Unsaved changes on the current screen (e.g. a control's self-assessment)?
-    // Offer to save them BEFORE switching — the save must run while the current
+    // Offer to save them BEFORE switching - the save must run while the current
     // client is still active, so we await it first.
     const g = useUnsavedGuard.getState()
     if (g.dirty) {
@@ -56,7 +56,7 @@ function ClientSelector() {
         style={{ fontSize: 12, fontWeight: 600, padding: '6px 10px', borderRadius: 8, cursor: 'pointer',
           border: `1px solid ${clientId ? 'rgba(37,99,235,.45)' : 'rgba(220,38,38,.5)'}`,
           background: clientId ? 'var(--soft)' : 'rgba(220,38,38,.12)', color: 'var(--text)' }}>
-        <option value="">{t('— Select a client —')}</option>
+        <option value="">{t('- Select a client -')}</option>
         {clients.map(c => <option key={c.id} value={c.id}>{c.name}{c.pending_review ? ` (${t('{n} to review', { n: c.pending_review })})` : ''}</option>)}
       </select>
     </div>
@@ -219,7 +219,7 @@ export default function Shell() {
           📱 {t('Open the mobile quick view (cases & incidents)')} →
         </div>
       )}
-      {/* ── TOP BAR (utilities only — page nav lives in the sidebar) ── */}
+      {/* ── TOP BAR (utilities only - page nav lives in the sidebar) ── */}
       <header className="topbar">
         <div className="brand" onClick={() => navigate('/dashboard')}>
           <img className="brand-logo" src={theme === 'dark' ? LOGO_LG : LOGO_LIGHT} alt="EVA Comply" />
@@ -244,7 +244,7 @@ export default function Shell() {
                 background: (ent.trial.days_left ?? 0) <= 3 ? 'rgba(220,38,38,.12)' : 'rgba(217,119,6,.12)',
                 color: (ent.trial.days_left ?? 0) <= 3 ? 'var(--red)' : 'var(--amber)',
                 border: `1px solid ${(ent.trial.days_left ?? 0) <= 3 ? 'rgba(220,38,38,.3)' : 'rgba(217,119,6,.3)'}` }}>
-              ⏳ {t(ent.trial.days_left === 1 ? 'Trial — {days} day left · Subscribe' : 'Trial — {days} days left · Subscribe', { days: ent.trial.days_left ?? 0 })}
+              ⏳ {t(ent.trial.days_left === 1 ? 'Trial - {days} day left · Subscribe' : 'Trial - {days} days left · Subscribe', { days: ent.trial.days_left ?? 0 })}
             </button>
           )}
           <button className="lang-toggle" title={lang === 'fr' ? 'Switch to English' : 'Passer en français'} onClick={switchLang}>
@@ -256,7 +256,7 @@ export default function Shell() {
           </button>
           <NotificationBell />
           <button className="icon-btn" title={t('Settings')} onClick={() => navigate('/settings')}><IcGear /></button>
-          <button className="avatar-btn" title={`${user?.display_name} — account & sign out`}
+          <button className="avatar-btn" title={`${user?.display_name} - account & sign out`}
             style={{ background: `linear-gradient(135deg, ${roleColor}, #1E293B)` }}
             onClick={() => navigate('/users')}>
             {initials}

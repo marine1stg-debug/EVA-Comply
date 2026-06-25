@@ -2,7 +2,7 @@
 
 One interface for evidence, support attachments and training videos. Defaults to
 local disk (STORAGE_BACKEND=local). Set STORAGE_BACKEND=s3 or r2 with the matching
-credentials to store in S3-compatible object storage instead — no call-site changes.
+credentials to store in S3-compatible object storage instead - no call-site changes.
 
 Call sites should depend only on:
     save_bytes(key, data)            -> stores bytes at `key`

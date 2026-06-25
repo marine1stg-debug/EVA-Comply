@@ -68,7 +68,7 @@ function RestoreModal({ target, labelOf, onClose, onDone }:
                 {labelOf(c)}
               </label>
             ))}
-            {!target.cats.length && <div className="page-sub">{t('This backup lists no categories — everything in the file will be restored.')}</div>}
+            {!target.cats.length && <div className="page-sub">{t('This backup lists no categories - everything in the file will be restored.')}</div>}
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 14, justifyContent: 'flex-end' }}>
             <button className="tb-btn" onClick={onClose}>{t('Cancel')}</button>
@@ -177,7 +177,7 @@ export default function BackupRestorePage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontWeight: 700, color: 'var(--text)' }}>{t('Full backup (everything)')}</div>
-            <div className="page-sub" style={{ marginTop: 2 }}>{t('Download one .zip with the entire database (all data) plus every uploaded file — evidence and policy documents.')}</div>
+            <div className="page-sub" style={{ marginTop: 2 }}>{t('Download one .zip with the entire database (all data) plus every uploaded file - evidence and policy documents.')}</div>
           </div>
           <button className="submit-btn" disabled={fullBusy} onClick={downloadFull} style={{ flexShrink: 0 }}>
             ⬇ {fullBusy ? t('Preparing…') : t('Download full backup')}
@@ -269,7 +269,7 @@ export default function BackupRestorePage() {
         <div className="card-hdr" style={{ marginBottom: 8 }}><span className="card-title">{t('Framework catalogs')}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           <div className="page-sub" style={{ flex: 1, minWidth: 240 }}>
-            {t('Download all framework catalogs (English + French .xlsx) as a single zip — CMMC L1, CMMC L2, ITSP.10.171 and NIST SP 800-171 R3.')}
+            {t('Download all framework catalogs (English + French .xlsx) as a single zip - CMMC L1, CMMC L2, ITSP.10.171 and NIST SP 800-171 R3.')}
           </div>
           <button className="submit-btn" disabled={busy} onClick={downloadFrameworks}>⬇ {t('Download catalogs (.zip)')}</button>
         </div>

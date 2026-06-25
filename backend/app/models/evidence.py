@@ -26,7 +26,7 @@ class AuditDecision(str, enum.Enum):
 
 class ControlStatus:
     """User-facing audit status vocabulary (stored as a plain string in
-    org_controls.audit_status — kept separate from the legacy OrgControlStatus
+    org_controls.audit_status - kept separate from the legacy OrgControlStatus
     enum so dashboard/MSP rollups stay unchanged)."""
     COMPLIANT = "compliant"
     NON_COMPLIANT = "non_compliant"
@@ -97,7 +97,7 @@ class OrgControl(Base, TimestampMixin):
     under_review: Mapped[bool] = mapped_column(Boolean, default=False)
     under_review_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
-    # Simple relationships — no back_populates to avoid cross-file circular issues
+    # Simple relationships - no back_populates to avoid cross-file circular issues
     evidence_items: Mapped[list["EvidenceItem"]] = relationship("EvidenceItem", lazy="select")
 
 

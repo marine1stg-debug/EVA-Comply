@@ -37,7 +37,7 @@ SYSTEM = (
     "professional Canadian French. Rules: keep technical terms accurate; DO NOT "
     "translate or alter control identifiers (e.g. AC-2, AC-2(1)) or bracketed "
     "placeholders such as [Assignment: organization-defined ...] and "
-    "[Selection: ...] — copy them verbatim; preserve list lettering (a. b. c.) and "
+    "[Selection: ...] - copy them verbatim; preserve list lettering (a. b. c.) and "
     "numbering; do not add commentary. Return ONLY a JSON object with keys "
     "\"title\", \"description\", \"discussion\" (use empty strings if an input is empty)."
 )
@@ -111,7 +111,7 @@ async def run(src, limit, force):
                 _write(fr_path, en, fr)
                 print(f"  …{done}/{len(todo)} (saved)")
         _write(fr_path, en, fr)
-        print(f"\nDone — {done} translated. Wrote {fr_path}")
+        print(f"\nDone - {done} translated. Wrote {fr_path}")
         print("Next: docker compose exec api python -m app.seed_catalogs --yes")
 
 

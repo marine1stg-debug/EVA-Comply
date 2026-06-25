@@ -99,7 +99,7 @@ async def get_current_user(
         raise HTTPException(status_code=401, detail="Could not validate token")
 
     # SECURITY: the pre-MFA temp token carries mfa_pending=True and must
-    # never be accepted as a session token — only /auth/mfa/verify may use it.
+    # never be accepted as a session token - only /auth/mfa/verify may use it.
     if payload.get("mfa_pending"):
         raise HTTPException(status_code=401, detail="MFA verification required")
 
@@ -112,7 +112,7 @@ async def get_current_user(
     tenant_result = await db.execute(select(Tenant).where(Tenant.id == user.tenant_id))
     tenant = tenant_result.scalar_one_or_none()
     if tenant and tenant.subscription_status.value == "suspended":
-        raise HTTPException(status_code=402, detail="Account suspended — please update payment")
+        raise HTTPException(status_code=402, detail="Account suspended - please update payment")
 
     return user
 
@@ -248,7 +248,7 @@ async def refresh_session(request: RefreshRequest, http_request: Request, db: As
         raise HTTPException(status_code=401, detail="User not found or inactive")
     # Revocation: a refresh token is only valid for the version it was issued at.
     if int(payload.get("tv", 0)) != int(user.token_version or 0):
-        raise HTTPException(status_code=401, detail="Session expired — please sign in again")
+        raise HTTPException(status_code=401, detail="Session expired - please sign in again")
     return _session_tokens(user)
 
 
@@ -290,8 +290,8 @@ async def unlock_account(body: TokenBody, db: AsyncSession = Depends(get_db)):
 
 @router.get("/signup-options")
 async def signup_options(db: AsyncSession = Depends(get_db)):
-    """Public — active plans (from the configurable catalog) and frameworks."""
-    # All active frameworks — both built-in and imported (custom) — so plans and
+    """Public - active plans (from the configurable catalog) and frameworks."""
+    # All active frameworks - both built-in and imported (custom) - so plans and
     # signup can include catalogs you've imported, not just the seeded ones.
     fw_rows = (await db.execute(
         select(Framework).where(Framework.is_active == True)  # noqa: E712
@@ -322,19 +322,19 @@ class VerifyRequestBody(BaseModel):
 
 @router.get("/captcha")
 async def get_captcha():
-    """Public — issue a fresh arithmetic CAPTCHA challenge for signup."""
+    """Public - issue a fresh arithmetic CAPTCHA challenge for signup."""
     question, token = make_captcha()
     return {"question": question, "captcha_token": token}
 
 
 @router.post("/request-verification")
 async def request_verification(body: VerifyRequestBody, http_request: Request, db: AsyncSession = Depends(get_db)):
-    """Public — issue an email verification code. In dev (console email) the
+    """Public - issue an email verification code. In dev (console email) the
     code is returned so the flow is testable without an email service."""
     ratelimit.enforce(http_request, "request_verification", limit=5, window_seconds=900)
     exists = (await db.execute(select(User).where(User.email == body.email))).scalar_one_or_none()
     if exists:
-        raise HTTPException(status_code=400, detail="That email already has an account — please sign in")
+        raise HTTPException(status_code=400, detail="That email already has an account - please sign in")
     code = gen_verification_code()
     token = create_verification_token(body.email, code)
     dev = settings.EMAIL_BACKEND == "console" or settings.ENVIRONMENT == "development"
@@ -355,7 +355,7 @@ async def register(request: RegisterRequest, http_request: Request, db: AsyncSes
 
     # Require a valid CAPTCHA answer (challenge issued by /captcha).
     if not request.captcha_token or not verify_captcha(request.captcha_token, request.captcha_answer or ""):
-        raise HTTPException(status_code=400, detail="Incorrect or expired CAPTCHA — please try again")
+        raise HTTPException(status_code=400, detail="Incorrect or expired CAPTCHA - please try again")
 
     # Require a valid email-verification code (token issued by /request-verification).
     if not request.verification_token or not request.code:
@@ -363,7 +363,7 @@ async def register(request: RegisterRequest, http_request: Request, db: AsyncSes
     try:
         vp = decode_token(request.verification_token)
     except Exception:
-        raise HTTPException(status_code=400, detail="Verification expired — request a new code")
+        raise HTTPException(status_code=400, detail="Verification expired - request a new code")
     if vp.get("type") != "verify" or vp.get("email") != request.email or vp.get("code") != request.code:
         raise HTTPException(status_code=400, detail="Invalid verification code")
 
@@ -418,7 +418,7 @@ async def register(request: RegisterRequest, http_request: Request, db: AsyncSes
     db.add(user)
     await db.flush()
 
-    # MSP master tenants don't track their own controls — frameworks are
+    # MSP master tenants don't track their own controls - frameworks are
     # assigned to each client. Only provision frameworks for single clients.
     assigned = 0
     if not is_msp:
@@ -433,7 +433,7 @@ async def register(request: RegisterRequest, http_request: Request, db: AsyncSes
         send_email(list(recipients), "New MSP/Reseller awaiting authorization",
                    f"{request.org_name} signed up as an MSP/Reseller and is awaiting authorization in Tenant Management.")
         return {
-            "message": "Account created — awaiting EVA authorization",
+            "message": "Account created - awaiting EVA authorization",
             "pending": True,
             "tenant_id": str(tenant.id),
         }
@@ -454,7 +454,7 @@ async def register(request: RegisterRequest, http_request: Request, db: AsyncSes
 
 @router.get("/promo/{code}")
 async def check_promo(code: str, db: AsyncSession = Depends(get_db)):
-    """Public — validate a signup promo code and report the billing behavior it grants."""
+    """Public - validate a signup promo code and report the billing behavior it grants."""
     from app.core.promo import resolve_promo, MODE_HINT
     p = await resolve_promo(db, code)
     if not p:
@@ -521,7 +521,7 @@ async def change_password(
 
 @router.get("/entitlements")
 async def entitlements(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
-    """What the current user's tenant is allowed to do — drives UI gating."""
+    """What the current user's tenant is allowed to do - drives UI gating."""
     t = (await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))).scalar_one()
     ent = await get_entitlements(db, t)
     usage = await tenant_usage(db, t)
@@ -535,7 +535,7 @@ async def entitlements(current_user: User = Depends(get_current_user), db: Async
 
 @router.get("/invite-info")
 async def invite_info(token: str, db: AsyncSession = Depends(get_db)):
-    """Public — describe an invite so the accept page can show who/what."""
+    """Public - describe an invite so the accept page can show who/what."""
     try:
         p = decode_token(token)
     except Exception:

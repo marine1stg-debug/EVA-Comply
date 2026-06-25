@@ -9,7 +9,7 @@ Design goals:
     (already required to be >=32 chars in production), so deployments need no
     extra env var and nothing breaks on upgrade.
   * **Fail safe.** If a value can't be decrypted (e.g. SECRET_KEY rotated),
-    ``decrypt`` returns ``None`` — the feature degrades (key must be re-entered)
+    ``decrypt`` returns ``None`` - the feature degrades (key must be re-entered)
     rather than crashing a request.
 
 If ``SECRET_KEY`` ever rotates, previously-encrypted secrets become

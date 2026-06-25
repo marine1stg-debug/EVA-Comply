@@ -85,7 +85,7 @@ DOMAIN_FR = {
     "vulnerability management": "Gestion des vulnérabilités",
     "data protection": "Protection des données",
     "organizational": "Contrôles organisationnels",
-    # CIS Controls v8.1 — control families
+    # CIS Controls v8.1 - control families
     "cis 1: inventory and control of enterprise assets": "CIS 1 : Inventaire et contrôle des actifs de l’entreprise",
     "cis 2: inventory and control of software assets": "CIS 2 : Inventaire et contrôle des actifs logiciels",
     "cis 3: data protection": "CIS 3 : Protection des données",

@@ -111,10 +111,10 @@ export default function PortfolioPage() {
                 return (
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td style={{ color: c.perceived != null ? '#0EA5E9' : 'var(--text3)', fontWeight: 600 }}>{c.perceived ?? '—'}{c.perceived != null ? '/5' : ''}</td>
+                    <td style={{ color: c.perceived != null ? '#0EA5E9' : 'var(--text3)', fontWeight: 600 }}>{c.perceived ?? '-'}{c.perceived != null ? '/5' : ''}</td>
                     <td style={{ color: '#16A34A', fontWeight: 600 }}>{c.assessed}/5</td>
                     <td style={{ color: 'var(--text3)' }}>{c.target}/5</td>
-                    <td className={gcls}>{gap == null ? '—' : `${gap > 0 ? '+' : ''}${gap}`}</td>
+                    <td className={gcls}>{gap == null ? '-' : `${gap > 0 ? '+' : ''}${gap}`}</td>
                   </tr>
                 )
               })}

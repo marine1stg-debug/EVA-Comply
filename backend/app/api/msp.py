@@ -1,5 +1,5 @@
 """
-MSP API — client management + portfolio overview.
+MSP API - client management + portfolio overview.
 Scope: MSP roles → client tenants under their MSP; super_admin → all clients.
 Resale economics (eva_cost / margin) are derived for display from plan price.
 """
@@ -76,7 +76,7 @@ async def _client_summary(db: AsyncSession, t: Tenant, idx: int) -> dict:
         "id": str(t.id), "name": t.name, "short": _initials(t.name), "color": PALETTE[idx % len(PALETTE)],
         "compliance": compliance, "controls_done": done, "controls_total": total,
         "evidence_pending": pending, "status": _status(t.subscription_status),
-        "frameworks": frameworks or ["—"], "plan": t.plan_name or "—",
+        "frameworks": frameworks or ["-"], "plan": t.plan_name or "-",
         "msp_review": t.msp_review_enabled, "users": users, "admin": admin,
         "last_activity": last.strftime("%b %d, %Y") if last else "Never",
         "monthly_fee": fee, "eva_cost": eva_cost, "margin": fee - eva_cost,

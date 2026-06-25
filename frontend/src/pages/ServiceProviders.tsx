@@ -161,7 +161,7 @@ export default function ServiceProvidersPage() {
                   <div style={{ fontWeight: 600 }}>{p.name}</div>
                   <div style={{ fontSize: 10.5, color: 'var(--text3)' }}>{p.contact_email}{p.website ? ` · ${p.website}` : ''}</div>
                 </td>
-                <td style={{ fontSize: 11, maxWidth: 280 }}>{(p.skills || []).join(', ') || '—'}</td>
+                <td style={{ fontSize: 11, maxWidth: 280 }}>{(p.skills || []).join(', ') || '-'}</td>
                 <td style={{ fontWeight: 700 }}>{p.priority_weight}</td>
                 <td><span className={`badge ${STATUS_BADGE[p.status] || 'b-gray'}`}>{t(p.status)}</span></td>
                 <td>

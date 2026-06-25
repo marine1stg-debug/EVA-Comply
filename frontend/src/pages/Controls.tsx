@@ -22,14 +22,14 @@ function HelpModal({ controlId, domain, onClose }: { controlId: string; domain: 
   return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
-        <div className="modal-hdr"><span className="card-title">{t('Get help')}{domain ? ` — ${domain}` : ''}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
+        <div className="modal-hdr"><span className="card-title">{t('Get help')}{domain ? ` - ${domain}` : ''}</span><button className="ev-action-btn" onClick={onClose}>✕</button></div>
         <div className="modal-body">
           {isLoading ? <div className="page-sub">{t('Loading…')}</div>
             : !data || !data.providers?.length
-              ? <div className="page-sub">{t('No matching providers yet — check back soon.')}</div>
+              ? <div className="page-sub">{t('No matching providers yet - check back soon.')}</div>
               : <>
                   <div className="page-sub" style={{ marginBottom: 10 }}>
-                    {data.exact ? t('Providers who can help, best match first:') : t('No exact match — here are available providers:')}
+                    {data.exact ? t('Providers who can help, best match first:') : t('No exact match - here are available providers:')}
                   </div>
                   {data.providers.map((p: any) => (
                     <div key={p.id} style={{ border: '1px solid var(--border-l)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
@@ -115,7 +115,7 @@ const EE_STATE: Record<string, { bg: string; dot: string; badge: string; label: 
   missing:   { bg: 'rgba(220,38,38,.10)', dot: '#EF4444', badge: 'b-red',    label: 'missing' },
   submitted: { bg: 'rgba(37,99,235,.12)', dot: '#3B82F6', badge: 'b-blue',   label: 'submitted' },
   accepted:  { bg: 'rgba(22,163,74,.12)', dot: '#22C55E', badge: 'b-green',  label: 'accepted' },
-  returned:  { bg: 'rgba(234,88,12,.12)', dot: '#F97316', badge: 'b-orange', label: 'returned — action needed' },
+  returned:  { bg: 'rgba(234,88,12,.12)', dot: '#F97316', badge: 'b-orange', label: 'returned - action needed' },
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -483,7 +483,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
   const genReco = useMutation({
     mutationFn: async (source: 'premade' | 'ai') => (await api.post(`/recommendations/control/${id}/generate`, { source })).data,
     onSuccess: (r: any) => {
-      toast.success(r.created ? `Added ${r.created} recommendation${r.created === 1 ? '' : 's'}` : 'No gap — control is at or above target')
+      toast.success(r.created ? `Added ${r.created} recommendation${r.created === 1 ? '' : 's'}` : 'No gap - control is at or above target')
       qc.invalidateQueries({ queryKey: ['reco', id] })
       qc.invalidateQueries({ queryKey: ['recommendations'] })
     },
@@ -643,7 +643,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
               </div>
             </div>
 
-            {/* Status row — auto-derived from evidence, or manual override */}
+            {/* Status row - auto-derived from evidence, or manual override */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border-l)', flexWrap: 'wrap' }}>
               <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text2)', textTransform: 'uppercase', letterSpacing: '.05em' }}>{t('Status')}</span>
               <span className={`badge ${c.audit_status_badge}`}>{c.audit_status_label}</span>
@@ -672,7 +672,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                 border: `1px solid ${c.under_review ? '#FDE68A' : 'var(--border-l)'}`,
                 background: c.under_review ? '#FFFBEB' : 'var(--surface)', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                 {c.under_review
-                  ? <span style={{ fontSize: 12, color: '#92400E' }}>🔎 <b>{t('Under review')}</b>{c.under_review_note ? ` — ${c.under_review_note}` : ''}</span>
+                  ? <span style={{ fontSize: 12, color: '#92400E' }}>🔎 <b>{t('Under review')}</b>{c.under_review_note ? ` - ${c.under_review_note}` : ''}</span>
                   : <span style={{ fontSize: 12, color: 'var(--text3)' }}>{t('As a coach, you can challenge this control and send it back under review.')}</span>}
                 {c.can_coach && (
                   <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
@@ -794,7 +794,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                       }}
                     >
                       <span style={{ transform: discOpen ? 'rotate(90deg)' : 'none', transition: 'transform .15s', display: 'inline-block' }}>▸</span>
-                      {t('Discussion — standard guidance')}
+                      {t('Discussion - standard guidance')}
                       <span style={{ marginLeft: 'auto', fontWeight: 500, textTransform: 'none', letterSpacing: 0, color: 'var(--text3)' }}>
                         {discOpen ? t('Hide') : t('Read')}
                       </span>
@@ -812,7 +812,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                   </div>
                 )}
 
-                {/* Self-assessment — embedded here so the client rates against the requirement/objective above */}
+                {/* Self-assessment - embedded here so the client rates against the requirement/objective above */}
                 <div style={{ marginTop: 20, paddingTop: 16, borderTop: '2px solid var(--border-l)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                     <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text2)', textTransform: 'uppercase', letterSpacing: '.05em' }}>◎ {t('Self-assessment')}</span>
@@ -846,7 +846,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                   <div style={{ marginTop: 10 }}>
                     <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text2)', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 6 }}>{t('Comments / Additional info')}</div>
                     <textarea value={saDraft.comment} onChange={e => setSaDraft(s => ({ ...s, comment: e.target.value }))} rows={3}
-                      placeholder={t('Add context for your answers — scope, exceptions, planned improvements…')}
+                      placeholder={t('Add context for your answers - scope, exceptions, planned improvements…')}
                       style={{ width: '100%', fontSize: 12.5, padding: 9, border: '1px solid var(--border-l)', borderRadius: 6, resize: 'vertical', fontFamily: 'inherit', background: 'var(--card)', color: 'var(--text)' }} />
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>
@@ -947,7 +947,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                       style={{ fontSize: 12, padding: '8px 14px', opacity: (addEvidence.isPending || !newEvi.title.trim()) ? 0.5 : 1 }}>
                       {addEvidence.isPending ? t('Adding…') : t('Add evidence')}
                     </button>
-                    <span className="upload-sub" style={{ fontSize: 10.5, color: 'var(--text3)' }}>{t('PDF, images, spreadsheets — up to 50 MB')}</span>
+                    <span className="upload-sub" style={{ fontSize: 10.5, color: 'var(--text3)' }}>{t('PDF, images, spreadsheets - up to 50 MB')}</span>
                   </div>
                 </div>
               </div>
@@ -1012,7 +1012,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                   </div>
                   )
                 })}
-                {exp && exp.items.length === 0 && <div className="page-sub" style={{ marginBottom: 10 }}>{t('No expected evidence defined yet — add the first item below.')}</div>}
+                {exp && exp.items.length === 0 && <div className="page-sub" style={{ marginBottom: 10 }}>{t('No expected evidence defined yet - add the first item below.')}</div>}
 
                 <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
                   <input value={newExp} onChange={e => setNewExp(e.target.value)} placeholder={t('Add an expected evidence item for this client…')}
@@ -1081,7 +1081,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                     <div key={ev.id} className="hist-item">
                       <span className="hist-icon">{icon}</span>
                       <div className="hist-text">
-                        {ev.label}{ev.detail ? ` — ${ev.detail}` : ''}
+                        {ev.label}{ev.detail ? ` - ${ev.detail}` : ''}
                         <div style={{ fontSize: 10, color: 'var(--text3)' }}>{t('by {actor}', { actor: ev.actor })}</div>
                       </div>
                       <div className="hist-time">{ev.date}</div>
@@ -1132,7 +1132,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
                 <button className="dec-btn d-more" disabled={setStatus.isPending}
                   onClick={() => setStatus.mutate({ mode: 'manual', status: 'in_progress', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('⏳ Needs more')}</button>
                 <button className="dec-btn d-na" disabled={setStatus.isPending}
-                  onClick={() => setStatus.mutate({ mode: 'manual', status: 'not_applicable', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('— Not applicable')}</button>
+                  onClick={() => setStatus.mutate({ mode: 'manual', status: 'not_applicable', note: auditNote.trim() || undefined }, { onSuccess: () => setAuditNote('') })}>{t('- Not applicable')}</button>
               </div>
               <textarea className="auditor-note" rows={3} placeholder={t('Auditor notes…')}
                 value={auditNote} onChange={e => setAuditNote(e.target.value)} />
@@ -1177,7 +1177,7 @@ function ControlDetail({ id, onBack, onOpen }: { id: string; onBack: () => void;
         </div>
       </div>
 
-      {/* Bottom prev/next — mirrors the top toolbar so long controls can be
+      {/* Bottom prev/next - mirrors the top toolbar so long controls can be
           navigated without scrolling back up. */}
       {listIds.length > 1 && (
         <div className="fi" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 18, paddingTop: 14, borderTop: '1px solid var(--border-l)' }}>

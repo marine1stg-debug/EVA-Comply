@@ -18,7 +18,7 @@ async def run():
             select(Framework).where(Framework.name.ilike("%800-171%"))
         )).scalars().first()
         if not fw:
-            print("NIST 800-171 framework not found — import it first.")
+            print("NIST 800-171 framework not found - import it first.")
             return
         updated, missing = 0, 0
         for ref, s in NIST_SCRIPTS.items():

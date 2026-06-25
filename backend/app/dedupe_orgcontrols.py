@@ -10,7 +10,7 @@ For each (org_id, control_id) group with >1 row this keeps the EARLIEST row
 references to it, then deletes the extra OrgControl rows. ExpectedEvidence is
 keyed by (org_id, control_id) so it is unaffected.
 
-DRY RUN by default — prints what it would do and exits. Add --yes to commit.
+DRY RUN by default - prints what it would do and exits. Add --yes to commit.
 
 USAGE (inside the api container):
     docker compose exec api python -m app.dedupe_orgcontrols            # dry run
@@ -23,7 +23,7 @@ from collections import defaultdict
 from sqlalchemy import select, update, delete
 
 from app.core.database import AsyncSessionLocal
-from app.models import framework, evidence  # noqa: F401 — register mappers
+from app.models import framework, evidence  # noqa: F401 - register mappers
 from app.models.evidence import OrgControl, EvidenceItem
 
 
@@ -78,7 +78,7 @@ async def run(commit: bool):
             await db.commit()
             print("\nCommitted.")
         else:
-            print("\nDry run only — re-run with --yes to apply.")
+            print("\nDry run only - re-run with --yes to apply.")
 
 
 if __name__ == "__main__":

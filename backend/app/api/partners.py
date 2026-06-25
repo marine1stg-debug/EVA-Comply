@@ -1,7 +1,7 @@
 """MSP partner / reseller margin API.
 
 Model (wholesale markup + volume tiers):
-  • EVA sets a wholesale price per plan (the MSP's cost) — billing_plans.wholesale_monthly.
+  • EVA sets a wholesale price per plan (the MSP's cost) - billing_plans.wholesale_monthly.
   • The client is billed the RETAIL price (tenant.monthly_price) via EVA's Stripe.
   • EVA applies a volume discount to the wholesale based on the MSP's active client
     count, keeps the discounted wholesale, and pays the MSP the difference
@@ -127,7 +127,7 @@ async def _msp_margin(db: AsyncSession, msp: Tenant) -> dict:
             collected = round(retail * (1 - cdisc / 100.0))
             payout = round(collected * cpct / 100.0)
             eva_keep = max(0, collected - payout)
-            row = {"id": str(c.id), "name": c.name, "plan": c.plan_name or (plan.name if plan else "—"),
+            row = {"id": str(c.id), "name": c.name, "plan": c.plan_name or (plan.name if plan else "-"),
                    "status": c.subscription_status.value, "active": billable,
                    "retail": retail, "wholesale": collected, "effective_wholesale": eva_keep,
                    "margin": payout, "floor": 0}
@@ -136,7 +136,7 @@ async def _msp_margin(db: AsyncSession, msp: Tenant) -> dict:
         else:
             eff_ws = _eff_wholesale(plan, discount)
             margin = max(0, retail - eff_ws)
-            row = {"id": str(c.id), "name": c.name, "plan": c.plan_name or (plan.name if plan else "—"),
+            row = {"id": str(c.id), "name": c.name, "plan": c.plan_name or (plan.name if plan else "-"),
                    "status": c.subscription_status.value, "active": billable,
                    "retail": retail, "wholesale": (plan.wholesale_monthly or 0) if plan else 0,
                    "effective_wholesale": eff_ws, "margin": margin, "floor": eff_ws}
@@ -306,7 +306,7 @@ async def generate_statement(msp_id: str, current_user: User = Depends(get_curre
     today = date.today()
     period_start = today.replace(day=1)
     lines = [{
-        "description": f"{c['name']} — {c['plan']} (retail ${c['retail']} − EVA ${c['effective_wholesale']})",
+        "description": f"{c['name']} - {c['plan']} (retail ${c['retail']} − EVA ${c['effective_wholesale']})",
         "qty": 1, "amount": c["margin"],
     } for c in data["clients"] if c["active"]]
 
@@ -328,7 +328,7 @@ async def generate_statement(msp_id: str, current_user: User = Depends(get_curre
         try:
             send_email(
                 to=a.email,
-                subject=f"EVA Comply — Monthly statement {inv.number}",
+                subject=f"EVA Comply - Monthly statement {inv.number}",
                 body=(f"Hello {a.display_name or ''},\n\n"
                       f"Your monthly partner statement {inv.number} is ready.\n"
                       f"Active clients: {totals['active_clients']}\n"
@@ -340,7 +340,7 @@ async def generate_statement(msp_id: str, current_user: User = Depends(get_curre
             pass
     try:
         await audit_record(db, current_user, "msp.statement.generated",
-                           target=msp.name, detail=f"{inv.number} — payout ${totals['msp_payout']}")
+                           target=msp.name, detail=f"{inv.number} - payout ${totals['msp_payout']}")
         await db.commit()
     except Exception:
         pass

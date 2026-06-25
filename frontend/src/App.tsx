@@ -46,7 +46,7 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 
 // Route-level role enforcement (mirrors the nav visibility rules in Shell.tsx).
-// Defense-in-depth only — the backend enforces authorization on every endpoint;
+// Defense-in-depth only - the backend enforces authorization on every endpoint;
 // this stops users from rendering admin pages by typing the URL.
 function RoleRoute({ allow, children }: { allow: string[]; children: React.ReactNode }) {
   const role = useAuthStore(s => s.user?.role || '')

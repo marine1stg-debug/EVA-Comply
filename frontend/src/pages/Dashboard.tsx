@@ -74,7 +74,7 @@ export default function DashboardPage() {
   const openTickets = (support?.cases || []).filter(c => c.status === 'open' || c.status === 'in_progress').length
   const isEva = ['super_admin', 'eva_auditor'].includes(user.role)
   // Reviewers (EVA / MSP) with no client selected see a portfolio rollup across
-  // all their clients — label it as such so it's not mistaken for one org.
+  // all their clients - label it as such so it's not mistaken for one org.
   const isReviewer = ['super_admin', 'eva_auditor', 'msp_admin', 'msp_analyst'].includes(user.role)
   const portfolioView = isReviewer && !clientId
   // EVA always sees the support box (entry to the console); others only when there's something open.
@@ -141,7 +141,7 @@ export default function DashboardPage() {
             <div style={{ flex: 1, height: 9, background: 'var(--surface-2)', borderRadius: 6, overflow: 'hidden' }}>
               <div style={{ width: `${((val ?? 0) / sm) * 100}%`, height: '100%', background: color }} />
             </div>
-            <span style={{ width: 46, textAlign: 'right', fontSize: 12, fontWeight: 600, color }}>{val ?? '—'}/{sm}</span>
+            <span style={{ width: 46, textAlign: 'right', fontSize: 12, fontWeight: 600, color }}>{val ?? '-'}/{sm}</span>
           </div>
         )
         const gap = mat.gap
@@ -212,7 +212,7 @@ export default function DashboardPage() {
             <span className="card-link" onClick={() => navigate('/controls')}>{t('View all')}</span>
           </div>
           <div className="ctrl-list">
-            {priorityControls.length === 0 && <div className="page-sub">{t('Nothing outstanding — nice work.')}</div>}
+            {priorityControls.length === 0 && <div className="page-sub">{t('Nothing outstanding - nice work.')}</div>}
             {priorityControls.map(c => (
               <div key={c.ref} className="ctrl-row-d" onClick={() => navigate('/controls')}>
                 <span className="ctrl-ref">{c.ref}</span>

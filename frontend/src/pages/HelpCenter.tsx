@@ -72,7 +72,7 @@ export default function HelpCenterPage() {
       <div className="page-hdr fi">
         <div>
           <div className="page-title">{t('Help Center')}</div>
-          <div className="page-sub">{t('Your owner’s manual for EVA Comply — guides tailored to your role.')}</div>
+          <div className="page-sub">{t('Your owner’s manual for EVA Comply - guides tailored to your role.')}</div>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ export default function HelpCenterPage() {
       {showMspNote && (
         <div className="fi" style={{ margin: '0 0 14px', padding: '11px 14px', borderRadius: 10,
           border: '1px solid var(--border-l)', borderLeft: '4px solid #7C3AED', background: 'var(--card)', fontSize: 13, color: 'var(--text2)', lineHeight: 1.55 }}>
-          🏢 {t('Your organization is managed by an MSP, so your evidence is pre-reviewed by your MSP before it reaches EVA. After you submit, it goes to your MSP first — they approve and forward it, or return it to you with feedback.')}
+          🏢 {t('Your organization is managed by an MSP, so your evidence is pre-reviewed by your MSP before it reaches EVA. After you submit, it goes to your MSP first - they approve and forward it, or return it to you with feedback.')}
         </div>
       )}
 

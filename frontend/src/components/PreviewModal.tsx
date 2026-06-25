@@ -48,7 +48,7 @@ export default function PreviewModal({ id, title, onClose }: { id: string; title
               <tbody>{(data.rows || []).map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}</tbody>
             </table>
           )}
-          {data?.kind === 'none' && <div className="page-sub">No inline preview for this file type — use Download to view it.</div>}
+          {data?.kind === 'none' && <div className="page-sub">No inline preview for this file type - use Download to view it.</div>}
         </div>
       </div>
     </div>

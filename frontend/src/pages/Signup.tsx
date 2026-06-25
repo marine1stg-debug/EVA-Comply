@@ -83,7 +83,7 @@ export default function SignupPage() {
       })
       // MSP/Reseller accounts are created pending and can't sign in until EVA authorizes them.
       if (data.pending) {
-        toast.success(t('Account created — awaiting EVA authorization. You’ll be notified once approved.'))
+        toast.success(t('Account created - awaiting EVA authorization. You’ll be notified once approved.'))
         navigate('/login')
         return
       }
@@ -100,7 +100,7 @@ export default function SignupPage() {
           })).data
           if (co.url) { window.location.href = co.url; return }
         }
-        toast.success(t('Welcome to EVA — your trial has started'))
+        toast.success(t('Welcome to EVA - your trial has started'))
         navigate('/dashboard')
       }
       // Require reading & accepting the agreement BEFORE entering the app.
@@ -200,10 +200,10 @@ export default function SignupPage() {
             {promoInfo && (
               promoInfo.valid
                 ? <div className="text-xs mb-2" style={{ color: '#34D399' }}>✓ {promoInfo.hint}</div>
-                : <div className="text-xs mb-2" style={{ color: '#F87171' }}>{t('That code isn’t valid — you can continue without one.')}</div>
+                : <div className="text-xs mb-2" style={{ color: '#F87171' }}>{t('That code isn’t valid - you can continue without one.')}</div>
             )}
             <div className="text-xs mt-1 mb-3" style={{ color: '#4A6A8A' }}>
-              {selectedPlan?.tenant_type === 'msp' ? t('MSP plans manage multiple client orgs — you’ll add clients after signup.') : opts?.stripe_enabled ? t('Next step takes you to secure Stripe checkout.') : t('Payment is simulated in this build — no card required.')}
+              {selectedPlan?.tenant_type === 'msp' ? t('MSP plans manage multiple client orgs - you’ll add clients after signup.') : opts?.stripe_enabled ? t('Next step takes you to secure Stripe checkout.') : t('Payment is simulated in this build - no card required.')}
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button className="flex-1 py-2.5 rounded-lg text-sm" style={{ border: '1px solid rgba(255,255,255,.12)', color: '#7094B8' }} onClick={() => setStep(2)}>{t('← Back')}</button>

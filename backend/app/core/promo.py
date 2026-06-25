@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.promo import PromoCode
 
 MODE_HINT = {
-    "no_card_trial": "Free trial — no card required",
-    "card_trial": "Card required — free during the trial, then auto-charges",
+    "no_card_trial": "Free trial - no card required",
+    "card_trial": "Card required - free during the trial, then auto-charges",
     "charge_immediately": "Payment required to start",
 }
 

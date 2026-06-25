@@ -3,7 +3,7 @@
 Used by the LLM connector, the only place the server makes an HTTP request to a
 URL chosen by an (admin) user. Without this, the configured base URL could point
 at the cloud metadata endpoint (169.254.169.254), localhost, or internal-only
-services, and the response — plus the configured API key — could be exfiltrated.
+services, and the response - plus the configured API key - could be exfiltrated.
 
 Self-hosted LLMs (e.g. Ollama on localhost, an internal vLLM) are a legitimate
 use case, so private/loopback targets are allowed ONLY when the operator opts in

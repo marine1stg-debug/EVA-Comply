@@ -1,5 +1,5 @@
 """
-Controls API — list (with per-org status/coverage/evidence) and detail.
+Controls API - list (with per-org status/coverage/evidence) and detail.
 Org scope: client roles → own tenant; MSP/EVA roles → a client tenant in
 their scope (the seeded demo client) so they see real posture.
 """
@@ -127,7 +127,7 @@ EV_BADGE = {
 
 
 async def _target_org(db: AsyncSession, user: User):
-    """Org this request acts on — the selected client for reviewers, own tenant for clients."""
+    """Org this request acts on - the selected client for reviewers, own tenant for clients."""
     from app.core.client_context import resolve_org
     return await resolve_org(db, user)
 
@@ -189,7 +189,7 @@ async def _evidence_counts(db: AsyncSession, org_id) -> dict:
 
 async def _returned_counts(db: AsyncSession, org_id) -> dict:
     """Per-org-control count of evidence the auditor sent back (needs more /
-    rejected) — i.e. items the client must act on."""
+    rejected) - i.e. items the client must act on."""
     if not org_id:
         return {}
     rows = await db.execute(
@@ -280,12 +280,12 @@ async def list_controls(
             "id": str(c.id),
             "ref": c.ref,
             "title": loc(c, "title", lang),
-            "framework": fw_map.get(c.framework_id, "—"),
-            "domain": loc_domain(c.domain, lang) or "—",
-            "level": c.level or "—",
+            "framework": fw_map.get(c.framework_id, "-"),
+            "domain": loc_domain(c.domain, lang) or "-",
+            "level": c.level or "-",
             "priority": c.priority.value if c.priority else "low",
             "risk": c.risk_rating.value if c.risk_rating else "low",
-            "category": c.control_category.value if c.control_category else "—",
+            "category": c.control_category.value if c.control_category else "-",
             "status": status,
             "statusBadge": STATUS_BADGE.get(status, "b-gray"),
             "audit_status": (_ds := _display_status(oc, ev_count, c.id in answered_sa)),
@@ -302,8 +302,8 @@ async def list_controls(
             "policy_template": match_policy_name(c.domain, _pols, lang),
         })
 
-    domains = sorted({c["domain"] for c in items if c["domain"] != "—"})
-    frameworks = sorted({c["framework"] for c in items if c["framework"] != "—"})
+    domains = sorted({c["domain"] for c in items if c["domain"] != "-"})
+    frameworks = sorted({c["framework"] for c in items if c["framework"] != "-"})
     return {
         "items": items,
         "domains": domains,
@@ -367,7 +367,7 @@ async def control_detail(
                     "file_size": ev.file_size,
                     "can_preview": bool(ev.file_key),
                     "by": who,
-                    "date": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "—",
+                    "date": ev.created_at.strftime("%b %d, %Y") if ev.created_at else "-",
                     "note": ev.description,
                 })
 
@@ -412,12 +412,12 @@ async def control_detail(
         "id": str(control.id),
         "ref": control.ref,
         "title": loc(control, "title", lang),
-        "domain": loc_domain(control.domain, lang) or "—",
+        "domain": loc_domain(control.domain, lang) or "-",
         "english": english,
         "fr_available": fr_available,
-        "level": control.level or "—",
-        "category": control.control_category.value if control.control_category else "—",
-        "framework": framework.name if framework else "—",
+        "level": control.level or "-",
+        "category": control.control_category.value if control.control_category else "-",
+        "framework": framework.name if framework else "-",
         "priority": priority,
         "priorityBadge": PRIORITY_BADGE.get(priority, "b-gray"),
         "risk": risk,
@@ -970,8 +970,8 @@ async def control_events(
                     "status": "Status changed"}
     return {"events": [{
         "id": str(e.id), "action": e.action, "label": ACTION_LABEL.get(e.action, e.action),
-        "detail": e.detail, "actor": e.actor_name or "—",
-        "date": e.created_at.strftime("%b %d, %Y %H:%M") if e.created_at else "—",
+        "detail": e.detail, "actor": e.actor_name or "-",
+        "date": e.created_at.strftime("%b %d, %Y %H:%M") if e.created_at else "-",
     } for e in rows]}
 
 
@@ -1003,7 +1003,7 @@ async def review_evidence_item(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Approve or flag (return) a single uploaded evidence item — the
+    """Approve or flag (return) a single uploaded evidence item - the
     evidence-centric review used by the Evidence tab. Works whether or not the
     item is linked to an expected-evidence suggestion."""
     if current_user.role not in REVIEWER_ROLES:
@@ -1023,7 +1023,7 @@ async def review_evidence_item(
         ev.status = EvidenceStatus.accepted
         ev.review_note = note
         await _log_event(db, org_id, control.id, ev.id, current_user, "accepted",
-                         f"{ev.title[:80]}" + (f" — {note}" if note else ""))
+                         f"{ev.title[:80]}" + (f" - {note}" if note else ""))
     else:
         ev.status = EvidenceStatus.needs_more
         ev.review_note = note
@@ -1084,7 +1084,7 @@ async def set_control_status(
         oc.audit_status = st
         oc.status_note = (body.note or "").strip() or None
         await _log_event(db, org_id, control.id, None, current_user, "status",
-                         f"Set to {AUDIT_LABEL[st]}" + (f" — {oc.status_note}" if oc.status_note else ""))
+                         f"Set to {AUDIT_LABEL[st]}" + (f" - {oc.status_note}" if oc.status_note else ""))
     else:
         oc.status_mode = "auto"
         oc.status_note = None
