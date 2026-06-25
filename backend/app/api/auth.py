@@ -308,7 +308,8 @@ async def signup_options(db: AsyncSession = Depends(get_db)):
         select(BillingPlan).where(BillingPlan.is_active == True)  # noqa: E712
     )).scalars().all()
     plans = [{"key": str(p.id), "name": p.name, "price": p.price_monthly, "tenant_type": p.tier.value,
-              "frameworks": (p.inclusions or {}).get("frameworks", "all")}
+              "frameworks": (p.inclusions or {}).get("frameworks", "all"),
+              "highlights": (p.inclusions or {}).get("highlights") or []}
              for p in plan_rows]
     ps = await get_settings(db)
     return {"plans": plans, "frameworks": frameworks, "stripe_enabled": bool(settings.STRIPE_SECRET_KEY),
@@ -528,7 +529,8 @@ async def entitlements(current_user: User = Depends(get_current_user), db: Async
     from app.core.entitlements import effective_mode
     trial = trial_state(t, ps.trial_days, effective_mode(t, ps))
     return {**ent, "usage": usage, "role": current_user.role.value,
-            "tenant_type": t.tenant_type.value, "trial": trial, "org_name": t.name}
+            "tenant_type": t.tenant_type.value, "trial": trial, "org_name": t.name,
+            "msp_managed": t.parent_msp_id is not None, "msp_review": bool(t.msp_review_enabled)}
 
 
 @router.get("/invite-info")

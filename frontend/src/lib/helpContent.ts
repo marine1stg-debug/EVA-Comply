@@ -19,12 +19,33 @@ export function audiencesForRole(role: string): Audience[] {
   return ['all', 'client']
 }
 
+// "View Help as …" personas (EVA staff can preview each user's view).
+export type Persona = 'me' | 'client' | 'msp_client' | 'msp' | 'eva' | 'all'
+export function audiencesForPersona(p: Persona): Audience[] {
+  switch (p) {
+    case 'client': return ['all', 'client']         // direct client (no MSP)
+    case 'msp_client': return ['all', 'client']     // a client managed by an MSP
+    case 'msp': return ['all', 'msp']               // the MSP team itself
+    case 'eva': return ['all', 'client', 'msp', 'eva']
+    case 'all': return ['all', 'client', 'msp', 'eva']
+    default: return ['all', 'client', 'msp', 'eva']
+  }
+}
+export const PERSONA_OPTIONS: { id: Persona; label: Bi }[] = [
+  { id: 'me', label: { en: 'My view (EVA staff)', fr: 'Ma vue (équipe EVA)' } },
+  { id: 'client', label: { en: 'A direct client', fr: 'Un client direct' } },
+  { id: 'msp_client', label: { en: 'An MSP’s client', fr: 'Un client de MSP' } },
+  { id: 'msp', label: { en: 'An MSP (partner)', fr: 'Un MSP (partenaire)' } },
+  { id: 'all', label: { en: 'Everything (all roles)', fr: 'Tout (tous les rôles)' } },
+]
+
 export const HELP_CATEGORIES: { id: string; title: Bi }[] = [
   { id: 'getting_started', title: { en: 'Getting started', fr: 'Pour commencer' } },
   { id: 'compliance', title: { en: 'Compliance', fr: 'Conformité' } },
   { id: 'review', title: { en: 'Review & evidence', fr: 'Revue et preuves' } },
   { id: 'msp', title: { en: 'For MSPs', fr: 'Pour les MSP' } },
   { id: 'admin', title: { en: 'Administration', fr: 'Administration' } },
+  { id: 'faq', title: { en: 'FAQ — frequently asked questions', fr: 'FAQ — questions fréquentes' } },
 ]
 
 export const HELP_ARTICLES: HelpArticle[] = [
@@ -131,7 +152,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     },
   },
   {
-    id: 'review_pipeline', category: 'review', audience: ['msp', 'eva'], icon: '👁',
+    id: 'review_pipeline', category: 'review', audience: ['all'], icon: '👁',
     title: { en: 'The two-stage review pipeline', fr: 'Le flux de revue en deux étapes' },
     summary: { en: 'How MSP pre-review and EVA acceptance work.', fr: 'Comment fonctionnent la pré-revue MSP et l’acceptation EVA.' },
     body: {
@@ -202,6 +223,181 @@ export const HELP_ARTICLES: HelpArticle[] = [
     body: {
       en: 'The Support Console lists incoming requests with a status filter that defaults to "Awaiting our reply". Reply in the thread and set the status; closed cases are dimmed. You can also enable/disable the feature and edit its categories and intro.\n\nAudit Logs shows the activity trail. Every role can see the entries that belong to their scope.',
       fr: 'La Console de support liste les demandes entrantes avec un filtre de statut par défaut sur « En attente de notre réponse ». Répondez dans le fil et définissez le statut ; les demandes fermées sont grisées. Vous pouvez aussi activer/désactiver la fonction et modifier ses catégories et son introduction.\n\nLes Journaux d’audit montrent la piste d’activité. Chaque rôle voit les entrées de son périmètre.',
+    },
+  },
+
+  // ── More functions (every menu explained) ──
+  {
+    id: 'policies', category: 'compliance', audience: ['all'], icon: '📘',
+    title: { en: 'Policy library & Word preview', fr: 'Bibliothèque de politiques et aperçu Word' },
+    summary: { en: 'Browse, preview and download ready-made policy templates.', fr: 'Parcourir, prévisualiser et télécharger des modèles de politiques prêts à l’emploi.' },
+    body: {
+      en: 'Policies is a library of ready-made policy templates (.docx) mapped to control families. Search by topic or filter by category to find the one you need.\n\nClick the eye icon to preview the full policy right in the app — it renders as a real Word-style document (pages and formatting), and opens in your current language (EN/FR) with a toggle. Then download the .docx and adapt it to your organization. Controls also suggest the matching policy where one exists.\n\nSuper Admins additionally manage the library: add, edit, replace the file, hide/show, and set which control family each policy covers.',
+      fr: 'Politiques est une bibliothèque de modèles de politiques (.docx) associés aux familles de contrôles. Recherchez par sujet ou filtrez par catégorie pour trouver celui qu’il vous faut.\n\nCliquez sur l’icône œil pour prévisualiser toute la politique dans l’app — elle s’affiche comme un vrai document Word (pages et mise en forme) et s’ouvre dans votre langue actuelle (EN/FR), avec une bascule. Téléchargez ensuite le .docx et adaptez-le. Les contrôles suggèrent aussi la politique correspondante lorsqu’elle existe.\n\nLes super administrateurs gèrent en plus la bibliothèque : ajouter, modifier, remplacer le fichier, masquer/afficher, et définir la famille de contrôles couverte.',
+    },
+  },
+  {
+    id: 'frameworks_import', category: 'admin', audience: ['eva', 'msp'], icon: '📚',
+    title: { en: 'Frameworks library & import', fr: 'Bibliothèque de référentiels et import' },
+    summary: { en: 'Assign built-in frameworks or import a custom control catalog.', fr: 'Attribuer des référentiels intégrés ou importer un catalogue personnalisé.' },
+    body: {
+      en: 'Library lists the frameworks available to assign (CMMC L1/L2, NIST SP 800-171 R3, ITSP.10.171, and any you have imported).\n\nImport lets you bring in your own control catalog from an Excel (.xlsx) file, so you can run an organization against a framework that isn’t built in. Once imported it behaves like any other framework — controls, evidence, maturity and reports all work the same.',
+      fr: 'Bibliothèque liste les référentiels attribuables (CMMC N1/N2, NIST SP 800-171 R3, ITSP.10.171, et ceux que vous avez importés).\n\nImport permet d’importer votre propre catalogue de contrôles depuis un fichier Excel (.xlsx), pour évaluer une organisation selon un référentiel non intégré. Une fois importé, il se comporte comme les autres — contrôles, preuves, maturité et rapports fonctionnent de la même façon.',
+    },
+  },
+  {
+    id: 'ai_connector', category: 'admin', audience: ['eva'], icon: '✦',
+    title: { en: 'AI connector (optional)', fr: 'Connecteur IA (optionnel)' },
+    summary: { en: 'Connect an LLM to power AI recommendations & video scripts.', fr: 'Connecter un LLM pour les recommandations IA et scripts vidéo.' },
+    body: {
+      en: 'The AI Connector lets a Super Admin plug in a language model (OpenAI, Anthropic, or a self-hosted Ollama) used to generate recommendations and training-video scripts. It is OFF by default.\n\nEnter the provider, model and API key (the key is encrypted and never shown back), set a timeout, then use "Test connection" before enabling. For security, the connector cannot call internal/private addresses unless the operator explicitly allows it via an environment setting.\n\nIf you don’t connect an LLM, the app still works — recommendations come from the built-in curated library instead.',
+      fr: 'Le Connecteur IA permet à un super administrateur de brancher un modèle de langage (OpenAI, Anthropic, ou un Ollama auto-hébergé) pour générer recommandations et scripts de vidéos. Il est DÉSACTIVÉ par défaut.\n\nSaisissez le fournisseur, le modèle et la clé API (chiffrée, jamais réaffichée), réglez un délai d’expiration, puis utilisez « Tester la connexion » avant d’activer. Par sécurité, le connecteur ne peut pas appeler d’adresses internes/privées sauf autorisation explicite via une variable d’environnement.\n\nSans LLM connecté, l’app fonctionne quand même — les recommandations proviennent alors de la bibliothèque intégrée.',
+    },
+  },
+  {
+    id: 'billing_help', category: 'admin', audience: ['eva', 'msp', 'client'], icon: '💳',
+    title: { en: 'Billing & subscription', fr: 'Facturation et abonnement' },
+    summary: { en: 'See your plan, invoices and manage the subscription.', fr: 'Voir votre forfait, vos factures et gérer l’abonnement.' },
+    body: {
+      en: 'Billing shows YOUR organization’s plan, seats in use, frameworks, monthly/yearly total and invoice history. "Activate plan" starts or updates the subscription.\n\nIf a real payment provider (Stripe) is configured it opens a secure checkout; if not, the subscription is simulated (marked active with a local invoice) — handy for testing, no real charge.\n\nNote: this page is about your own organization. The EVA internal organization shows an information banner because billing doesn’t apply to the platform owner — manage client subscriptions from Tenants or Clients instead.',
+      fr: 'Facturation affiche le forfait de VOTRE organisation, les sièges utilisés, les référentiels, le total mensuel/annuel et l’historique des factures. « Activate plan » démarre ou met à jour l’abonnement.\n\nSi un fournisseur de paiement réel (Stripe) est configuré, un paiement sécurisé s’ouvre ; sinon, l’abonnement est simulé (marqué actif avec une facture locale) — pratique pour tester, sans prélèvement réel.\n\nNote : cette page concerne votre propre organisation. L’organisation interne EVA affiche un bandeau d’information car la facturation ne s’applique pas au propriétaire de la plateforme — gérez les abonnements clients via Organisations ou Clients.',
+    },
+  },
+  {
+    id: 'backup_restore', category: 'admin', audience: ['eva'], icon: '🗄',
+    title: { en: 'Backup & restore', fr: 'Sauvegarde et restauration' },
+    summary: { en: 'Export signed backups and restore them safely.', fr: 'Exporter des sauvegardes signées et les restaurer en sécurité.' },
+    body: {
+      en: 'Backup & Restore (Super Admin) exports the data you choose by category (and optionally specific clients), or a "full backup" that bundles all data plus every uploaded file.\n\nBackups are digitally signed by the system. When restoring, a stored snapshot is trusted; an uploaded file must be a backup produced by this system or it is rejected. Restore merges data (it never deletes), strips passwords/MFA secrets, and is recorded in the audit log. Take a backup before any risky change.',
+      fr: 'Sauvegarde et restauration (Super Admin) exporte les données choisies par catégorie (et éventuellement des clients précis), ou une « sauvegarde complète » regroupant toutes les données plus chaque fichier téléversé.\n\nLes sauvegardes sont signées numériquement. À la restauration, un instantané stocké est de confiance ; un fichier téléversé doit être une sauvegarde produite par ce système, sinon il est refusé. La restauration fusionne les données (ne supprime jamais), retire les mots de passe/secrets MFA, et est journalisée. Faites une sauvegarde avant tout changement risqué.',
+    },
+  },
+  {
+    id: 'marketplace_help', category: 'admin', audience: ['eva', 'client'], icon: '🛠',
+    title: { en: 'Service providers (marketplace)', fr: 'Fournisseurs de services (place de marché)' },
+    summary: { en: 'A directory of providers who can help on a control.', fr: 'Un annuaire de prestataires pouvant aider sur un contrôle.' },
+    body: {
+      en: 'The marketplace is a directory of service providers and their skills (derived from control domains). Providers register and are authorized by EVA.\n\nWhen a client is stuck on a control, they can use "Get Help" to find a provider whose skills match that control’s domain.',
+      fr: 'La place de marché est un annuaire de prestataires et de leurs compétences (issues des domaines de contrôles). Les prestataires s’inscrivent et sont autorisés par EVA.\n\nQuand un client bloque sur un contrôle, il peut utiliser « Obtenir de l’aide » pour trouver un prestataire dont les compétences correspondent au domaine du contrôle.',
+    },
+  },
+  {
+    id: 'settings_security', category: 'getting_started', audience: ['all'], icon: '⚙',
+    title: { en: 'Your profile, password & MFA', fr: 'Votre profil, mot de passe et MFA' },
+    summary: { en: 'Change your password, enable two-factor, set language.', fr: 'Changer le mot de passe, activer la double authentification, choisir la langue.' },
+    body: {
+      en: 'Settings is your personal account page. Change your password here (minimum 12 characters; changing it signs out your other sessions).\n\nEnable MFA (two-factor): scan the QR code with an authenticator app (Google Authenticator, Authy, etc.) and confirm with a code. Admin roles are strongly encouraged to turn it on. You can also switch language and theme from the top bar at any time.',
+      fr: 'Paramètres est votre page de compte personnelle. Changez-y votre mot de passe (12 caractères minimum ; le changer déconnecte vos autres sessions).\n\nActivez la MFA (double authentification) : scannez le code QR avec une application d’authentification (Google Authenticator, Authy, etc.) et confirmez avec un code. Les rôles admin sont fortement encouragés à l’activer. Vous pouvez aussi changer la langue et le thème depuis la barre du haut à tout moment.',
+    },
+  },
+  {
+    id: 'guides_tour', category: 'getting_started', audience: ['all'], icon: '🧭',
+    title: { en: 'Quick Tour & the built-in guides', fr: 'Visite guidée et guides intégrés' },
+    summary: { en: 'Where to find the guided walkthrough and admin guides.', fr: 'Où trouver le parcours guidé et les guides admin.' },
+    body: {
+      en: 'Quick Tour (in the sidebar, and shown on your first sign-in) is a short, role-aware walkthrough of the app — click any step to expand the details. You can reopen it anytime.\n\nSuper Admins also have two reference guides under Administration: the Configuration Guide (how every setting works) and the Setup & Update Guide (how the app is hosted and how to deploy an update). The Setup guide is also reachable from the "What’s new" window next to the version number.',
+      fr: 'Visite guidée (dans la barre latérale, et affichée à votre première connexion) est un court parcours adapté à votre rôle — cliquez sur une étape pour déplier les détails. Vous pouvez la rouvrir à tout moment.\n\nLes super administrateurs disposent aussi de deux guides sous Administration : le Guide de configuration (fonctionnement de chaque réglage) et le Guide d’installation et de mise à jour (hébergement de l’app et déploiement d’une mise à jour). Ce dernier est aussi accessible depuis la fenêtre « Nouveautés » à côté du numéro de version.',
+    },
+  },
+
+  // ── FAQ — common questions at all levels ──
+  {
+    id: 'faq_login', category: 'faq', audience: ['all'], icon: '🔐',
+    title: { en: 'I can’t sign in or my account is locked', fr: 'Je n’arrive pas à me connecter ou mon compte est verrouillé' },
+    summary: { en: 'What to do after failed sign-ins.', fr: 'Que faire après des échecs de connexion.' },
+    body: {
+      en: 'After 3 failed attempts your account locks for 15 minutes (a protection against attacks). You can: wait 15 minutes; click the "unlock link" option on the sign-in page to get an email; or ask an administrator to unlock you from Users & Roles. If you simply forgot your password, an administrator can send you a reset link.',
+      fr: 'Après 3 échecs, le compte se verrouille 15 minutes (protection contre les attaques). Vous pouvez : attendre 15 minutes ; cliquer sur l’option « lien de déverrouillage » sur l’écran de connexion pour recevoir un courriel ; ou demander à un administrateur de vous déverrouiller depuis Utilisateurs et rôles. Si vous avez oublié votre mot de passe, un administrateur peut vous envoyer un lien de réinitialisation.',
+    },
+  },
+  {
+    id: 'faq_mfa', category: 'faq', audience: ['all'], icon: '🔐',
+    title: { en: 'How do I turn on two-factor (MFA)?', fr: 'Comment activer la double authentification (MFA) ?' },
+    summary: { en: 'Enable MFA from Settings.', fr: 'Activer la MFA depuis Paramètres.' },
+    body: {
+      en: 'Open Settings → Enable MFA. Scan the QR code with an authenticator app (Google Authenticator, Microsoft Authenticator, Authy…), then enter the 6-digit code to confirm. From then on, sign-in asks for a fresh code. To turn it off, use "Disable MFA" in Settings; an admin can reset it for you if you lose your device.',
+      fr: 'Ouvrez Paramètres → Activer la MFA. Scannez le code QR avec une application d’authentification (Google Authenticator, Microsoft Authenticator, Authy…), puis saisissez le code à 6 chiffres pour confirmer. Ensuite, la connexion demandera un nouveau code. Pour la désactiver, utilisez « Désactiver la MFA » dans Paramètres ; un admin peut la réinitialiser si vous perdez votre appareil.',
+    },
+  },
+  {
+    id: 'faq_lang', category: 'faq', audience: ['all'], icon: '🌓',
+    title: { en: 'How do I switch to French (or English)?', fr: 'Comment passer en français (ou en anglais) ?' },
+    summary: { en: 'Use the EN/FR toggle in the top bar.', fr: 'Utilisez le sélecteur EN/FR en haut.' },
+    body: {
+      en: 'Click EN or FR in the top bar. The whole interface switches and your choice is remembered. Most content (controls, recommendations, policies, evidence requirements) is bilingual. A few custom items you typed yourself stay in the language you entered them.',
+      fr: 'Cliquez sur EN ou FR dans la barre du haut. Toute l’interface bascule et votre choix est mémorisé. La plupart du contenu (contrôles, recommandations, politiques, preuves attendues) est bilingue. Quelques éléments personnalisés que vous avez saisis restent dans la langue d’origine.',
+    },
+  },
+  {
+    id: 'faq_ev_status', category: 'faq', audience: ['all'], icon: '📎',
+    title: { en: 'My evidence says “In EVA review” — what now?', fr: 'Ma preuve indique « En revue EVA » — et maintenant ?' },
+    summary: { en: 'What each evidence status means.', fr: 'Ce que signifie chaque statut de preuve.' },
+    body: {
+      en: 'Evidence moves through statuses: Draft → Submitted → In MSP review → In EVA review → Accepted (or Needs more / Rejected). "In EVA review" means it’s waiting for an EVA auditor to decide — there’s nothing more for you to do until they respond. If it comes back as "Needs more" or "Rejected", open it to read the note, fix the issue and re-submit.\n\nTip: if your engagement is set to "self-audit", evidence is accepted immediately with no review step.',
+      fr: 'Une preuve passe par des statuts : Brouillon → Soumise → En revue MSP → En revue EVA → Acceptée (ou Complément requis / Rejetée). « En revue EVA » signifie qu’elle attend la décision d’un auditeur EVA — vous n’avez rien à faire de plus en attendant. Si elle revient en « Complément requis » ou « Rejetée », ouvrez-la pour lire la note, corrigez et re-soumettez.\n\nAstuce : si votre engagement est en « auto-audit », la preuve est acceptée immédiatement, sans étape de revue.',
+    },
+  },
+  {
+    id: 'faq_upload_rejected', category: 'faq', audience: ['all'], icon: '📎',
+    title: { en: 'My file upload was rejected', fr: 'Mon téléversement de fichier a été refusé' },
+    summary: { en: 'Allowed file types and size limits.', fr: 'Types de fichiers et tailles autorisés.' },
+    body: {
+      en: 'Evidence files must be 50 MB or less and of an allowed type: documents (PDF, Word, Excel, PowerPoint, CSV, TXT), images (PNG, JPG, GIF, WebP…) and archives (ZIP). Executables, scripts, HTML and SVG are blocked for security — even if renamed. Policy uploads must be .docx; training videos must be a common video format (MP4, MOV, WebM…).',
+      fr: 'Les fichiers de preuve doivent faire 50 Mo ou moins et être d’un type autorisé : documents (PDF, Word, Excel, PowerPoint, CSV, TXT), images (PNG, JPG, GIF, WebP…) et archives (ZIP). Les exécutables, scripts, HTML et SVG sont bloqués par sécurité — même renommés. Les politiques doivent être en .docx ; les vidéos dans un format courant (MP4, MOV, WebM…).',
+    },
+  },
+  {
+    id: 'faq_add_user', category: 'faq', audience: ['client', 'msp', 'eva'], icon: '👤',
+    title: { en: 'How do I add someone to my organization?', fr: 'Comment ajouter quelqu’un à mon organisation ?' },
+    summary: { en: 'Invite a teammate from Users & Roles.', fr: 'Inviter un collègue depuis Utilisateurs et rôles.' },
+    body: {
+      en: 'Open Users & Roles → Invite. Enter their email and pick a role you’re allowed to assign (a Client Admin can invite Contributors and Viewers). They receive an email link to set a password and join. You can later edit their role, unlock them, reset MFA, or deactivate them. Viewers are read-only; Contributors can do the compliance work.',
+      fr: 'Ouvrez Utilisateurs et rôles → Inviter. Saisissez son courriel et choisissez un rôle que vous pouvez attribuer (un Admin client peut inviter Contributeurs et Lecteurs). La personne reçoit un lien par courriel pour définir un mot de passe et rejoindre. Vous pourrez ensuite modifier son rôle, la déverrouiller, réinitialiser la MFA ou la désactiver. Les Lecteurs sont en lecture seule ; les Contributeurs font le travail de conformité.',
+    },
+  },
+  {
+    id: 'faq_report', category: 'faq', audience: ['all'], icon: '⬇',
+    title: { en: 'How do I download a compliance report?', fr: 'Comment télécharger un rapport de conformité ?' },
+    summary: { en: 'Generate reports from the Reports page.', fr: 'Générer des rapports depuis la page Rapports.' },
+    body: {
+      en: 'Open Reports, choose the framework and format (PDF, Word or Excel), and generate. You can also download an Evidence Register ZIP — a spreadsheet index plus every evidence file, organized by framework and control. Report availability can depend on your plan.',
+      fr: 'Ouvrez Rapports, choisissez le référentiel et le format (PDF, Word ou Excel), puis générez. Vous pouvez aussi télécharger un registre de preuves en ZIP — un index tableur plus chaque fichier de preuve, organisé par référentiel et contrôle. La disponibilité des rapports peut dépendre de votre forfait.',
+    },
+  },
+  {
+    id: 'faq_policy_preview', category: 'faq', audience: ['all'], icon: '📘',
+    title: { en: 'How do I read a policy without downloading it?', fr: 'Comment lire une politique sans la télécharger ?' },
+    summary: { en: 'Use the eye / Preview button.', fr: 'Utilisez le bouton œil / Aperçu.' },
+    body: {
+      en: 'On the Policies page, click the eye ("Preview") button on any policy. It opens a full Word-style preview inside the app, in your current language, with an EN/FR toggle. When you’re ready to use it, click Download to get the .docx.',
+      fr: 'Sur la page Politiques, cliquez sur le bouton œil (« Aperçu ») d’une politique. Un aperçu complet façon Word s’ouvre dans l’app, dans votre langue actuelle, avec une bascule EN/FR. Quand vous voulez l’utiliser, cliquez sur Télécharger pour obtenir le .docx.',
+    },
+  },
+  {
+    id: 'faq_video', category: 'faq', audience: ['eva'], icon: '🎬',
+    title: { en: 'The webcam recording button isn’t working', fr: 'Le bouton d’enregistrement webcam ne fonctionne pas' },
+    summary: { en: 'Camera access needs HTTPS and permission.', fr: 'L’accès caméra nécessite HTTPS et une autorisation.' },
+    body: {
+      en: 'Recording happens in your browser, not on the server. The camera needs: a secure (HTTPS) page, and permission. If nothing happens, check the address bar for a blocked-camera icon and allow it, and make sure you clicked the "Record" (camera) button — not the "Save script" button. Chrome, Edge and Firefox are supported; very old browsers may not record.',
+      fr: 'L’enregistrement se fait dans votre navigateur, pas sur le serveur. La caméra nécessite : une page sécurisée (HTTPS) et une autorisation. Si rien ne se passe, vérifiez l’icône de caméra bloquée dans la barre d’adresse et autorisez-la, et assurez-vous d’avoir cliqué sur le bouton « Enregistrer » (caméra) — pas « Enregistrer le script ». Chrome, Edge et Firefox sont pris en charge ; de très vieux navigateurs peuvent ne pas enregistrer.',
+    },
+  },
+  {
+    id: 'faq_billing_eva', category: 'faq', audience: ['eva'], icon: '💳',
+    title: { en: 'Why does Billing show a plan for EVA itself?', fr: 'Pourquoi la facturation affiche-t-elle un forfait pour EVA ?' },
+    summary: { en: 'The Billing page is about your own org.', fr: 'La page Facturation concerne votre propre organisation.' },
+    body: {
+      en: 'The Billing page always shows your OWN organization’s subscription. Signed in as EVA’s Super Admin, you see EVA’s own (which isn’t meaningful — EVA is the vendor, it doesn’t subscribe to itself). That’s why an information banner appears. To manage a client’s subscription, use Tenants or Clients instead. The "Viewing client" selector at the top only changes compliance screens, not billing.',
+      fr: 'La page Facturation affiche toujours l’abonnement de VOTRE organisation. Connecté comme Super Admin d’EVA, vous voyez celle d’EVA (sans intérêt — EVA est le fournisseur, elle ne s’abonne pas à elle-même). D’où le bandeau d’information. Pour gérer l’abonnement d’un client, passez par Organisations ou Clients. Le sélecteur « Viewing client » en haut ne change que les écrans de conformité, pas la facturation.',
+    },
+  },
+  {
+    id: 'faq_support', category: 'faq', audience: ['all'], icon: '🎧',
+    title: { en: 'How do I get more help?', fr: 'Comment obtenir plus d’aide ?' },
+    summary: { en: 'Use Quick Tour, this Help Center, or Contact Support.', fr: 'Utilisez la Visite guidée, ce Centre d’aide ou Contacter le support.' },
+    body: {
+      en: 'Three places: Quick Tour (a guided walkthrough), this Help Center (search any term to find the right article), and Contact Support (raise a request to the EVA team and track its replies). For technical/hosting questions, Super Admins also have the Setup & Update Guide and Configuration Guide under Administration.',
+      fr: 'Trois endroits : Visite guidée (un parcours guidé), ce Centre d’aide (recherchez un terme pour trouver le bon article), et Contacter le support (envoyez une demande à l’équipe EVA et suivez les réponses). Pour les questions techniques/d’hébergement, les super administrateurs ont aussi le Guide d’installation et le Guide de configuration sous Administration.',
     },
   },
 ]

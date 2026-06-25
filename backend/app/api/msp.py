@@ -14,6 +14,7 @@ from app.core.config import settings
 from app.core.security import hash_password, random_password, create_invite_token
 from app.core.provisioning import assign_frameworks
 from app.core.entitlements import get_entitlements, tenant_usage, filter_frameworks, ensure_active
+from app.core.audit import record as audit_record
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType, SubscriptionStatus
@@ -153,6 +154,55 @@ async def list_clients(current_user: User = Depends(get_current_user), db: Async
     tenants = await _client_tenants(db, current_user)
     clients = [await _client_summary(db, t, i) for i, t in enumerate(tenants)]
     return {"clients": clients, "total": len(clients)}
+
+
+# ── MSP pre-review: per-client toggle + MSP-wide default ─────────────────────
+class ReviewBody(BaseModel):
+    enabled: bool
+
+
+@router.patch("/clients/{client_id}/review")
+async def set_client_review(client_id: str, body: ReviewBody,
+                            current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """Turn MSP pre-review on/off for one client. MSP admins manage their own
+    clients; super_admin any. When ON, the client's submitted evidence goes to
+    the MSP queue before EVA; when OFF, it goes straight to EVA."""
+    if current_user.role not in (UserRole.msp_admin, UserRole.super_admin):
+        raise HTTPException(status_code=403, detail="MSP admin access required")
+    tenants = await _client_tenants(db, current_user)
+    try:
+        cid = uuid.UUID(client_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Client not found")
+    t = next((x for x in tenants if x.id == cid), None)
+    if not t:
+        raise HTTPException(status_code=404, detail="Client not found")
+    t.msp_review_enabled = bool(body.enabled)
+    await audit_record(db, current_user, "tenant.msp_review",
+                       target=t.name, detail="on" if body.enabled else "off", org_id=t.id)
+    await db.commit()
+    return {"id": str(t.id), "msp_review": t.msp_review_enabled}
+
+
+@router.get("/review-default")
+async def get_review_default(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """The MSP-wide default that pre-fills the toggle when adding a new client."""
+    if current_user.role not in (UserRole.msp_admin, UserRole.msp_analyst):
+        return {"default": True}
+    me = (await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))).scalar_one()
+    return {"default": bool((me.settings or {}).get("msp_review_default", True))}
+
+
+@router.put("/review-default")
+async def set_review_default(body: ReviewBody,
+                             current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """Set the MSP-wide default applied to newly added clients."""
+    if current_user.role != UserRole.msp_admin:
+        raise HTTPException(status_code=403, detail="Only an MSP Admin can set the default")
+    me = (await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))).scalar_one()
+    me.settings = {**(me.settings or {}), "msp_review_default": bool(body.enabled)}
+    await db.commit()
+    return {"default": bool(body.enabled)}
 
 
 @router.get("/clients/{client_id}")

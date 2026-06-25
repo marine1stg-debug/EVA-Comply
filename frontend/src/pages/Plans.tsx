@@ -9,6 +9,7 @@ interface Inclusions {
   features: Record<string, boolean>
   max_users: number
   max_clients: number
+  highlights?: string[]
 }
 interface Plan {
   id: string; name: string; tier: string; price_monthly: number; wholesale_monthly: number; is_active: boolean
@@ -47,11 +48,15 @@ function PlanEditor({ plan, frameworks, featureKeys, onClose }: {
   })
   const [maxUsers, setMaxUsers] = useState(plan?.inclusions.max_users ?? 0)
   const [maxClients, setMaxClients] = useState(plan?.inclusions.max_clients ?? 0)
+  const [highlights, setHighlights] = useState<string>((plan?.inclusions.highlights || []).join('\n'))
 
   const body = () => ({
     name, tier, price_monthly: price, wholesale_monthly: wholesale, is_active: active,
     yearly_discount_pct: yearlyDisc,
-    inclusions: { frameworks: allFw ? 'all' : fwIds, features, max_users: maxUsers, max_clients: maxClients },
+    inclusions: {
+      frameworks: allFw ? 'all' : fwIds, features, max_users: maxUsers, max_clients: maxClients,
+      highlights: highlights.split('\n').map(s => s.trim()).filter(Boolean),
+    },
   })
   const save = useMutation({
     mutationFn: async () => isNew
@@ -116,6 +121,12 @@ function PlanEditor({ plan, frameworks, featureKeys, onClose }: {
               <input type="checkbox" checked={!!features[k]} onChange={e => setFeatures(f => ({ ...f, [k]: e.target.checked }))} /> {t(FEATURE_LABEL[k] || k)}
             </label>
           ))}
+
+          <div className="form-label" style={{ marginTop: 14 }}>{t('Landing-page highlights (one per line)')}</div>
+          <textarea className="form-input" rows={4} style={{ width: '100%', boxSizing: 'border-box', fontSize: 12, lineHeight: 1.6 }}
+            placeholder={t('e.g. Framework compliance tracking\nEvidence collection & review\nExpert EVA audit decisions')}
+            value={highlights} onChange={e => setHighlights(e.target.value)} />
+          <div className="page-sub" style={{ fontSize: 11, marginTop: 2 }}>{t('Shown as the ✓ bullets on the public landing page. Leave empty to use the default bullets.')}</div>
 
           <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
             <div className="form-row" style={{ flex: 1 }}><label className="form-label">{t('Max users (0 = ∞)')}</label><input className="form-input" type="number" value={maxUsers} onChange={e => setMaxUsers(Number(e.target.value))} /></div>

@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../lib/api'
 import { useAuthStore } from '../store/auth'
 import { useT, useI18n } from '../lib/i18n'
-import { HELP_ARTICLES, HELP_CATEGORIES, audiencesForRole, type HelpArticle, type Audience } from '../lib/helpContent'
+import { HELP_ARTICLES, HELP_CATEGORIES, audiencesForRole, audiencesForPersona, PERSONA_OPTIONS, type HelpArticle, type Audience, type Persona } from '../lib/helpContent'
 import Ico from '../components/Ico'
 
 function Body({ text }: { text: string }) {
@@ -24,13 +26,23 @@ export default function HelpCenterPage() {
   const t = useT()
   const { lang } = useI18n()
   const role = useAuthStore(s => s.user?.role || '')
-  const myAud = audiencesForRole(role)
-  const [showAll, setShowAll] = useState(false)
+  const isEva = ['super_admin', 'eva_auditor'].includes(role)
+  const [persona, setPersona] = useState<Persona>('me')
   const [q, setQ] = useState('')
   const [open, setOpen] = useState<HelpArticle | null>(null)
 
+  // EVA staff can preview each user's view; everyone else sees their own scope.
+  const myAud = (isEva && persona !== 'me') ? audiencesForPersona(persona) : audiencesForRole(role)
+
+  // Dynamic note for clients whose MSP pre-reviews their evidence. Shown to a
+  // real MSP-managed client (entitlements flag), or when EVA previews "MSP's client".
+  const { data: ent } = useQuery<{ msp_review?: boolean; msp_managed?: boolean }>({
+    queryKey: ['entitlements'], queryFn: async () => (await api.get('/auth/entitlements')).data,
+  })
+  const showMspNote = (isEva && persona === 'msp_client') || (!isEva && !!ent?.msp_review)
+
   const L = (b: { en: string; fr: string }) => (lang === 'fr' ? b.fr : b.en)
-  const inScope = (a: HelpArticle) => showAll || a.audience.some(x => myAud.includes(x as Audience))
+  const inScope = (a: HelpArticle) => a.audience.some(x => myAud.includes(x as Audience))
   const matches = (a: HelpArticle) => {
     if (!q.trim()) return true
     const s = q.toLowerCase()
@@ -64,16 +76,47 @@ export default function HelpCenterPage() {
         </div>
       </div>
 
-      <div className="filter-bar fi">
+      <div className="filter-bar fi" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
         <input className="form-input" style={{ maxWidth: 320, fontSize: 13 }} placeholder={t('Search help…')} value={q} onChange={e => setQ(e.target.value)} />
-        <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text2)' }}>
-          <input type="checkbox" checked={showAll} onChange={e => setShowAll(e.target.checked)} /> {t('Show all roles')}
-        </label>
+        {isEva && (
+          <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text2)' }}>
+            👁 {t('View Help as')}
+            <select className="filter-select" value={persona} onChange={e => setPersona(e.target.value as Persona)}>
+              {PERSONA_OPTIONS.map(o => <option key={o.id} value={o.id}>{L(o.label)}</option>)}
+            </select>
+          </label>
+        )}
       </div>
+      {isEva && persona !== 'me' && (
+        <div className="page-sub fi" style={{ marginTop: -4, marginBottom: 8, fontSize: 12, fontStyle: 'italic' }}>
+          {t('Previewing the Help Center as this user would see it.')}
+        </div>
+      )}
+      {showMspNote && (
+        <div className="fi" style={{ margin: '0 0 14px', padding: '11px 14px', borderRadius: 10,
+          border: '1px solid var(--border-l)', borderLeft: '4px solid #7C3AED', background: 'var(--card)', fontSize: 13, color: 'var(--text2)', lineHeight: 1.55 }}>
+          🏢 {t('Your organization is managed by an MSP, so your evidence is pre-reviewed by your MSP before it reaches EVA. After you submit, it goes to your MSP first — they approve and forward it, or return it to you with feedback.')}
+        </div>
+      )}
 
       {HELP_CATEGORIES.map(cat => {
         const arts = visible.filter(a => a.category === cat.id)
         if (arts.length === 0) return null
+        if (cat.id === 'faq') {
+          return (
+            <div key={cat.id} className="detail-section fi" style={{ marginBottom: 16 }}>
+              <div className="card-hdr" style={{ marginBottom: 10 }}><span className="card-title">{L(cat.title)}</span></div>
+              {arts.map(a => (
+                <details key={a.id} style={{ border: '1px solid var(--border-l)', borderRadius: 10, background: 'var(--card)', marginBottom: 8, overflow: 'hidden' }}>
+                  <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, fontWeight: 600 }}>
+                    <Ico e={a.icon} size={15} /> {L(a.title)}
+                  </summary>
+                  <div style={{ padding: '0 14px 12px 36px' }}><Body text={L(a.body)} /></div>
+                </details>
+              ))}
+            </div>
+          )
+        }
         return (
           <div key={cat.id} className="detail-section fi" style={{ marginBottom: 16 }}>
             <div className="card-hdr" style={{ marginBottom: 10 }}><span className="card-title">{L(cat.title)}</span></div>

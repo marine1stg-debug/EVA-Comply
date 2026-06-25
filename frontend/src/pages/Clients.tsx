@@ -28,6 +28,8 @@ function AddClientModal({ onClose }: { onClose: () => void }) {
   const [inviteLink, setInviteLink] = useState<string | null>(null)
 
   useEffect(() => { api.get('/auth/signup-options').then(r => setFrameworks(r.data.frameworks)).catch(() => {}) }, [])
+  // Pre-fill the MSP pre-review checkbox from the MSP-wide default.
+  useEffect(() => { api.get('/msp/review-default').then(r => setReview(!!r.data.default)).catch(() => {}) }, [])
   const toggle = (id: string) => setFwIds(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id])
 
   const create = useMutation({
@@ -97,12 +99,23 @@ function AddClientModal({ onClose }: { onClose: () => void }) {
 
 function ClientList({ onOpen }: { onOpen: (id: string) => void }) {
   const t = useT()
+  const qc = useQueryClient()
   const [adding, setAdding] = useState(false)
   const role = useAuthStore(s => s.user?.role || '')
   const canAdd = ['super_admin', 'msp_admin'].includes(role)
+  const isMspAdmin = role === 'msp_admin'
   const { data, isLoading, isError, error } = useQuery<{ clients: Client[]; total: number }>({
     queryKey: ['msp-clients'],
     queryFn: async () => (await api.get('/msp/clients')).data,
+  })
+  const { data: rd } = useQuery<{ default: boolean }>({
+    queryKey: ['msp-review-default'], enabled: isMspAdmin,
+    queryFn: async () => (await api.get('/msp/review-default')).data,
+  })
+  const setDefault = useMutation({
+    mutationFn: async (enabled: boolean) => (await api.put('/msp/review-default', { enabled })).data,
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['msp-review-default'] }); toast.success(t('Saved')) },
+    onError: (e: any) => toast.error(e?.response?.data?.detail || t('Save failed')),
   })
   if (isLoading) return <div className="page-sub">{t('Loading clients…')}</div>
   if (isError) {
@@ -120,7 +133,16 @@ function ClientList({ onOpen }: { onOpen: (id: string) => void }) {
           <div className="page-title">{t('Client Management')}</div>
           <div className="page-sub">{t('{n} clients · click a client to view details', { n: data.total })}</div>
         </div>
-        {canAdd && <div className="page-actions"><button className="tb-btn pri" onClick={() => setAdding(true)}>{t('+ Add Client')}</button></div>}
+        <div className="page-actions" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {isMspAdmin && rd && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: 'var(--text2)' }}
+              title={t('Pre-fills the MSP pre-review setting for clients you add')}>
+              <input type="checkbox" checked={!!rd.default} disabled={setDefault.isPending} onChange={e => setDefault.mutate(e.target.checked)} />
+              {t('MSP pre-review on by default for new clients')}
+            </label>
+          )}
+          {canAdd && <button className="tb-btn pri" onClick={() => setAdding(true)}>{t('+ Add Client')}</button>}
+        </div>
       </div>
       {adding && <AddClientModal onClose={() => setAdding(false)} />}
       <div className="client-list fi">
@@ -162,9 +184,20 @@ function ClientList({ onOpen }: { onOpen: (id: string) => void }) {
 
 function ClientDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const t = useT()
+  const qc = useQueryClient()
+  const role = useAuthStore(s => s.user?.role || '')
+  const canToggle = ['super_admin', 'msp_admin'].includes(role)
   const { data: c, isLoading, isError } = useQuery<Client>({
     queryKey: ['msp-client', id],
     queryFn: async () => (await api.get(`/msp/clients/${id}`)).data,
+  })
+  const toggleReview = useMutation({
+    mutationFn: async (enabled: boolean) => (await api.patch(`/msp/clients/${id}/review`, { enabled })).data,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['msp-client', id] }); qc.invalidateQueries({ queryKey: ['msp-clients'] })
+      toast.success(t('Saved'))
+    },
+    onError: (e: any) => toast.error(e?.response?.data?.detail || t('Save failed')),
   })
   if (isLoading) return <div className="page-sub">{t('Loading client…')}</div>
   if (isError || !c) return <div className="page-sub" style={{ color: 'var(--red)' }}>{t('Failed to load client.')}</div>
@@ -201,11 +234,28 @@ function ClientDetail({ id, onBack }: { id: string; onBack: () => void }) {
         </div>
         <div className="detail-section">
           <div className="card-hdr" style={{ marginBottom: 10 }}><span className="card-title">{t('Client Info')}</span></div>
-          {([['Plan', c.plan], ['Frameworks', c.frameworks.join(', ')], ['MSP Pre-review', c.msp_review ? t('Enabled') : t('Off')],
+          {([['Plan', c.plan], ['Frameworks', c.frameworks.join(', ')],
             ['Monthly fee', `$${c.monthly_fee}/mo`], ['EVA cost', `$${c.eva_cost}/mo`], ['Margin', `$${c.margin}/mo`],
             ['Last active', c.last_activity]] as [string, string][]).map(([k, v]) => (
             <div key={k} className="meta-row"><span className="meta-key">{t(k)}</span><span className="meta-val">{v}</span></div>
           ))}
+          <div className="meta-row" style={{ alignItems: 'center' }}>
+            <span className="meta-key">{t('MSP Pre-review')}</span>
+            <span className="meta-val" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span className={`badge ${c.msp_review ? 'b-purple' : 'b-gray'}`} style={{ fontSize: 9 }}>{c.msp_review ? t('Enabled') : t('Off')}</span>
+              {canToggle && (
+                <button className="tb-btn" style={{ fontSize: 11, padding: '2px 8px' }} disabled={toggleReview.isPending}
+                  onClick={() => toggleReview.mutate(!c.msp_review)}>
+                  {c.msp_review ? t('Turn off') : t('Turn on')}
+                </button>
+              )}
+            </span>
+          </div>
+          {canToggle && (
+            <div className="page-sub" style={{ marginTop: 6, fontSize: 11 }}>
+              {t('When ON, this client’s evidence goes to your MSP review queue before EVA. When OFF, it goes straight to EVA.')}
+            </div>
+          )}
         </div>
       </div>
     </>

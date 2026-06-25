@@ -4,7 +4,7 @@ import { api } from '../lib/api'
 import { LOGO_LG } from '../assets/logo'
 import { useT } from '../lib/i18n'
 
-interface Plan { key: string; name: string; price: number; tenant_type: string }
+interface Plan { key: string; name: string; price: number; tenant_type: string; highlights?: string[] }
 
 export default function WelcomePage() {
   const navigate = useNavigate()
@@ -24,10 +24,14 @@ export default function WelcomePage() {
       <div style={{ fontSize: 20, fontWeight: 700, color: '#E2E8F0', marginTop: 6 }}>{p.name}</div>
       <div style={{ fontSize: 30, fontWeight: 700, color: '#fff', marginTop: 8 }}>${p.price}<span style={{ fontSize: 13, color: '#4A6A8A', fontWeight: 400 }}>{t('/mo')}</span></div>
       <ul style={{ listStyle: 'none', margin: '16px 0', padding: 0, fontSize: 13, color: '#94B3CE', lineHeight: 2 }}>
-        <li>{t('✓ Framework compliance tracking')}</li>
-        <li>{t('✓ Evidence collection & review')}</li>
-        <li>{t('✓ Expert EVA audit decisions')}</li>
-        {p.tenant_type === 'msp' && <li>{t('✓ Multi-client portfolio + resale')}</li>}
+        {(p.highlights && p.highlights.length)
+          ? p.highlights.map((h, i) => <li key={i}>✓ {h}</li>)
+          : <>
+              <li>{t('✓ Framework compliance tracking')}</li>
+              <li>{t('✓ Evidence collection & review')}</li>
+              <li>{t('✓ Expert EVA audit decisions')}</li>
+              {p.tenant_type === 'msp' && <li>{t('✓ Multi-client portfolio + resale')}</li>}
+            </>}
       </ul>
       <button onClick={() => navigate('/signup')} className="w-full py-2.5 rounded-lg font-semibold text-white text-sm"
         style={{ background: highlight ? 'linear-gradient(135deg,#1A8FD1,#3A2F8F)' : 'rgba(255,255,255,.06)', border: highlight ? 'none' : '1px solid rgba(255,255,255,.12)' }}>
