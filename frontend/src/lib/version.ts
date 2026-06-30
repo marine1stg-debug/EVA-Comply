@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.9.0'
+export const APP_VERSION = '1.10.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,16 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.10.0',
+    date: '2026-06-25',
+    changes: [
+      'New System Settings hub (Administration): one place for deployment configuration, with a Readiness tab that checks your .env requirements and shows what is production-ready.',
+      'Email (SMTP) settings now live as a tab inside System Settings.',
+      'The personal Settings page is renamed User Settings to avoid confusion.',
+      'Storage, Payments, General, and Security each explain what they do and which settings control them (becoming editable in-app next).',
+    ],
+  },
   {
     version: '1.9.0',
     date: '2026-06-25',

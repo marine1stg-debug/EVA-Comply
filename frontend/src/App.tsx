@@ -39,6 +39,7 @@ import ConfigGuidePage from './pages/ConfigGuide'
 import SetupGuidePage from './pages/SetupGuide'
 import ImprovementsPage from './pages/Improvements'
 import EmailSettingsPage from './pages/EmailSettings'
+import SystemSettingsPage from './pages/SystemSettings'
 import Shell from './components/Shell'
 import MobileQuick from './pages/MobileQuick'
 
@@ -113,6 +114,7 @@ export default function App() {
           <Route path="setup-guide" element={<RoleRoute allow={SUPER}><SetupGuidePage /></RoleRoute>} />
           <Route path="improvements" element={<RoleRoute allow={SUPER}><ImprovementsPage /></RoleRoute>} />
           <Route path="email-settings" element={<RoleRoute allow={SUPER}><EmailSettingsPage /></RoleRoute>} />
+          <Route path="system-settings" element={<RoleRoute allow={SUPER}><SystemSettingsPage /></RoleRoute>} />
         </Route>
       </Routes>
     </BrowserRouter>

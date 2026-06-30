@@ -1533,6 +1533,31 @@ export const FR: Record<string, string> = {
   'Preparing…': 'Préparation…',
   'Full backup downloaded': 'Sauvegarde complète téléchargée',
 
+  // ── System Settings hub ──
+  'System Settings': 'Réglages système',
+  'User Settings': 'Réglages utilisateur',
+  'Configure the deployment and check that it is production-ready. Super Admin only.':
+    'Configurez le déploiement et vérifiez qu’il est prêt pour la production. Super administrateur seulement.',
+  'Readiness': 'État de préparation',
+  'Storage': 'Stockage',
+  'Payments': 'Paiements',
+  'Could not load readiness.': 'Impossible de charger l’état de préparation.',
+  'Production-ready': 'Prêt pour la production',
+  'Setup incomplete': 'Configuration incomplète',
+  '{a} of {b} required items done': '{a} sur {b} éléments requis complétés',
+  '.env requirements': 'Exigences du .env',
+  'recommended': 'recommandé',
+  'Set in the server .env for now': 'À définir dans le .env du serveur pour l’instant',
+  'Editable in-app in an upcoming update.': 'Modifiable dans l’app lors d’une prochaine mise à jour.',
+  'Site URL, app name, support email, and the per-type sender addresses (noreply / cases / invoicing). The Site URL is used to build invite and reset links, so it must match your real domain.':
+    'URL du site, nom de l’app, courriel de soutien et les adresses d’expéditeur par type (noreply / cases / invoicing). L’URL du site sert à construire les liens d’invitation et de réinitialisation; elle doit correspondre à votre domaine réel.',
+  'Where uploaded evidence and policy files are stored. The default "local" keeps files in a container volume - it works, but it is NOT durable: a bad rebuild or moving servers can lose them. Recommended (not required): point this at Cloudflare R2 or S3 so evidence is stored off-box and survives anything that happens to the server.':
+    'Où sont stockés les fichiers de preuves et de politiques téléversés. Le mode « local » par défaut garde les fichiers dans un volume de conteneur - ça fonctionne, mais ce n’est PAS durable : une mauvaise reconstruction ou un changement de serveur peut les perdre. Recommandé (non requis) : pointez vers Cloudflare R2 ou S3 pour que les preuves soient stockées hors serveur et survivent à tout incident.',
+  'Stripe keys for paid subscriptions. Only needed if you charge customers for plans. Without them, plan checkout is simply disabled and everything else works.':
+    'Clés Stripe pour les abonnements payants. Nécessaires uniquement si vous facturez des forfaits. Sans elles, le paiement des forfaits est simplement désactivé et tout le reste fonctionne.',
+  'Session length, minimum password length, and whether MFA is required. Sensible defaults are already in place (8-hour sessions, 12-character minimum). These will become editable here in the next update.':
+    'Durée de session, longueur minimale du mot de passe et obligation de la MFA. Des valeurs par défaut raisonnables sont déjà en place (sessions de 8 heures, minimum de 12 caractères). Ces réglages deviendront modifiables ici à la prochaine mise à jour.',
+
   // ── Email (SMTP) settings ──
   'Email (SMTP)': 'Courriel (SMTP)',
   'Configure how the app sends invites, verification, and notifications. Overrides the server defaults when saved.':
