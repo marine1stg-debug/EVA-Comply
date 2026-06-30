@@ -1533,6 +1533,35 @@ export const FR: Record<string, string> = {
   'Preparing…': 'Préparation…',
   'Full backup downloaded': 'Sauvegarde complète téléchargée',
 
+  // ── System Settings: config forms ──
+  'Site URL': 'URL du site',
+  'App name': 'Nom de l’application',
+  'Support email': 'Courriel de soutien',
+  'Sender · noreply': 'Expéditeur · noreply',
+  'Sender · support cases': 'Expéditeur · cas de soutien',
+  'Sender · invoicing': 'Expéditeur · facturation',
+  'Site URL, app name, support email, and per-type sender addresses. The Site URL builds invite and reset links, so it must match your real domain. Blank fields fall back to the server .env ({u}).':
+    'URL du site, nom de l’app, courriel de soutien et adresses d’expéditeur par type. L’URL du site construit les liens d’invitation et de réinitialisation; elle doit correspondre à votre domaine réel. Les champs vides reprennent le .env du serveur ({u}).',
+  'Use server default': 'Utiliser la valeur par défaut du serveur',
+  'Local disk (not durable)': 'Disque local (non durable)',
+  'R2 account ID': 'ID de compte R2',
+  'R2 only': 'R2 seulement',
+  'Access key ID': 'ID de clé d’accès',
+  'Secret access key': 'Clé d’accès secrète',
+  'Bucket': 'Compartiment',
+  'Test storage': 'Tester le stockage',
+  'Where uploaded evidence and policy files are stored. The default "local" keeps files in a container volume - it works, but it is NOT durable: a bad rebuild or moving servers can lose them. Recommended (not required): use Cloudflare R2 or S3 so evidence survives anything that happens to the server.':
+    'Où sont stockés les fichiers de preuves et de politiques téléversés. Le mode « local » par défaut garde les fichiers dans un volume de conteneur - ça fonctionne, mais ce n’est PAS durable : une mauvaise reconstruction ou un changement de serveur peut les perdre. Recommandé (non requis) : utilisez Cloudflare R2 ou S3 pour que les preuves survivent à tout incident.',
+  'Stripe keys for paid subscriptions. Only needed if you charge for plans. Without them, plan checkout is disabled and everything else works.':
+    'Clés Stripe pour les abonnements payants. Nécessaires seulement si vous facturez des forfaits. Sans elles, le paiement des forfaits est désactivé et tout le reste fonctionne.',
+  'Stripe secret key': 'Clé secrète Stripe',
+  'Stripe webhook secret': 'Secret de webhook Stripe',
+  'Test Stripe': 'Tester Stripe',
+  'Session length and minimum password length. Leave a field blank to use the server default ({m} min session, {p}-character minimum).':
+    'Durée de session et longueur minimale du mot de passe. Laissez un champ vide pour la valeur par défaut du serveur (session de {m} min, minimum de {p} caractères).',
+  'Session length (minutes)': 'Durée de session (minutes)',
+  'Minimum password length': 'Longueur minimale du mot de passe',
+
   // ── System Settings hub ──
   'System Settings': 'Réglages système',
   'User Settings': 'Réglages utilisateur',

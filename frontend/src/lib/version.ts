@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.10.0'
+export const APP_VERSION = '1.11.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,14 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.11.0',
+    date: '2026-06-25',
+    changes: [
+      'System Settings is now fully editable in-app: General (site URL, branding, sender addresses), Storage (Cloudflare R2 / S3, with a test button), Payments (Stripe, with a test), and Security (session length, minimum password length).',
+      'Secrets are encrypted at rest and write-only; every field falls back to the server .env when left blank, and all changes are audit-logged.',
+    ],
+  },
   {
     version: '1.10.0',
     date: '2026-06-25',

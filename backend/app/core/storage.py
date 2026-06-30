@@ -18,29 +18,35 @@ from fastapi import HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 
 from app.core.config import settings
+from app.core import platform_config as pc
 
 _S3_BACKENDS = {"s3", "r2"}
 
 
 def _is_s3() -> bool:
-    return settings.STORAGE_BACKEND in _S3_BACKENDS
+    return pc.storage_cfg()["backend"] in _S3_BACKENDS
+
+
+def _bucket() -> str:
+    return pc.storage_cfg()["bucket"]
 
 
 def _s3_client():
     import boto3  # imported lazily so local installs don't need boto3
+    cfg = pc.storage_cfg()
     kwargs = {
-        "aws_access_key_id": settings.R2_ACCESS_KEY_ID,
-        "aws_secret_access_key": settings.R2_SECRET_ACCESS_KEY,
+        "aws_access_key_id": cfg["access_key_id"],
+        "aws_secret_access_key": cfg["secret_access_key"],
     }
-    if settings.STORAGE_BACKEND == "r2" and settings.R2_ACCOUNT_ID:
-        kwargs["endpoint_url"] = f"https://{settings.R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+    if cfg["backend"] == "r2" and cfg["account_id"]:
+        kwargs["endpoint_url"] = f"https://{cfg['account_id']}.r2.cloudflarestorage.com"
     return boto3.client("s3", **kwargs)
 
 
 def save_bytes(key: str, data: bytes) -> str:
     """Persist `data` at `key`. Returns the key."""
     if _is_s3():
-        _s3_client().put_object(Bucket=settings.R2_BUCKET_NAME, Key=key, Body=data)
+        _s3_client().put_object(Bucket=_bucket(), Key=key, Body=data)
         return key
     path = os.path.join(settings.STORAGE_LOCAL_PATH, key)
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -52,7 +58,7 @@ def save_bytes(key: str, data: bytes) -> str:
 def read_bytes(key: str) -> bytes:
     """Read the whole object into memory (used for small previews)."""
     if _is_s3():
-        obj = _s3_client().get_object(Bucket=settings.R2_BUCKET_NAME, Key=key)
+        obj = _s3_client().get_object(Bucket=_bucket(), Key=key)
         return obj["Body"].read()
     with open(os.path.join(settings.STORAGE_LOCAL_PATH, key), "rb") as fh:
         return fh.read()
@@ -63,7 +69,7 @@ def exists(key: Optional[str]) -> bool:
         return False
     if _is_s3():
         try:
-            _s3_client().head_object(Bucket=settings.R2_BUCKET_NAME, Key=key)
+            _s3_client().head_object(Bucket=_bucket(), Key=key)
             return True
         except Exception:
             return False
@@ -75,7 +81,7 @@ def delete(key: Optional[str]) -> None:
         return
     try:
         if _is_s3():
-            _s3_client().delete_object(Bucket=settings.R2_BUCKET_NAME, Key=key)
+            _s3_client().delete_object(Bucket=_bucket(), Key=key)
         else:
             p = os.path.join(settings.STORAGE_LOCAL_PATH, key)
             if os.path.exists(p):
@@ -90,7 +96,7 @@ def open_response(key: Optional[str], filename: Optional[str] = None, mime: Opti
         raise HTTPException(status_code=404, detail="File not found in storage")
     media = mime or "application/octet-stream"
     if _is_s3():
-        obj = _s3_client().get_object(Bucket=settings.R2_BUCKET_NAME, Key=key)
+        obj = _s3_client().get_object(Bucket=_bucket(), Key=key)
         headers = {"Content-Disposition": f'inline; filename="{filename or os.path.basename(key)}"'} if filename else {}
         return StreamingResponse(io.BytesIO(obj["Body"].read()), media_type=media, headers=headers)
     path = os.path.join(settings.STORAGE_LOCAL_PATH, key)

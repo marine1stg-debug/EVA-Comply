@@ -19,6 +19,7 @@ from app.core.email import send_email
 from app.core.audit import record as audit_record
 from app.core.secrets_crypto import encrypt, decrypt
 from app.core import ratelimit
+from app.core import platform_config as pc
 from app.core.provisioning import assign_frameworks
 from app.core.entitlements import get_entitlements, tenant_usage, filter_frameworks, trial_state
 from app.core.platform import get_settings
@@ -36,10 +37,11 @@ MIN_PASSWORD_LENGTH = 12
 
 
 def _validate_password(pw: str) -> None:
-    if len(pw or "") < MIN_PASSWORD_LENGTH:
+    min_len = pc.min_password_length()
+    if len(pw or "") < min_len:
         raise HTTPException(
             status_code=400,
-            detail=f"Password must be at least {MIN_PASSWORD_LENGTH} characters",
+            detail=f"Password must be at least {min_len} characters",
         )
 
 
@@ -144,7 +146,7 @@ LOCKOUT_MINUTES = 15
 
 async def _send_unlock_email(user: User):
     token = create_unlock_token(user.id, user.email)
-    link = f"{settings.FRONTEND_URL}/unlock?token={token}"
+    link = f"{pc.frontend_url()}/unlock?token={token}"
     send_email(user.email, "Your EVA account is locked",
                f"Your account was locked after too many sign-in attempts.\n"
                f"It will unlock automatically in {LOCKOUT_MINUTES} minutes, or unlock it now:\n{link}")
@@ -312,7 +314,7 @@ async def signup_options(db: AsyncSession = Depends(get_db)):
               "highlights": (p.inclusions or {}).get("highlights") or []}
              for p in plan_rows]
     ps = await get_settings(db)
-    return {"plans": plans, "frameworks": frameworks, "stripe_enabled": bool(settings.STRIPE_SECRET_KEY),
+    return {"plans": plans, "frameworks": frameworks, "stripe_enabled": bool(pc.stripe_key()),
             "billing_mode": ps.billing_mode.value, "trial_days": ps.trial_days}
 
 

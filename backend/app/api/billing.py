@@ -19,6 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.config import settings
 from app.core import stripe_svc
+from app.core import platform_config as pc
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, SubscriptionStatus
@@ -134,7 +135,7 @@ async def billing_overview(
         "frameworks": frameworks,
         "invoices": [invoice_dict(i) for i in invoices],
         "stripe_connected": bool(t.subscription_id),
-        "stripe_enabled": bool(settings.STRIPE_SECRET_KEY),
+        "stripe_enabled": bool(pc.stripe_key()),
         # Auto-renewal lifecycle
         "interval": sub.get("interval", "month"),
         "auto_renew": active and not cancel_at_end,
@@ -169,8 +170,8 @@ async def checkout(
     else:
         amount = monthly
 
-    success = body.success_url or f"{FRONTEND_URL}/billing"
-    cancel = body.cancel_url or f"{FRONTEND_URL}/billing"
+    success = body.success_url or f"{pc.frontend_url()}/billing"
+    cancel = body.cancel_url or f"{pc.frontend_url()}/billing"
     rec = "year" if interval == "year" else "month"
     today = date.today()
     if interval == "year":
@@ -179,7 +180,7 @@ async def checkout(
         period_end = date(today.year + (1 if today.month == 12 else 0), today.month % 12 + 1, 1)
 
     # No Stripe key → simulate the subscription and still issue a numbered invoice.
-    if not settings.STRIPE_SECRET_KEY:
+    if not pc.stripe_key():
         t.plan_name = body.plan
         t.monthly_price = monthly
         t.subscription_status = SubscriptionStatus.active
@@ -207,7 +208,7 @@ async def checkout(
         subscription_data["trial_period_days"] = ps.trial_days
 
     import stripe
-    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe.api_key = pc.stripe_key()
     try:
         session = stripe.checkout.Session.create(
             mode="subscription",
@@ -238,9 +239,9 @@ async def cancel_subscription(current_user: User = Depends(get_current_user), db
     if current_user.role not in BILLING_ROLES:
         raise HTTPException(status_code=403, detail="Billing requires admin access")
     t = (await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))).scalar_one()
-    if settings.STRIPE_SECRET_KEY and t.subscription_id:
+    if pc.stripe_key() and t.subscription_id:
         import stripe
-        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.api_key = pc.stripe_key()
         try:
             stripe.Subscription.modify(t.subscription_id, cancel_at_period_end=True)
         except Exception as e:
@@ -256,9 +257,9 @@ async def resume_subscription(current_user: User = Depends(get_current_user), db
     if current_user.role not in BILLING_ROLES:
         raise HTTPException(status_code=403, detail="Billing requires admin access")
     t = (await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))).scalar_one()
-    if settings.STRIPE_SECRET_KEY and t.subscription_id:
+    if pc.stripe_key() and t.subscription_id:
         import stripe
-        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.api_key = pc.stripe_key()
         try:
             stripe.Subscription.modify(t.subscription_id, cancel_at_period_end=False)
         except Exception as e:
@@ -274,11 +275,11 @@ async def stripe_webhook(request: Request, db: AsyncSession = Depends(get_db)):
     """Stripe webhook - unauthenticated; signature-verified with the webhook secret."""
     payload = await request.body()
     sig = request.headers.get("stripe-signature", "")
-    if not settings.STRIPE_WEBHOOK_SECRET:
+    if not pc.stripe_webhook_secret():
         raise HTTPException(status_code=400, detail="Webhook not configured")
     import stripe
     try:
-        event = stripe.Webhook.construct_event(payload, sig, settings.STRIPE_WEBHOOK_SECRET)
+        event = stripe.Webhook.construct_event(payload, sig, pc.stripe_webhook_secret())
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid webhook: {e}")
 

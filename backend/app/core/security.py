@@ -83,9 +83,15 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (
-        expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
+    if expires_delta is None:
+        # Session length: in-app Security setting overrides the .env default.
+        try:
+            from app.core import platform_config as pc
+            minutes = pc.session_minutes()
+        except Exception:
+            minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        expires_delta = timedelta(minutes=minutes)
+    expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire, "type": "access"})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 

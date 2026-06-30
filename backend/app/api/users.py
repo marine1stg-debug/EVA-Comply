@@ -20,7 +20,8 @@ from app.api.auth import get_current_user
 from app.models.user import User, UserRole
 from app.models.tenant import Tenant, TenantType
 
-FRONTEND_URL = settings.FRONTEND_URL
+from app.core import platform_config as pc  # noqa: E402
+FRONTEND_URL = settings.FRONTEND_URL  # legacy; invite/reset links use pc.frontend_url()
 INVITABLE_ROLES = {
     UserRole.super_admin: ["super_admin", "eva_auditor"],
     UserRole.msp_admin: ["msp_admin", "msp_analyst"],
@@ -156,7 +157,7 @@ async def invite_user(
     dev = settings.ENVIRONMENT == "development" or settings.EMAIL_BACKEND == "console"
     print(f"[invite] {u.email} -> /accept-invite?token={token}")
     return {"id": str(u.id), "email": u.email,
-            "invite_link": f"{FRONTEND_URL}/accept-invite?token={token}" if dev else None}
+            "invite_link": f"{pc.frontend_url()}/accept-invite?token={token}" if dev else None}
 
 
 class ActiveBody(BaseModel):
@@ -301,7 +302,7 @@ async def reset_password(user_id: str, current_user: User = Depends(get_current_
     await audit_record(db, current_user, "user.password_reset", target=u.email, org_id=u.tenant_id)
     await db.commit()
     token = create_invite_token(u.id, u.email)
-    link = f"{FRONTEND_URL}/accept-invite?token={token}"
+    link = f"{pc.frontend_url()}/accept-invite?token={token}"
     send_email(u.email, "Reset your EVA password",
                f"A password reset was requested for your account. Set a new password here:\n{link}")
     print(f"[reset] {u.email} -> /accept-invite?token={token}")

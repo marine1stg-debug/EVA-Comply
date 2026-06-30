@@ -80,15 +80,12 @@ def _effective() -> dict:
 
 
 def sender_address(sender: str) -> str:
-    # Per-type overrides stay available via .env; otherwise the effective
-    # from-address (in-app setting, else .env FROM_EMAIL) is used for all.
-    mapping = {
-        "invoicing": settings.EMAIL_FROM_INVOICING,
-        "cases": settings.EMAIL_FROM_CASES,
-        "noreply": settings.EMAIL_FROM_NOREPLY,
-    }
+    # Per-type override (in-app General settings, else .env EMAIL_FROM_*); when
+    # none, use the configured default From (email page, else .env FROM_EMAIL).
+    from app.core import platform_config as pc
     base = _effective()["from_email"]
-    return (mapping.get(sender) or base).strip() or base
+    per = pc.sender_only(sender)
+    return (per or base).strip() or base
 
 
 def _build_message(from_addr, recipients, subject, body, html, attachments):

@@ -83,7 +83,8 @@ async def _client_summary(db: AsyncSession, t: Tenant, idx: int) -> dict:
     }
 
 
-FRONTEND_URL = settings.FRONTEND_URL
+from app.core import platform_config as pc  # noqa: E402
+FRONTEND_URL = settings.FRONTEND_URL  # legacy; invite links use pc.frontend_url()
 
 
 class NewClientBody(BaseModel):
@@ -145,7 +146,7 @@ async def create_client(
     print(f"[invite] {admin.email} -> /accept-invite?token={token}")
     return {
         "id": str(tenant.id), "name": tenant.name, "controls_assigned": assigned,
-        "invite_link": f"{FRONTEND_URL}/accept-invite?token={token}" if dev else None,
+        "invite_link": f"{pc.frontend_url()}/accept-invite?token={token}" if dev else None,
     }
 
 
