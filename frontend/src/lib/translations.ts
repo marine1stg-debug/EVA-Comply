@@ -1562,6 +1562,36 @@ export const FR: Record<string, string> = {
   'Session length (minutes)': 'Durée de session (minutes)',
   'Minimum password length': 'Longueur minimale du mot de passe',
 
+  // ── System Settings: readiness panel ──
+  'General': 'Général',
+  'Security': 'Sécurité',
+  'Environment': 'Environnement',
+  'Set ENVIRONMENT to production': 'Définir ENVIRONMENT à production',
+  'Strong SECRET_KEY (32+ characters)': 'SECRET_KEY robuste (32+ caractères)',
+  'Database password changed from the default': 'Mot de passe de base de données changé par rapport au défaut',
+  'Site URL set to your real HTTPS domain': 'URL du site définie sur votre domaine HTTPS réel',
+  'Durable object storage (R2/S3) for evidence': 'Stockage objet durable (R2/S3) pour les preuves',
+  'Stripe keys set (only if you charge for plans)': 'Clés Stripe définies (seulement si vous facturez des forfaits)',
+  'Production mode is on.': 'Mode production activé.',
+  'Currently “{env}”. Set to production before go-live.': 'Actuellement « {env} ». Passez en production avant la mise en ligne.',
+  'Strong key in place.': 'Clé robuste en place.',
+  'Generate one with: openssl rand -hex 32': 'Générez-en une avec : openssl rand -hex 32',
+  'Custom database password.': 'Mot de passe de base de données personnalisé.',
+  'Still using a default or sample password.': 'Utilise encore un mot de passe par défaut ou d’exemple.',
+  'Configured in-app.': 'Configuré dans l’app.',
+  'Using the server .env backend: {b}': 'Utilise le moteur du .env serveur : {b}',
+  'Not configured (console only - links would leak).': 'Non configuré (console seulement - les liens fuiteraient).',
+  'Current: {url}': 'Actuel : {url}',
+  'Not set.': 'Non défini.',
+  'Durable storage in use ({b}).': 'Stockage durable en usage ({b}).',
+  'Backend: {b}. Local works but is not durable across rebuilds.': 'Moteur : {b}. Le local fonctionne mais n’est pas durable lors des reconstructions.',
+  'Stripe enabled.': 'Stripe activé.',
+  'Not set (billing checkout disabled).': 'Non défini (paiement désactivé).',
+  'The site password gate (BASIC_AUTH_USER / BASIC_AUTH_PASSWORD) is enforced by nginx and set in the server .env.':
+    'Le portail mot de passe du site (BASIC_AUTH_USER / BASIC_AUTH_PASSWORD) est appliqué par nginx et défini dans le .env du serveur.',
+  'HTTPS and your domain are managed by Caddy (caddy/Caddyfile).':
+    'Le HTTPS et votre domaine sont gérés par Caddy (caddy/Caddyfile).',
+
   // ── System Settings hub ──
   'System Settings': 'Réglages système',
   'User Settings': 'Réglages utilisateur',

@@ -47,7 +47,7 @@ export default function ConfigGuidePage() {
         { icon: '⏱️', title: L('Session length & silent refresh', 'Durée de session et rafraîchissement silencieux'),
           how: L('A short access token is refreshed silently from a long-lived refresh token.', 'Un jeton d’accès court est renouvelé en silence depuis un jeton de rafraîchissement de longue durée.'),
           cfg: [
-            L('ACCESS_TOKEN_EXPIRE_MINUTES (env) - default 15 (often raised, e.g. 480 = 8 h).', 'ACCESS_TOKEN_EXPIRE_MINUTES (env) - défaut 15 (souvent augmenté, p. ex. 480 = 8 h).'),
+            L('ACCESS_TOKEN_EXPIRE_MINUTES (env, or in-app) - default 15 (often raised, e.g. 480 = 8 h). Now editable live in System Settings → Security (overrides the env).', 'ACCESS_TOKEN_EXPIRE_MINUTES (env, ou dans l’app) - défaut 15 (souvent augmenté, p. ex. 480 = 8 h). Modifiable en direct dans Réglages système → Sécurité (remplace l’env).'),
             L('REFRESH_TOKEN_EXPIRE_DAYS (env) - default 30.', 'REFRESH_TOKEN_EXPIRE_DAYS (env) - défaut 30.'),
             L('Changing a password revokes all existing sessions (token version bump).', 'Changer un mot de passe révoque toutes les sessions existantes (incrément de version de jeton).'),
           ] },
@@ -56,9 +56,9 @@ export default function ConfigGuidePage() {
           cfg: [
             L('MFA - required for super_admin, eva_auditor, msp_admin. Opt-in: each user enables it (Settings → enable MFA). Enforced at login only once turned on - no forced enrollment.', 'MFA - requise pour super_admin, eva_auditor, msp_admin. Sur activation : chaque utilisateur l’active (Réglages → activer la MFA). Imposée à la connexion seulement une fois activée - pas d’inscription forcée.'),
             L('Lockout - 3 failed logins → 15-minute lock + emailed unlock link. Admins can also unlock a user.', 'Verrouillage - 3 échecs → verrouillage 15 min + lien de déverrouillage par courriel. Les admins peuvent aussi déverrouiller un utilisateur.'),
-            L('Password - minimum 12 characters (no complexity rule).', 'Mot de passe - minimum 12 caractères (pas de règle de complexité).'),
+            L('Password - default minimum 12 characters (no complexity rule); editable in-app in System Settings → Security.', 'Mot de passe - minimum 12 caractères par défaut (pas de règle de complexité) ; modifiable dans l’app via Réglages système → Sécurité.'),
             L('Rate limits (per IP): login 10/5min, MFA 10/5min, refresh 60/5min, register 5/h, verification & unlock 5/15min.', 'Limites (par IP) : connexion 10/5min, MFA 10/5min, refresh 60/5min, inscription 5/h, vérification et déverrouillage 5/15min.'),
-            L('These four (MFA roles, lockout, password length, rate limits) are CODE CONSTANTS - changing them needs a code change + redeploy.', 'Ces quatre éléments (rôles MFA, verrouillage, longueur du mot de passe, limites) sont des CONSTANTES DE CODE - les changer demande une modification + redéploiement.'),
+            L('Code constants (need a redeploy to change): MFA-required roles, lockout, and rate limits. Session length and password length are now editable in-app (System Settings → Security).', 'Constantes de code (redéploiement requis) : rôles MFA requis, verrouillage et limites. La durée de session et la longueur du mot de passe sont maintenant modifiables dans l’app (Réglages système → Sécurité).'),
           ] },
       ],
     },
@@ -160,7 +160,7 @@ export default function ConfigGuidePage() {
             L('EMAIL_BACKEND (env) - smtp | sendgrid | console (ses is accepted but not implemented → falls back to console).', 'EMAIL_BACKEND (env) - smtp | sendgrid | console (ses accepté mais non implémenté → retombe sur console).'),
             L('smtp needs SMTP_HOST/PORT/USER/PASSWORD/TLS; sendgrid needs SENDGRID_API_KEY.', 'smtp nécessite SMTP_HOST/PORT/USER/PASSWORD/TLS ; sendgrid nécessite SENDGRID_API_KEY.'),
             L('Senders FROM_EMAIL (default) + EMAIL_FROM_INVOICING/CASES/NOREPLY (each falls back to FROM_EMAIL).', 'Expéditeurs FROM_EMAIL (défaut) + EMAIL_FROM_INVOICING/CASES/NOREPLY (chacun retombe sur FROM_EMAIL).'),
-            L('Production refuses to start with console. Super Admin can view/test the config in-app.', 'La production refuse de démarrer avec console. Le Super Admin peut voir/tester la config dans l’app.'),
+            L('Super Admin configures the whole provider, sender and credentials in-app (System Settings → Email) with a test-send; the .env is the fallback. Production refuses to start with EMAIL_BACKEND=console in the .env.', 'Le Super Admin configure le fournisseur, l’expéditeur et les identifiants dans l’app (Réglages système → Courriel) avec un envoi test ; le .env sert de repli. La production refuse de démarrer avec EMAIL_BACKEND=console dans le .env.'),
           ] },
       ],
     },
@@ -170,7 +170,7 @@ export default function ConfigGuidePage() {
         { icon: '📦', title: L('Where uploaded files live', 'Où vivent les fichiers téléversés'),
           how: L('Local disk by default; S3/Cloudflare R2 supported for durable storage.', 'Disque local par défaut ; S3/Cloudflare R2 pris en charge pour un stockage durable.'),
           cfg: [
-            L('STORAGE_BACKEND (env) - local | s3 | r2 (azure/gcs accepted but not implemented → behave as local).', 'STORAGE_BACKEND (env) - local | s3 | r2 (azure/gcs acceptés mais non implémentés → se comportent comme local).'),
+            L('STORAGE_BACKEND (env, or in-app) - local | s3 | r2 (azure/gcs accepted but not implemented → behave as local). Now configurable in System Settings → Storage with a test button; in-app overrides the env.', 'STORAGE_BACKEND (env, ou dans l’app) - local | s3 | r2 (azure/gcs acceptés mais non implémentés → se comportent comme local). Configurable dans Réglages système → Stockage avec un bouton de test ; l’app remplace l’env.'),
             L('STORAGE_LOCAL_PATH (default /app/uploads); R2/S3 use R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME.', 'STORAGE_LOCAL_PATH (défaut /app/uploads) ; R2/S3 utilisent R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME.'),
             L('Persistent volumes hold uploads (evidence + uploaded policies) and backups.', 'Des volumes persistants contiennent les téléversements (preuves + politiques) et les sauvegardes.'),
           ] },
@@ -185,7 +185,7 @@ export default function ConfigGuidePage() {
             L('Billing mode (platform default no_card_trial): no_card_trial (free trial then lock), card_trial (Stripe trial, auto-charge), charge_immediately. Trial days default 14.', 'Mode de facturation (défaut no_card_trial) : no_card_trial (essai puis verrouillage), card_trial (essai Stripe, prélèvement auto), charge_immediately. Jours d’essai défaut 14.'),
             L('Plans - tier (single_client/msp), monthly price, included frameworks, feature flags, seat/client caps. Managed under Plans & Pricing.', 'Forfaits - niveau (single_client/msp), prix mensuel, référentiels inclus, indicateurs de fonctions, plafonds de sièges/clients. Gérés sous Forfaits et tarifs.'),
             L('Enforced feature gates today: reports and import. (Other flags exist but aren’t enforced yet.)', 'Restrictions appliquées aujourd’hui : reports et import. (D’autres indicateurs existent mais ne sont pas encore appliqués.)'),
-            L('Stripe - STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET (env). Without a secret key, checkout is SIMULATED (marks active, local invoice).', 'Stripe - STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET (env). Sans clé secrète, le paiement est SIMULÉ (marque actif, facture locale).'),
+            L('Stripe - STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET (env, or in-app). Also settable in System Settings → Payments with a test; in-app overrides the env. Without a secret key, checkout is SIMULATED (marks active, local invoice).', 'Stripe - STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET (env, ou dans l’app). Réglables dans Réglages système → Paiements avec un test ; l’app remplace l’env. Sans clé secrète, le paiement est SIMULÉ (marque actif, facture locale).'),
           ] },
       ],
     },
@@ -227,6 +227,24 @@ export default function ConfigGuidePage() {
           ] },
       ],
     },
+    {
+      id: 'system', heading: L('15 · System Settings (in-app config hub)', '15 · Réglages système (centre de config dans l’app)'),
+      boxes: [
+        { icon: '⚙️', title: L('One place to configure & verify the deployment', 'Un endroit pour configurer et vérifier le déploiement'),
+          how: L('Super-Admin hub with a Readiness check plus editable General, Email, Storage, Payments and Security.', 'Centre Super Admin avec un État de préparation et des onglets modifiables Général, Courriel, Stockage, Paiements et Sécurité.'),
+          cfg: [
+            L('Readiness - read-only checks of the .env requirements (production mode, SECRET_KEY, DB password, email, site URL) plus recommended storage/Stripe, with done/not-done marks.', 'État de préparation - vérifications en lecture seule des exigences du .env (mode production, SECRET_KEY, mot de passe BD, courriel, URL du site) plus stockage/Stripe recommandés, avec coches fait/à faire.'),
+            L('General - Site URL, app name, support email, sender addresses. Email - the SMTP/SendGrid provider. Storage - local/R2/S3 with a test. Payments - Stripe keys with a test. Security - session length & minimum password length.', 'Général - URL du site, nom de l’app, courriel de soutien, expéditeurs. Courriel - le fournisseur SMTP/SendGrid. Stockage - local/R2/S3 avec test. Paiements - clés Stripe avec test. Sécurité - durée de session et longueur minimale du mot de passe.'),
+            L('Secrets (SMTP/R2/Stripe) are encrypted at rest and write-only; every field falls back to the .env when blank; all saves are audit-logged. SECRET_KEY, the DB password, the site gate and Caddy/HTTPS stay in the .env on purpose.', 'Les secrets (SMTP/R2/Stripe) sont chiffrés au repos et en écriture seule ; chaque champ retombe sur le .env si vide ; chaque sauvegarde est journalisée. SECRET_KEY, le mot de passe BD, le portail du site et Caddy/HTTPS restent volontairement dans le .env.'),
+          ] },
+        { icon: '🐞', title: L('Improvement / Requests (internal)', 'Améliorations / Demandes (interne)'),
+          how: L('An internal log for the EVA team to record fixes and ideas, with screenshots.', 'Un journal interne pour l’équipe EVA pour consigner correctifs et idées, avec captures d’écran.'),
+          cfg: [
+            L('Super Admin only. Capture a screen region or paste a screenshot (bug button near the language toggle, or Ctrl/Cmd+Shift+E). Track status, mark Implemented with a resolution note, copy a request for Claude, or export the log to Word.', 'Super Admin seulement. Capturez une zone de l’écran ou collez une capture (bouton bogue près du sélecteur de langue, ou Ctrl/Cmd+Maj+E). Suivez le statut, marquez Implémenté avec une note, copiez une demande pour Claude, ou exportez le journal en Word.'),
+            L('Dev/Tester accounts: tag a Super Admin as a developer (label only; they keep full admin rights).', 'Comptes Dev/Testeur : étiquetez un Super Admin comme développeur (étiquette seulement ; conserve tous les droits admin).'),
+          ] },
+      ],
+    },
   ]
 
   const envRows: [string, string, string][] = [
@@ -245,7 +263,7 @@ export default function ConfigGuidePage() {
 
   const caveats: string[] = [
     L('MFA is opt-in even for admin roles - only enforced once a user enables it. No forced enrollment.', 'La MFA est sur activation même pour les rôles admin - imposée seulement une fois activée. Aucune inscription forcée.'),
-    L('Lockout, password length, rate limits and MFA-required roles are code constants, not env/in-app settings.', 'Verrouillage, longueur de mot de passe, limites et rôles MFA requis sont des constantes de code, pas des réglages env/dans l’app.'),
+    L('Lockout, rate limits and MFA-required roles are code constants. Session length and password length are now editable in-app (System Settings → Security).', 'Verrouillage, limites et rôles MFA requis sont des constantes de code. La durée de session et la longueur du mot de passe sont maintenant modifiables dans l’app (Réglages système → Sécurité).'),
     L('EMAIL_BACKEND=ses and STORAGE_BACKEND=azure/gcs are accepted but not implemented (fall back to console / local).', 'EMAIL_BACKEND=ses et STORAGE_BACKEND=azure/gcs sont acceptés mais non implémentés (retombent sur console / local).'),
     L('Self-audit auto-accept happens on the upload path; submitting an existing draft routes to review even on self-audit orgs.', 'L’auto-acceptation en auto-audit se fait sur le chemin téléversement ; soumettre un brouillon existant part en revue même sur les orgs en auto-audit.'),
     L('Plan flags msp_review/audit_logs/api exist but aren’t enforced yet; only reports and import are gated.', 'Les indicateurs msp_review/audit_logs/api existent mais ne sont pas encore appliqués ; seuls reports et import sont restreints.'),
@@ -317,7 +335,7 @@ export default function ConfigGuidePage() {
         </div>
       ))}
 
-      <div className="cg-sechd" id="cg-env"><span className="cg-bar" /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{L('15 · Environment variables - cheat sheet', '15 · Variables d’environnement - aide-mémoire')}</span></div>
+      <div className="cg-sechd" id="cg-env"><span className="cg-bar" /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>{L('16 · Environment variables - cheat sheet', '16 · Variables d’environnement - aide-mémoire')}</span></div>
       <div className="page-sub" style={{ marginTop: 0 }}>{L('Set in the server .env (or container env). Changing any requires a redeploy.', 'À définir dans le .env serveur (ou l’env du conteneur). Tout changement nécessite un redéploiement.')}</div>
       <table className="cg-table">
         <thead><tr><th>{L('Variable', 'Variable')}</th><th>{L('Purpose', 'Rôle')}</th><th>{L('Default / note', 'Défaut / note')}</th></tr></thead>

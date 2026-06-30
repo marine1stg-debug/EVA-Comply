@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.11.0'
+export const APP_VERSION = '1.12.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,14 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.12.0',
+    date: '2026-06-30',
+    changes: [
+      'System Settings is now fully translated in French, including the Readiness panel checks and tab labels.',
+      'Configuration & How-it-works guide updated to reflect what is now editable in-app (email, storage, Stripe, site URL, session and password length), with a new System Settings section.',
+    ],
+  },
   {
     version: '1.11.0',
     date: '2026-06-30',

@@ -22,10 +22,6 @@ _DEV_SECRET = "dev_secret_key_change_in_production_min_32_chars"
 _DEV_DB = ("eva_secret_change_in_prod", "change_me")
 
 
-def _check(ok: bool, label: str, detail: str, required: bool = True) -> dict:
-    return {"ok": bool(ok), "label": label, "detail": detail, "required": required}
-
-
 @router.get("/readiness")
 async def readiness(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     if current_user.role != UserRole.super_admin:
@@ -42,33 +38,24 @@ async def readiness(current_user: User = Depends(get_current_user), db: AsyncSes
     email_inapp = bool(email_row and email_row.configured and email_row.backend != "console")
     email_env = settings.EMAIL_BACKEND != "console"
     email_ok = email_inapp or email_env
-    email_detail = ("Configured in-app" if email_inapp
-                    else f".env backend: {settings.EMAIL_BACKEND}" if email_env
-                    else "Not configured (console only - links would leak)")
+    email_mode = "inapp" if email_inapp else ("env" if email_env else "none")
 
     storage_durable = settings.STORAGE_BACKEND in ("r2", "s3")
     stripe_on = bool(settings.STRIPE_SECRET_KEY)
 
-    # ── .env requirements checklist (the box the operator asked for) ──────────
-    env_checklist = [
-        _check(is_prod, "ENVIRONMENT=production",
-               f"Currently '{settings.ENVIRONMENT}'." + ("" if is_prod else " Set to production before go-live.")),
-        _check(secret_ok, "SECRET_KEY set (32+ chars, not the dev default)",
-               "Strong key in place." if secret_ok else "Generate with: openssl rand -hex 32"),
-        _check(db_ok, "POSTGRES_PASSWORD changed from the default",
-               "Custom database password." if db_ok else "Still using a default/sample password."),
-        _check(email_ok, "Email backend configured (not console)", email_detail),
-        _check(fe_ok, "FRONTEND_URL set to your real HTTPS domain",
-               fe or "Not set." ),
-        _check(storage_durable, "Durable object storage (R2/S3) for evidence",
-               f"Backend: {settings.STORAGE_BACKEND}." + ("" if storage_durable else " Local works but isn't durable across rebuilds."),
-               required=False),
-        _check(stripe_on, "Stripe keys set (only if you charge for plans)",
-               "Stripe enabled." if stripe_on else "Not set (billing checkout disabled).", required=False),
+    # Stable keys + raw values; the frontend renders the labels/details in the
+    # user's language (so the panel is fully bilingual).
+    checklist = [
+        {"key": "env_production", "ok": is_prod, "required": True, "meta": {"env": settings.ENVIRONMENT}},
+        {"key": "secret_key", "ok": secret_ok, "required": True, "meta": {}},
+        {"key": "db_password", "ok": db_ok, "required": True, "meta": {}},
+        {"key": "email", "ok": email_ok, "required": True, "meta": {"mode": email_mode, "backend": settings.EMAIL_BACKEND}},
+        {"key": "frontend_url", "ok": fe_ok, "required": True, "meta": {"url": fe}},
+        {"key": "storage", "ok": storage_durable, "required": False, "meta": {"backend": settings.STORAGE_BACKEND}},
+        {"key": "stripe", "ok": stripe_on, "required": False, "meta": {}},
     ]
-
-    required_done = sum(1 for c in env_checklist if c["required"] and c["ok"])
-    required_total = sum(1 for c in env_checklist if c["required"])
+    required_done = sum(1 for c in checklist if c["required"] and c["ok"])
+    required_total = sum(1 for c in checklist if c["required"])
 
     return {
         "environment": settings.ENVIRONMENT,
@@ -76,10 +63,7 @@ async def readiness(current_user: User = Depends(get_current_user), db: AsyncSes
         "required_done": required_done,
         "required_total": required_total,
         "all_required_ok": required_done == required_total,
-        "checklist": env_checklist,
-        # Note about items the API can't verify (managed by nginx, not the app).
-        "notes": [
-            "The site password gate (BASIC_AUTH_USER / BASIC_AUTH_PASSWORD) is enforced by nginx and set in the server .env.",
-            "HTTPS and your domain are managed by Caddy (caddy/Caddyfile).",
-        ],
+        "checklist": checklist,
+        # Items the API can't verify (managed by nginx / Caddy, not the app).
+        "notes": ["basic_auth", "caddy_https"],
     }

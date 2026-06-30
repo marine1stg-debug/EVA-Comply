@@ -13,7 +13,41 @@ const whyBox = (txt: string) => (
   <div className="card" style={{ padding: 12, marginBottom: 12, fontSize: 12.5, color: 'var(--text2)', lineHeight: 1.6, borderLeft: '3px solid var(--sky, #1A8FD1)' }}>{txt}</div>
 )
 
-interface Chk { ok: boolean; label: string; detail: string; required: boolean }
+// Readiness rows are sent from the backend as stable keys + values; we render
+// the label/detail here so the whole panel is bilingual.
+type TFn = (k: string, p?: Record<string, any>) => string
+function readyLabel(c: { key: string }, t: TFn): string {
+  switch (c.key) {
+    case 'env_production': return t('Set ENVIRONMENT to production')
+    case 'secret_key': return t('Strong SECRET_KEY (32+ characters)')
+    case 'db_password': return t('Database password changed from the default')
+    case 'email': return t('Email backend configured (not console)')
+    case 'frontend_url': return t('Site URL set to your real HTTPS domain')
+    case 'storage': return t('Durable object storage (R2/S3) for evidence')
+    case 'stripe': return t('Stripe keys set (only if you charge for plans)')
+    default: return c.key
+  }
+}
+function readyDetail(c: { key: string; ok: boolean; meta: Record<string, any> }, t: TFn): string {
+  const m = c.meta || {}
+  switch (c.key) {
+    case 'env_production': return c.ok ? t('Production mode is on.') : t('Currently “{env}”. Set to production before go-live.', { env: m.env })
+    case 'secret_key': return c.ok ? t('Strong key in place.') : t('Generate one with: openssl rand -hex 32')
+    case 'db_password': return c.ok ? t('Custom database password.') : t('Still using a default or sample password.')
+    case 'email': return m.mode === 'inapp' ? t('Configured in-app.') : m.mode === 'env' ? t('Using the server .env backend: {b}', { b: m.backend }) : t('Not configured (console only - links would leak).')
+    case 'frontend_url': return m.url ? t('Current: {url}', { url: m.url }) : t('Not set.')
+    case 'storage': return c.ok ? t('Durable storage in use ({b}).', { b: m.backend }) : t('Backend: {b}. Local works but is not durable across rebuilds.', { b: m.backend })
+    case 'stripe': return c.ok ? t('Stripe enabled.') : t('Not set (billing checkout disabled).')
+    default: return ''
+  }
+}
+function noteText(n: string, t: TFn): string {
+  if (n === 'basic_auth') return t('The site password gate (BASIC_AUTH_USER / BASIC_AUTH_PASSWORD) is enforced by nginx and set in the server .env.')
+  if (n === 'caddy_https') return t('HTTPS and your domain are managed by Caddy (caddy/Caddyfile).')
+  return n
+}
+
+interface Chk { ok: boolean; key: string; required: boolean; meta: Record<string, any> }
 interface Readiness {
   environment: string; production: boolean
   required_done: number; required_total: number; all_required_ok: boolean
@@ -237,6 +271,7 @@ function ReadinessTab() {
           </div>
           <div className="page-sub" style={{ fontSize: 12 }}>
             {t('{a} of {b} required items done', { a: data.required_done, b: data.required_total })} · {t('Environment')}: <b>{data.environment}</b>
+
           </div>
         </div>
       </div>
@@ -254,9 +289,9 @@ function ReadinessTab() {
             </span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>
-                {c.label} {!c.required && <span style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 500 }}>· {t('recommended')}</span>}
+                {readyLabel(c, t)} {!c.required && <span style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 500 }}>· {t('recommended')}</span>}
               </div>
-              <div style={{ fontSize: 11.5, color: 'var(--text2)', marginTop: 2 }}>{c.detail}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--text2)', marginTop: 2 }}>{readyDetail(c, t)}</div>
             </div>
           </div>
         ))}
@@ -264,7 +299,7 @@ function ReadinessTab() {
 
       {data.notes?.length > 0 && (
         <div className="card" style={{ padding: 12, marginTop: 14, fontSize: 11.5, color: 'var(--text2)', lineHeight: 1.6, background: 'var(--soft)' }}>
-          {data.notes.map((n, i) => <div key={i}>• {n}</div>)}
+          {data.notes.map((n, i) => <div key={i}>• {noteText(n, t)}</div>)}
         </div>
       )}
     </div>
