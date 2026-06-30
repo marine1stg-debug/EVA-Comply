@@ -1533,6 +1533,29 @@ export const FR: Record<string, string> = {
   'Preparing…': 'Préparation…',
   'Full backup downloaded': 'Sauvegarde complète téléchargée',
 
+  // ── Email (SMTP) settings ──
+  'Email (SMTP)': 'Courriel (SMTP)',
+  'Configure how the app sends invites, verification, and notifications. Overrides the server defaults when saved.':
+    'Configurez l’envoi des invitations, vérifications et notifications. Remplace les réglages du serveur une fois enregistré.',
+  'Not configured in-app yet - the app is using the server settings (backend: {b}, from: {e}).':
+    'Pas encore configuré dans l’app - l’application utilise les réglages du serveur (moteur : {b}, expéditeur : {e}).',
+  'SMTP server': 'Serveur SMTP',
+  'SendGrid (API)': 'SendGrid (API)',
+  'Console (no real email - logs only)': 'Console (aucun courriel réel - journaux seulement)',
+  'From address': 'Adresse d’expéditeur',
+  'SMTP host': 'Hôte SMTP',
+  'SendGrid API key': 'Clé API SendGrid',
+  'set': 'défini',
+  'Leave blank to keep current': 'Laisser vide pour conserver l’actuel',
+  'Use STARTTLS (recommended, port 587)': 'Utiliser STARTTLS (recommandé, port 587)',
+  'Send test email': 'Envoyer un courriel test',
+  'Email settings saved': 'Réglages de courriel enregistrés',
+  'Test email sent': 'Courriel test envoyé',
+  'Super Admin access required.': 'Accès super administrateur requis.',
+  'Failed to load email settings.': 'Échec du chargement des réglages de courriel.',
+  'Tip: most providers (IONOS, Microsoft 365, Google) use STARTTLS on port 587, and require the From address to match the username you authenticate with. The test email is sent to your own address.':
+    'Astuce : la plupart des fournisseurs (IONOS, Microsoft 365, Google) utilisent STARTTLS sur le port 587 et exigent que l’adresse d’expéditeur corresponde au nom d’utilisateur d’authentification. Le courriel test est envoyé à votre propre adresse.',
+
   // ── Maturity reference ──
   'How maturity is calculated': 'Comment la maturité est calculée',
 

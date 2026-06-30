@@ -2,7 +2,7 @@
 // changelog shown to Super Admins via the "what's new" info icon.
 // Bump APP_VERSION and prepend a new entry to CHANGELOG on each release.
 
-export const APP_VERSION = '1.8.0'
+export const APP_VERSION = '1.9.0'
 
 export interface Release {
   version: string
@@ -11,6 +11,13 @@ export interface Release {
 }
 
 export const CHANGELOG: Release[] = [
+  {
+    version: '1.9.0',
+    date: '2026-06-25',
+    changes: [
+      'New Email (SMTP) settings page under Administration: configure the mail provider, From address, and credentials in-app instead of editing the server - with a "Send test email" button. Passwords are stored encrypted.',
+    ],
+  },
   {
     version: '1.8.0',
     date: '2026-06-25',

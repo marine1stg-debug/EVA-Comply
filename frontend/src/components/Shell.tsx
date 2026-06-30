@@ -191,6 +191,7 @@ export default function Shell() {
       { path: '/training', icon: '🎬', label: 'Training Videos', show: canTenants },
       { path: '/marketplace', icon: '🛠', label: 'Service Providers', show: canTenants },
       { path: '/ai-settings', icon: '✦', label: 'AI Connector', show: canTenants },
+      { path: '/email-settings', icon: '✉', label: 'Email (SMTP)', show: canTenants },
       { path: '/users', icon: '👤', label: 'Users & Roles', show: canUsers },
       { path: '/billing', icon: '💳', label: 'Billing', show: canBilling },
       { path: '/audit-logs', icon: '📋', label: 'Audit Logs', show: !!role },

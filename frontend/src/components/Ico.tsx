@@ -10,7 +10,7 @@ import {
   Archive, BarChart3, Bell, BookOpen, BookOpenCheck, Building2, CircleDollarSign,
   Clapperboard, ClipboardList, Compass, CreditCard, Download, Eye, FileText,
   FolderOpen, Hand, Headphones, KeyRound, LayoutGrid, Landmark, List,
-  Paperclip, Rocket, RotateCcw, ScrollText, Settings, Shield, Sparkles, SunMoon, Tag, Target,
+  Mail, Paperclip, Rocket, RotateCcw, ScrollText, Settings, Shield, Sparkles, SunMoon, Tag, Target,
   Upload, User, Wrench, type LucideIcon,
 } from 'lucide-react'
 
@@ -24,6 +24,7 @@ const MAP: Record<string, LucideIcon> = {
   '📄': FileText,
   '◎': Target,
   '✦': Sparkles,
+  '✉': Mail,
   '↺': RotateCcw,
   '⬇': Download,
   '👁': Eye,
