@@ -23,7 +23,7 @@ export default function ConfigGuidePage() {
           cfg: [
             L('SECRET_KEY (env) - required, ≥32 chars in production (openssl rand -hex 32). Changing it logs everyone out and makes stored AI keys / MFA secrets unreadable.', 'SECRET_KEY (env) - requis, ≥32 caractères en production (openssl rand -hex 32). Le changer déconnecte tout le monde et rend illisibles les clés IA / secrets MFA stockés.'),
             L('ENVIRONMENT (env) - development | production (default development). Production hides API docs and enables the startup safety guard.', 'ENVIRONMENT (env) - development | production (défaut development). La production masque la doc API et active la garde de démarrage.'),
-            L('FRONTEND_URL (env) - public app URL; used in invite/reset/unlock links and CORS.', 'FRONTEND_URL (env) - URL publique de l’app ; utilisée dans les liens et le CORS.'),
+            L('FRONTEND_URL (env, or in-app) - public app URL; used in invite/reset/unlock links and CORS. Now also settable live in System Settings → General (Site URL), which overrides the env.', 'FRONTEND_URL (env, ou dans l’app) - URL publique de l’app ; utilisée dans les liens et le CORS. Réglable en direct dans Réglages système → Général (URL du site), ce qui remplace l’env.'),
             L('Startup guard: in production the app refuses to start with a default/short SECRET_KEY, the dev DB password, or EMAIL_BACKEND=console.', 'Garde de démarrage : en production, l’app refuse de démarrer avec un SECRET_KEY par défaut/court, le mot de passe BD de dev, ou EMAIL_BACKEND=console.'),
           ] },
         { icon: '🚪', title: L('Site access gate (Basic Auth)', 'Portail d’accès au site (Basic Auth)'),

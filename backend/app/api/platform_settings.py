@@ -19,7 +19,7 @@ from app.core.audit import record as audit_record
 from app.core import platform_config as pc
 from app.api.auth import get_current_user
 from app.models.user import User, UserRole
-from app.models.platform_settings import PlatformSettings
+from app.models.platform_settings import DeploymentConfig
 
 router = APIRouter()
 KEEP = "__KEEP__"
@@ -30,17 +30,17 @@ def _require_super(user: User):
         raise HTTPException(status_code=403, detail="Super Admin access required")
 
 
-async def _row(db: AsyncSession) -> PlatformSettings:
-    r = (await db.execute(select(PlatformSettings).limit(1))).scalar_one_or_none()
+async def _row(db: AsyncSession) -> DeploymentConfig:
+    r = (await db.execute(select(DeploymentConfig).limit(1))).scalar_one_or_none()
     if not r:
-        r = PlatformSettings()
+        r = DeploymentConfig()
         db.add(r)
         await db.commit()
         await db.refresh(r)
     return r
 
 
-def _serialize(r: PlatformSettings) -> dict:
+def _serialize(r: DeploymentConfig) -> dict:
     return {
         "general": {
             "site_url": r.site_url or "", "app_name": r.app_name or "",

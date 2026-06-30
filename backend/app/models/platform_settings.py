@@ -14,8 +14,8 @@ from app.core.database import Base
 from app.models.base import TimestampMixin
 
 
-class PlatformSettings(Base, TimestampMixin):
-    __tablename__ = "platform_settings"
+class DeploymentConfig(Base, TimestampMixin):
+    __tablename__ = "deployment_config"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 

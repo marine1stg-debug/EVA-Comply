@@ -16,8 +16,13 @@ depends_on = None
 
 
 def upgrade() -> None:
+    # Idempotent: skip if the table already exists (defensive against a
+    # half-applied state or a stray create_all).
+    bind = op.get_bind()
+    if sa.inspect(bind).has_table('deployment_config'):
+        return
     op.create_table(
-        'platform_settings',
+        'deployment_config',
         sa.Column('id', UUID(as_uuid=True), primary_key=True),
         sa.Column('site_url', sa.String(length=300), nullable=True),
         sa.Column('app_name', sa.String(length=120), nullable=True),
@@ -40,4 +45,4 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table('platform_settings')
+    op.drop_table('deployment_config')

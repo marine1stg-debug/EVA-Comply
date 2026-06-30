@@ -13,7 +13,7 @@ export interface Release {
 export const CHANGELOG: Release[] = [
   {
     version: '1.11.0',
-    date: '2026-06-25',
+    date: '2026-06-30',
     changes: [
       'System Settings is now fully editable in-app: General (site URL, branding, sender addresses), Storage (Cloudflare R2 / S3, with a test button), Payments (Stripe, with a test), and Security (session length, minimum password length).',
       'Secrets are encrypted at rest and write-only; every field falls back to the server .env when left blank, and all changes are audit-logged.',
@@ -21,7 +21,7 @@ export const CHANGELOG: Release[] = [
   },
   {
     version: '1.10.0',
-    date: '2026-06-25',
+    date: '2026-06-30',
     changes: [
       'New System Settings hub (Administration): one place for deployment configuration, with a Readiness tab that checks your .env requirements and shows what is production-ready.',
       'Email (SMTP) settings now live as a tab inside System Settings.',
@@ -31,14 +31,14 @@ export const CHANGELOG: Release[] = [
   },
   {
     version: '1.9.0',
-    date: '2026-06-25',
+    date: '2026-06-30',
     changes: [
       'New Email (SMTP) settings page under Administration: configure the mail provider, From address, and credentials in-app instead of editing the server - with a "Send test email" button. Passwords are stored encrypted.',
     ],
   },
   {
     version: '1.8.0',
-    date: '2026-06-25',
+    date: '2026-06-30',
     changes: [
       'New Improvement / Requests tool (Super Admin): log fixes and ideas with screenshots, track status, mark a request Implemented with a resolution note, copy a request for Claude, or export the whole log to Word.',
       'Capture window: a movable panel to grab a region of the app or paste a screenshot, opened by the camera button next to the language toggle or with Ctrl/Cmd+Shift+E.',
@@ -47,7 +47,7 @@ export const CHANGELOG: Release[] = [
   },
   {
     version: '1.7.0',
-    date: '2026-06-25',
+    date: '2026-06-30',
     changes: [
       'Maturity snapshots can now be managed: a new "Snapshots" button lists every saved date, lets you pick which one the radar compares against ("Previous"), delete individual ones, or reset them all.',
       'By default the most recent snapshot is used; star any earlier date to compare against it instead.',
@@ -55,7 +55,7 @@ export const CHANGELOG: Release[] = [
   },
   {
     version: '1.6.0',
-    date: '2026-06-25',
+    date: '2026-06-30',
     changes: [
       'New "How maturity is calculated" reference on the Maturity page - opens a real Word document, in English or French, with a download button.',
       'Clients get a plain-language edition; EVA and MSP reviewers get an internal edition that adds the exact formulas and a technical annex.',

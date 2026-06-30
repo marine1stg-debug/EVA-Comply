@@ -1,6 +1,6 @@
 """Effective deployment config: in-app platform_settings override the .env.
 
-Read at use time from the single platform_settings row via a short-lived sync
+Read at use time from the single deployment_config row via a short-lived sync
 connection (works in both the API and the worker), cached briefly. Every getter
 falls back to the .env value when the in-app field is blank, so an unset value
 never changes current behavior. Call reload() after a save so it takes effect.
@@ -33,7 +33,7 @@ def _row() -> dict | None:
                 "SELECT site_url, app_name, support_email, from_noreply, from_cases, "
                 "from_invoicing, storage_backend, r2_account_id, r2_access_key_id, "
                 "r2_secret_access_key, r2_bucket, stripe_secret_key, stripe_webhook_secret, "
-                "session_minutes, min_password_length FROM platform_settings LIMIT 1")
+                "session_minutes, min_password_length FROM deployment_config LIMIT 1")
             r = cur.fetchone()
         finally:
             conn.close()
